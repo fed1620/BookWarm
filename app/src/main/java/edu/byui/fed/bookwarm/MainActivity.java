@@ -9,9 +9,11 @@ import android.widget.ListView;
 
 public class MainActivity extends ActionBarActivity {
     ListView list;
-    String[] titles; //HERE IT IS. Add book titles to this String array.
+    String[] titles = { //HERE IT IS. Add book titles to this String array.
+            "To Kill a Mockingbird"
+    };
     Integer[] imageId = { //Just one book for now. Adding titles without adding covers may break things.
-            R.mipmap.generic_bookCover,
+            R.mipmap.ic_generic_cover
     };
 
     @Override
