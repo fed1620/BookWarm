@@ -4,14 +4,21 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 
 public class MainActivity extends ActionBarActivity {
+    ListView list;
+    String[] titles;
+    Integer[] imageId = {
+            //todo: stick book cover repeats in here
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupCustomListView();
     }
 
 
@@ -37,5 +44,12 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // New Comment
+    /**
+     * Self-explanatory
+     */
+    void setupCustomListView() {
+        CustomList adapter = new CustomList(MainActivity.this, titles, imageId);
+        list = (ListView) findViewById(R.id.listView);
+        list.setAdapter(adapter);
+    }
 }
