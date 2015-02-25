@@ -1,8 +1,7 @@
-package edu.byui.fed.bookwarm;
+package edu.byui.cs246.bookwarm;
 
 /**
- * Created by Fed on 2/24/15.
- * The first version of our book class will simply store a title
+ * A Book now stores a title and an image ID
  */
 public class Book {
     private String title;

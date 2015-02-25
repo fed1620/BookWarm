@@ -1,4 +1,4 @@
-package edu.byui.fed.bookwarm;
+package edu.byui.cs246.bookwarm;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

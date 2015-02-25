@@ -1,4 +1,4 @@
-package edu.byui.fed.bookwarm;
+package edu.byui.cs246.bookwarm;
 //some code lovingly ripped off from: http://www.learn2crack.com/2013/10/android-custom-listview-images-text-example.html
 
 import android.app.Activity;
