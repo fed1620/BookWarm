@@ -4,7 +4,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -21,6 +25,15 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupCustomListView();
+
+        Button btn = (Button) findViewById(R.id.button2);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                EditText editTextPlainTextInput = (EditText) view.findViewById(R.id.title);
+                titles[0] = editTextPlainTextInput.getText().toString();
+            }
+        });
+
     }
 
 
