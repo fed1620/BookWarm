@@ -9,6 +9,8 @@ WOO! ListView now displays a book and a title. (Had to make a custom list class)
 -Jake
 
 ---------------------------------------------------------------------------------------------------
+2/25/15
+
 Created a new configuration "Test" that we will use to run all of our tests.
 
 To the left of the green RUN arrow, there is a drop-down menu that will either let you choose to

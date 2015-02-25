@@ -76,9 +76,9 @@ public class Library {
      *
      * @return returns an array of ints (image IDs)
      */
-    public int[] getImageIds() {
+    public Integer[] getImageIds() {
         // Allocate a new array according to how many books we have
-        int[] imageIds = new int[numBooks()];
+        Integer[] imageIds = new Integer[numBooks()];
 
         // Go through our list of books and get each title
         for (int i = 0; i < numBooks(); ++i) {
