@@ -6,6 +6,7 @@ package edu.byui.fed.bookwarm;
  */
 public class Book {
     private String title;
+    private Integer imageId;
 
     public void setTitle(String title) {
         // Do nothing with an invalid title
@@ -16,6 +17,12 @@ public class Book {
     }
 
     public String getTitle() {
-        return this.title;
+        return title;
     }
+
+    public void setImageId(Integer imageId) {
+        this.imageId = imageId;
+    }
+
+    public Integer getImageId() { return imageId; }
 }

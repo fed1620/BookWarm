@@ -24,16 +24,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         setupCustomListView();
-
-        Button btn = (Button) findViewById(R.id.button2);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                EditText editTextPlainTextInput = (EditText) view.findViewById(R.id.title);
-                titles[0] = editTextPlainTextInput.getText().toString();
-            }
-        });
-
+        setupMenuButton();
     }
 
 
@@ -66,5 +59,17 @@ public class MainActivity extends ActionBarActivity {
         CustomList adapter = new CustomList(MainActivity.this, titles, imageId);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
+    }
+
+    /**
+     * Also self-explanatory
+     */
+    void setupMenuButton() {
+        Button btn = (Button) findViewById(R.id.button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                //todo: goto the new activity
+            }
+        });
     }
 }
