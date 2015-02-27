@@ -2,6 +2,11 @@
 
 NOTES FOR TEAM MEMBERS GO HERE:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2/27/15
+
+IMPORTANT: Before committing any new code, first run the app and make sure
+that everything is working as intended!
+
 ---------------------------------------------------------------------------------------------------
 2/25/15
 
