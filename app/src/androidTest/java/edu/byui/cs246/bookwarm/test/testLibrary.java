@@ -3,7 +3,7 @@ package edu.byui.cs246.bookwarm.test;
 import junit.framework.TestCase;
 
 /**
- * Test 2
+ * Test 1
  */
-public class testLibrary2 extends TestCase {
+public class testLibrary extends TestCase {
 }

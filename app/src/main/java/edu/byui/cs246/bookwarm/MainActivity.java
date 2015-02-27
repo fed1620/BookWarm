@@ -29,6 +29,9 @@ public class MainActivity extends ActionBarActivity {
             createLibrary(library);
         }
 
+        // If any new books have been entered by the user, add that new book to our library.
+        addNewBook(library);
+
         // Because our custom list view needs the book information to be in array format, we will
         // kindly ask our library to give us all of the necessary book information in array format!
         getArrayElements(library);
@@ -93,6 +96,24 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
+     * If a new book object was passed to this activity via an intent, this method
+     * will simply add that new book to the user's library
+     *
+     * (NOTE: This method will likely be made obsolete in the future, when instead of
+     * passing the new book back to this activity, we will simply write the book
+     * to the library file and it will automatically be loaded along with the other ones)
+     *
+     * @param library The user's library
+     */
+    public void addNewBook(Library library) {
+    // Check for a new book that may have been added
+        Book newBook = (Book)getIntent().getSerializableExtra("newBook");
+        if (newBook != null) {
+            library.addBook(newBook);
+        }
+    }
+
+    /**
      * All of the book information that we choose to display in our custom list view will
      * be retrieved in array format
      *
@@ -123,9 +144,6 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 // Opens the menu activity
                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-
-                intent.putExtra("library", library);
-
                 startActivity(intent);
             }
         });

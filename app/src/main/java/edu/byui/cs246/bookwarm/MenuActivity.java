@@ -16,6 +16,7 @@ public class MenuActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        // Set up the button that will take us to the Add Book activity
         setupAddBookButton();
     }
 
@@ -51,11 +52,7 @@ public class MenuActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // Opens the Add Book activity
-                Intent intent = new Intent(MenuActivity.this, AddBook.class);
-
-                Library library = (Library)getIntent().getSerializableExtra("library");
-                intent.putExtra("library", library);
-
+                Intent intent = new Intent(MenuActivity.this, AddBookActivity.class);
                 startActivity(intent);
             }
         });

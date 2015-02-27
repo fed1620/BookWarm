@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 
-public class AddBook extends ActionBarActivity {
+public class AddBookActivity extends ActionBarActivity {
 
     public String title;
     public Integer imageID = R.mipmap.ic_generic_cover;        // For now, this is always the same
@@ -69,12 +69,10 @@ public class AddBook extends ActionBarActivity {
                         newBook.setTitle(title);
                         newBook.setImageId(imageID);
 
-                        Library library = (Library)getIntent().getSerializableExtra("library");
-                        library.addBook(newBook);
-
                         // Create a new intent that we will use to pass the book
                         // back to the main activity
-                        Intent intentPassBook = new Intent(AddBook.this, MainActivity.class);
+                        Intent intentPassBook = new Intent(AddBookActivity.this, MainActivity.class);
+                        intentPassBook.putExtra("newBook", newBook);
                         startActivity(intentPassBook);
                     }
                 }
