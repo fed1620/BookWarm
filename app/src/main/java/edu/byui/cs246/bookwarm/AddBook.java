@@ -12,15 +12,17 @@ import android.widget.EditText;
 
 public class AddBook extends ActionBarActivity {
 
+    public String title;
+    public Integer imageID = R.mipmap.ic_generic_cover;        // For now, this is always the same
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
 
-        // Set up the button that will allow us to add a new book
-        setupAddBookButton();
+        // Set up the button that will allow the user to add a new book
+        setupAddNewBookButton();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,26 +47,35 @@ public class AddBook extends ActionBarActivity {
     }
 
     /**
-     * Add a new book to the library
+     * Create the button that the user will press when they wish to add a new book to the library.
+     *
+     * When the button is clicked, the new book will be passed back to the main activity
+     * ONLY if the information fields have not been left blank
      */
-    void setupAddBookButton() {
+    void setupAddNewBookButton() {
         Button btn = (Button) findViewById(R.id.addBook);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get the title of the new book
+                // Get the title of the new book from the user
                 EditText bookTitle = (EditText)findViewById(R.id.title);
-                String title = bookTitle.getText().toString();
+                title = bookTitle.getText().toString();
 
-                // The new book that will be added to the library
-                Book newBook = new Book();
-                newBook.setTitle(title);
-                newBook.setImageId(R.mipmap.ic_generic_cover);
+                // The new book will only be added to the library if the user filled out
+                // all of the necessary fields (For the time being, just the title)
+                if (title != null) {
+                    if (!title.isEmpty()) {
+                        Book newBook = new Book();
+                        newBook.setTitle(title);
+                        newBook.setImageId(imageID);
 
-                // TODO: Add the new book to the same library being used in MainActivity.java
-
-                // Returns to the main activity
-                startActivity(new Intent(AddBook.this, MainActivity.class));
+                        // Create a new intent that we will use to pass the book
+                        // back to the main activity
+                        Intent intentPassBook = new Intent(AddBook.this, MainActivity.class);
+                        intentPassBook.putExtra("newBook", newBook);
+                        startActivity(intentPassBook);
+                    }
+                }
             }
         });
     }

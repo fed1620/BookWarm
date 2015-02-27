@@ -1,9 +1,11 @@
 package edu.byui.cs246.bookwarm;
 
+import java.io.Serializable;
+
 /**
  * A Book now stores a title and an image ID
  */
-public class Book {
+public class Book implements Serializable{
     private String title;
     private Integer imageId;
 

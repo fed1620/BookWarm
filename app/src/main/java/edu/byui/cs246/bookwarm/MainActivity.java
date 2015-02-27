@@ -11,17 +11,32 @@ import android.widget.ListView;
 
 
 public class MainActivity extends ActionBarActivity {
-    // The member variables we need for the different methods in this activity
-    public ListView list;
-    public String[] bookTitles;
-    public Integer[] imageId;
+    /*--------------------------------------------------------------------------------------------*/
+    public static Library library = new Library(); // ** Needs to be static, so that a new library
+    public ListView  list;                         // is not created every time we switch back to
+    public Integer[] imageId;                      // the main activity
+    public String[]  bookTitles;
+    /*--------------------------------------------------------------------------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadLibrary();
+        // The library should be initially 'created' (or in the future: 'loaded' from a file)
+        // ONLY once
+        if (library.numBooks() == 0) {
+            createLibrary(library);
+        }
+
+        // If any new books have been entered by the user, add that new book to our library.
+        addNewBook(library);
+
+        // Because our custom list view needs the book information to be in array format, we will
+        // kindly ask our library to give us all of the necessary book information in array format!
+        getArrayElements(library);
+
+        // Set up the List View and the Menu button
         setupCustomListView();
         setupMenuButton();
     }
@@ -49,13 +64,19 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void loadLibrary() {
-        Library library = new Library();  // For the time being, we are simply creating a library
-                                          // In the future, this will be loaded from a file
+    /**
+     * Create (In the future: load from a file) the user's library
+     * This method should only be called one time
+     *
+     * @param library The library object that will store the user's library of books
+     */
+    public void createLibrary(Library library) {
+        // ** For the time being, we are simply creating a hard-coded library
+        // ** In the future, this will be loaded from a file!
 
         // To Kill A Mockingbird
         Book book1 = new Book();
-        book1.setTitle("To Kill A Mockingbird");
+        book1.setTitle("To Kill a Mockingbird");
         book1.setImageId(R.mipmap.ic_generic_cover);
 
         // The Great Gatsby
@@ -72,8 +93,34 @@ public class MainActivity extends ActionBarActivity {
         library.addBook(book1);
         library.addBook(book2);
         library.addBook(book3);
+    }
 
-        // Get the necessary array elements from the library
+    /**
+     * If a new book object was passed to this activity via an intent, this method
+     * will simply add that new book to the user's library
+     *
+     * (NOTE: This method will likely be made obsolete in the future, when instead of
+     * passing the new book back to this activity, we will simply write the book
+     * to the library file and it will automatically be loaded along with the other ones)
+     *
+     * @param library The user's library
+     */
+    public void addNewBook(Library library) {
+        // Check for a new book that may have been added
+        Book newBook = (Book)getIntent().getSerializableExtra("newBook");
+        if (newBook != null) {
+            library.addBook(newBook);
+        }
+    }
+
+    /**
+     * All of the book information that we choose to display in our custom list view will
+     * be retrieved in array format
+     *
+     * @param library The user's library
+     */
+    public void getArrayElements(Library library) {
+        // Get the necessary array elements from the library (we need this for our custom list view)
         bookTitles = library.getBookTitles();
         imageId = library.getImageIds();
     }
