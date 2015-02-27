@@ -16,6 +16,7 @@ public class Library {
     public void addBook(Book book) {
         if (book == null) {
             System.out.println("ERROR: Cannot add a book with value: null");
+            return;
         }
         books.add(book);
     }
@@ -27,6 +28,7 @@ public class Library {
     public void deleteBook(Book condemnedBook) {
         if (condemnedBook == null) {
             System.out.println("ERROR: Cannot delete a book with value: null");
+            return;
         }
         books.remove(condemnedBook);
     }
@@ -39,6 +41,7 @@ public class Library {
     public int numBooks() {
         if (getBooks().size() < 0) {
             System.out.println("ERROR: Library contains invalid number of books");
+            return 0;
         }
         return getBooks().size();
     }
@@ -49,8 +52,9 @@ public class Library {
      * @return Returns List<Book> books
      */
     public List<Book> getBooks() {
-        if (books.isEmpty()) {
-            System.out.println("ERROR: Library contains no books");
+        if (books == null) {
+            System.out.println("ERROR: list of books is null");
+            return null;
         }
         return this.books;
     }
