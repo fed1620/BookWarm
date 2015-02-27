@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,7 +38,9 @@ public class Note {
     public void setPageNumber(int pageNumberTemp) {
         pageNumber = pageNumberTemp;
     }
-    public void loadNoteFromFile() throws IOException {
+
+    //todo: implement loading functionality for these stubs
+    /*public void loadNoteFromFile() throws IOException {
         try {
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(openFileInput("numbers")));
             String inputString;
@@ -57,5 +60,5 @@ public class Note {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }
