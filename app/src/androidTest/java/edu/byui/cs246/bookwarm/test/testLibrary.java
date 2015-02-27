@@ -100,11 +100,13 @@ public class testLibrary extends TestCase {
         for (int i = 0; i < bookList.size(); i++) {
             titles[i] = bookList.get(i).getTitle();
             imageIDs[i] = bookList.get(i).getImageId();
+        }
 
-            // Ensure that the contents in one array matches the contents of the
-            // array that is given to us by the library
-            assertEquals(titles[i], bookList.get(i).getTitle());
-            assertEquals(imageIDs[i], bookList.get(i).getImageId());
+        // Ensure that the contents in the local array matches the
+        // contents of the array that is given to us by the library
+        for (int i = 0; i < bookList.size(); i++) {
+            assertEquals(titles[i], library.getBookTitles()[i]);
+            assertEquals(imageIDs[i], library.getImageIds()[i]);
         }
     }
 }
