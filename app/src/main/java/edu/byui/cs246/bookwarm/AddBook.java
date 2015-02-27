@@ -69,10 +69,12 @@ public class AddBook extends ActionBarActivity {
                         newBook.setTitle(title);
                         newBook.setImageId(imageID);
 
+                        Library library = (Library)getIntent().getSerializableExtra("library");
+                        library.addBook(newBook);
+
                         // Create a new intent that we will use to pass the book
                         // back to the main activity
                         Intent intentPassBook = new Intent(AddBook.this, MainActivity.class);
-                        intentPassBook.putExtra("newBook", newBook);
                         startActivity(intentPassBook);
                     }
                 }

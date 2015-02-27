@@ -1,12 +1,13 @@
 package edu.byui.cs246.bookwarm;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A library is a list of books
  */
-public class Library {
+public class Library implements Serializable {
     private List<Book> books = new ArrayList<>();
 
     /**

@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 public class MainActivity extends ActionBarActivity {
     /*--------------------------------------------------------------------------------------------*/
-    public static Library library = new Library(); // ** Needs to be static, so that a new library
+    public static Library library = new Library(); // Needs to be static, so that a new library
     public ListView  list;                         // is not created every time we switch back to
     public Integer[] imageId;                      // the main activity
     public String[]  bookTitles;
@@ -28,9 +28,6 @@ public class MainActivity extends ActionBarActivity {
         if (library.numBooks() == 0) {
             createLibrary(library);
         }
-
-        // If any new books have been entered by the user, add that new book to our library.
-        addNewBook(library);
 
         // Because our custom list view needs the book information to be in array format, we will
         // kindly ask our library to give us all of the necessary book information in array format!
@@ -96,24 +93,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * If a new book object was passed to this activity via an intent, this method
-     * will simply add that new book to the user's library
-     *
-     * (NOTE: This method will likely be made obsolete in the future, when instead of
-     * passing the new book back to this activity, we will simply write the book
-     * to the library file and it will automatically be loaded along with the other ones)
-     *
-     * @param library The user's library
-     */
-    public void addNewBook(Library library) {
-        // Check for a new book that may have been added
-        Book newBook = (Book)getIntent().getSerializableExtra("newBook");
-        if (newBook != null) {
-            library.addBook(newBook);
-        }
-    }
-
-    /**
      * All of the book information that we choose to display in our custom list view will
      * be retrieved in array format
      *
@@ -143,7 +122,11 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // Opens the menu activity
-                startActivity(new Intent(MainActivity.this, MenuActivity.class));
+                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+
+                intent.putExtra("library", library);
+
+                startActivity(intent);
             }
         });
     }
