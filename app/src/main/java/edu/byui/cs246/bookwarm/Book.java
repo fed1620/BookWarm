@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Book implements Serializable{
     private String title;
-    private Integer cover;
+    private Integer imageId;
     private String author;
     private String publisher;
     private int readStatus;
@@ -35,13 +35,11 @@ public class Book implements Serializable{
         return title;
     }
 
-    public void setCover(Integer cover) {
-        this.cover = cover;
+    public void setImageId(Integer imageId) {
+        this.imageId = imageId;
     }
 
-    public Integer getImageId() { return cover; }
-
-    public int getCover() { return cover; }
+    public Integer getImageId() { return imageId; }
 
     public String getAuthor() { return author; }
 
@@ -56,8 +54,6 @@ public class Book implements Serializable{
     public int getReleaseDate() { return releaseDate; }
 
     public List<Note> getNotes() { return notes; }
-
-    public void setCover(int cover) { this.cover = cover; }
 
     public void setAuthor(String author) { this.author = author; }
 
