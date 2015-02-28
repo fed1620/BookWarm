@@ -2,6 +2,7 @@ package edu.byui.cs246.bookwarm;
 
 import android.content.Context;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -40,25 +41,25 @@ public class Note {
     }
 
     //todo: implement loading functionality for these stubs
-    /*public void loadNoteFromFile() throws IOException {
+    public void loadNoteFromFile() throws IOException {
         try {
-            BufferedReader inputReader = new BufferedReader(new InputStreamReader(openFileInput("numbers")));
+            BufferedReader inputReader = new BufferedReader(new InputStreamReader(new FileInputStream("note")));
             String inputString;
             List<String> items = new ArrayList<>();
             while ((inputString = inputReader.readLine()) != null) {
 
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
     public void saveNoteToFile() {
         try {
-            FileOutputStream fos = openFileOutput("note", Context.MODE_PRIVATE);
+            FileOutputStream fos = new FileOutputStream("note");
 
             fos.close();
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 }
