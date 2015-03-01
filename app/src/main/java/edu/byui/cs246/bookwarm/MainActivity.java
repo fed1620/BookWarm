@@ -78,6 +78,9 @@ public class MainActivity extends ActionBarActivity {
         Book book1 = new Book();
         book1.setTitle("To Kill a Mockingbird");
         book1.setImageId(R.mipmap.ic_generic_cover);
+        book1.setAuthor("author");
+        book1.setPublisher("publisher");
+        book1.setReadStatus(1);
 
         // The Great Gatsby
         Book book2 = new Book();
@@ -128,7 +131,7 @@ public class MainActivity extends ActionBarActivity {
     /**
      * Self-explanatory
      */
-    void setupCustomListView() {
+    private void setupCustomListView() {
         CustomList adapter = new CustomList(MainActivity.this, bookTitles, imageId);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
@@ -137,7 +140,7 @@ public class MainActivity extends ActionBarActivity {
     /**
      * Also self-explanatory
      */
-    void setupMenuButton() {
+    private void setupMenuButton() {
         Button btn = (Button) findViewById(R.id.button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
