@@ -14,25 +14,22 @@ import android.widget.TextView;
  */
 public class CustomList extends ArrayAdapter<String> {
     private final Activity  context;
-    private final String[]  titles;
-    private final Integer[] imageId;
+    private final Library library;
 
     /**
-     * Constructor for the CustomList class
-     * @param context
-     * @param titles  The titles for all the books
-     * @param imageId The book covers. (Until we are more pro, just use the generic covers I put in mipmap/covers
+     * Constructor for the class
+     * @param context context in which it is used
+     * @param library the library to be loaded
      */
-    public CustomList(Activity context, String[] titles, Integer[] imageId) {
-        super(context, R.layout.list_single, titles);
+    public CustomList(Activity context, Library library) {
+        super(context, R.layout.list_single, library.getBookTitles());
 
         this.context = context;
-        this.titles  = titles;
-        this.imageId = imageId;
+        this.library = library;
     }
 
     /**
-     * Not sure why this is necessary, probably something to do with ListView.setAdapter()
+     * Decide what gets shown in the ListView
      * @param position
      * @param view
      * @param parent
@@ -49,8 +46,8 @@ public class CustomList extends ArrayAdapter<String> {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
 
         //change em
-        txtTitle.setText(titles[position]);
-        imageView.setImageResource(imageId[position]);
+        txtTitle.setText(library.getBookTitles()[position]);
+        imageView.setImageResource(library.getImageIds()[position]);
 
         return rowView;
     }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -14,8 +15,7 @@ public class MainActivity extends ActionBarActivity {
     /*--------------------------------------------------------------------------------------------*/
     public static Library library = new Library(); // Needs to be static, so that a new library
     public ListView  list;                         // is not created every time we switch back to
-    public Integer[] imageId;                      // the main activity
-    public String[]  bookTitles;
+                                                   // the main activity
     /*--------------------------------------------------------------------------------------------*/
 
     @Override
@@ -31,10 +31,6 @@ public class MainActivity extends ActionBarActivity {
 
         // If any new books have been entered by the user, add that new book to our library.
         addNewBook(library);
-
-        // Because our custom list view needs the book information to be in array format, we will
-        // kindly ask our library to give us all of the necessary book information in array format!
-        getArrayElements(library);
 
         // Set up the List View and the Menu button
         setupCustomListView();
@@ -117,24 +113,20 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * All of the book information that we choose to display in our custom list view will
-     * be retrieved in array format
-     *
-     * @param library The user's library
-     */
-    public void getArrayElements(Library library) {
-        // Get the necessary array elements from the library (we need this for our custom list view)
-        bookTitles = library.getBookTitles();
-        imageId = library.getImageIds();
-    }
-
-    /**
      * Self-explanatory
      */
     private void setupCustomListView() {
-        CustomList adapter = new CustomList(MainActivity.this, bookTitles, imageId);
+        CustomList adapter = new CustomList(MainActivity.this, library);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
+
+        //The list listener itself, in all its glory
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
     }
 
     /**
