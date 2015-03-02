@@ -13,6 +13,7 @@ import android.widget.EditText;
 public class AddBookActivity extends ActionBarActivity {
 
     public String title;
+    public String author;
     public Integer imageID = R.mipmap.ic_generic_cover;        // For now, this is always the same
 
     @Override
@@ -59,7 +60,9 @@ public class AddBookActivity extends ActionBarActivity {
             public void onClick(View v) {
                 // Get the title of the new book from the user
                 EditText bookTitle = (EditText)findViewById(R.id.title);
+                EditText bookAuthor = (EditText)findViewById(R.id.author);
                 title = bookTitle.getText().toString();
+                author = bookAuthor.getText().toString();
 
                 // The new book will only be added to the library if the user filled out
                 // all of the necessary fields (For the time being, just the title)
@@ -67,6 +70,7 @@ public class AddBookActivity extends ActionBarActivity {
                     if (!title.isEmpty()) {
                         Book newBook = new Book();
                         newBook.setTitle(title);
+                        newBook.setAuthor(author);
                         newBook.setImageId(imageID);
 
                         // Create a new intent that we will use to pass the book

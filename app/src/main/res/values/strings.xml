@@ -13,5 +13,6 @@
     // activity_add_book.xml
     <string name="titleHint">Title</string>
     <string name="add_book">Add Book</string>
+    <string name="authorHint">Author</string>
 
 </resources>

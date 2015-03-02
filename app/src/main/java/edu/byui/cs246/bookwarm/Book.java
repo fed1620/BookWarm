@@ -14,8 +14,9 @@ import java.util.List;
  */
 public class Book implements Serializable{
     private String title;
-    private Integer imageId;
     private String author;
+
+    private Integer imageId;
     private String publisher;
     private int readStatus;
     private boolean isFavourite;

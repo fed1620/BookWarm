@@ -12,7 +12,7 @@ import android.widget.TextView;
 /**
  * The custom ArrayAdapter we'll use to display the library of books
  */
-public class CustomList extends ArrayAdapter<String> {
+public class CustomList extends ArrayAdapter<String> {       // Could be ArrayAdapter<Book>
     private final Activity  context;
     private final Library library;
 
