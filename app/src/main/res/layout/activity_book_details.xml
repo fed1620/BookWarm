@@ -9,19 +9,29 @@
         android:layout_height="200dp"
         android:id="@+id/coverIcon"
         android:layout_margin="15dp"
+        android:contentDescription="@string/bookCoverDescription"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner"
         android:layout_gravity="center_horizontal" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ratingBar" />
 
     <TextView
         android:layout_width="355dp"
         android:layout_height="wrap_content"
         android:id="@+id/bookInfo"
-        android:layout_gravity="center_horizontal"
         android:layout_weight="0.84" />
 
     <Button
         android:layout_width="245dp"
         android:layout_height="wrap_content"
-        android:text="Notes"
+        android:text="@string/notesButton"
         android:id="@+id/notesButton"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.06" />

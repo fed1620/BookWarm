@@ -4,11 +4,17 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
- * Created by Jake on 2/28/2015.
+ * This activity will display all information about the book in detail, and will allow
+ * the user to access the Notes relating to the book, set the read status, and rate the book
  */
 public class BookDetailsActivity extends ActionBarActivity {
     private Book thisBook;
@@ -51,6 +57,7 @@ public class BookDetailsActivity extends ActionBarActivity {
         thisBook = (Book)getIntent().getSerializableExtra("thisBook");
 
         setupDisplay();
+        setupSpinner();
     }
 
     //Fill out the display's information
@@ -83,5 +90,42 @@ public class BookDetailsActivity extends ActionBarActivity {
                 break;
         }
         //finished 'isRead' segment
+    }
+
+    /**
+     * Create the drop-down menu using a spinner. This will represent the read status
+     *
+     * Referenced: http://javatechig.com/android/android-spinner-example
+     */
+    public void setupSpinner() {
+        // First, get the array of strings that will indicate the read status
+        String[] readStatus = getResources().getStringArray(R.array.readStatus);
+
+        // Declare the spinner and the array adapter
+        final Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        ArrayAdapter<String> spinnerAdapter;
+        spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, readStatus);
+
+        // Set up the adapter
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                // Depending on which item is selected in the drop-down menu, a different
+                // read status will be assigned
+                switch(spinner.getSelectedItemPosition()) {
+                    case 0: thisBook.setReadStatus(-1);
+                    break;
+                    case 1: thisBook.setReadStatus(0);
+                    break;
+                    case 2: thisBook.setReadStatus(1);
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // Do nothing
+            }
+        });
     }
 }

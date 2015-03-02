@@ -105,8 +105,8 @@ public class MainActivity extends ActionBarActivity {
      * @param library The user's library
      */
     public void addNewBook(Library library) {
-    // Check for a new book that may have been added
-        Book newBook = (Book)getIntent().getSerializableExtra("newBook");
+        // Check for a new book that may have been added
+        Book newBook = (Book) getIntent().getSerializableExtra("newBook");
         if (newBook != null) {
             library.addBook(newBook);
         }

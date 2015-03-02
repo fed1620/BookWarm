@@ -15,4 +15,15 @@
     <string name="add_book">Add Book</string>
     <string name="authorHint">Author</string>
 
+    // activity_book_details.xml
+    <string name="notesButton">Notes</string>
+    <string name="bookCoverDescription">Book Cover</string>
+
+    <string-array name="readStatus">
+        <item>Have Not Read Yet</item>
+        <item>Reading</item>
+        <item>Have Already Read</item>
+    </string-array>
+
+
 </resources>
