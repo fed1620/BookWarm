@@ -2,7 +2,7 @@
 
 QUEST LOG:
 ~~~~~~~~~~
-Igor(Accretia Launcher) - Create note XML file[add new note button, delete button], displays all previously written notes, adds notes to Book object, retrieves notes from Book object.
+Igor(newLayoutLauncher) - Create note XML activity [add new note button, delete button], displays all previously written notes, adds notes to Book object, retrieves notes from Book object.
 Federico(Iostream Broadswordsman) - Implement rating bar and readstatus button in BookDetails
 Jake(RogueFactory) - Implement newActivity from onClicks on the ListView objects.
 
