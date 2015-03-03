@@ -127,8 +127,11 @@ public class MainActivity extends ActionBarActivity {
                 //create and start the new activity
                 Intent intent = new Intent(MainActivity.this, BookDetailsActivity.class);
 
+                //second part is basically just getting the corresponding book from the library,
+                //the listView is just a visual representation of what's in the library, after all.
                 intent.putExtra("thisBook", library.getBooks().get((int)id));
 
+                //ready, go.
                 startActivity(intent);
             }
         });
