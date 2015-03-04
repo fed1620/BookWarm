@@ -1,5 +1,8 @@
 package edu.byui.cs246.bookwarm;
 
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -68,9 +71,13 @@ public class Book implements Serializable {
 
     public void setReleaseDate(int releaseDate) { this.releaseDate = releaseDate; }
 
-    public void addNote(List<Note> notes) { this.notes = notes; }
+    public void addNote(Note note) { this.notes.add(note); }
 
-    public void removeNote(List<Note> notes) { this.notes = notes; }
+    public void removeNote(int index) { this.notes.remove(index); }
+
+    public void updateNotesDisplay(List<Note> notes) {
+
+    }
 
     public void loadFromFile() {
         try {

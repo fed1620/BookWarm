@@ -4,14 +4,13 @@ import junit.framework.TestCase;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 import edu.byui.cs246.bookwarm.Note;
 
 /**
- * (INSERT DESCRIPTION HERE)
+ * Test Set Number Page and Load Note From File functions
  */
 public class testNote extends TestCase {
 
