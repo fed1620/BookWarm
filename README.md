@@ -16,10 +16,27 @@ Jake(RogueFactory) - Implement the java for NoteDetailsActivity. (Possible custo
 
 NOTES FOR TEAM MEMBERS GO HERE:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+3/4/15
+
+Always make sure that each activity has a .java file associated with it! For clarity, make sure
+that the names of the files match in the following way:
+
+    NewActivity.java        // Implementation
+    activity_new.xml        // Layout
+
+    (Example):
+    AddBookActivity.java
+    activity_add_book.xml
+
+    - Federico
+
+---------------------------------------------------------------------------------------------------
 2/27/15
 
 IMPORTANT: Before committing any new code, first run the app and make sure
 that everything is working as intended!
+
     - Federico
 
 ---------------------------------------------------------------------------------------------------
