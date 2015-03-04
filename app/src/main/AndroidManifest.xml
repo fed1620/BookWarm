@@ -17,10 +17,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MenuActivity"
-            android:label="@string/title_activity_menu" >
-        </activity>
-        <activity
             android:name=".AddBookActivity"
             android:label="@string/title_activity_add_book" >
         </activity>

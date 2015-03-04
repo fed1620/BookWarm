@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 
@@ -32,9 +31,8 @@ public class MainActivity extends ActionBarActivity {
         // If any new books have been entered by the user, add that new book to our library.
         updateLibrary(library);
 
-        // Set up the List View and the Menu button
+        // Set up the List View
         setupCustomListView();
-        setupMenuButton();
     }
 
 
@@ -54,6 +52,12 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.id.add_new_book) {
+            Intent intent = new Intent(MainActivity.this, AddBookActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -139,21 +143,6 @@ public class MainActivity extends ActionBarActivity {
                 intent.putExtra("thisBook", library.getBooks().get((int)id));
 
                 //ready, go.
-                startActivity(intent);
-            }
-        });
-    }
-
-    /**
-     * Also self-explanatory
-     */
-    private void setupMenuButton() {
-        Button btn = (Button) findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Opens the menu activity
-                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                 startActivity(intent);
             }
         });

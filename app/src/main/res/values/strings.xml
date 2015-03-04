@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">BookWarm</string>
     <string name="hello_world">Hello world!</string>
+
+    // menu_main.xml
     <string name="action_settings">Settings</string>
+    <string name="add_new_book">Add New Book</string>
 
     // activity_main.xml
     <string name="title_activity_menu">Menu</string>
