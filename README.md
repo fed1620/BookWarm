@@ -13,7 +13,6 @@ MainActivity
 
 Jake(RogueFactory) - Implement the java for NoteDetailsActivity. (Possible custom adapter needed)
 
-
 NOTES FOR TEAM MEMBERS GO HERE:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -28,6 +27,9 @@ that the names of the files match in the following way:
     (Example):
     AddBookActivity.java
     activity_add_book.xml
+
+Appending "Activity" onto the end of the .java file will help us differentiate between the
+activity classes and the regular classes.
 
     - Federico
 
