@@ -7,13 +7,13 @@ Federico(Iostream Broadswordsman) - Implement rating bar and readstatus button i
 Jake(RogueFactory) - Implement newActivity from onClicks on the ListView objects.
 
 
-
 NOTES FOR TEAM MEMBERS GO HERE:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 2/27/15
 
 IMPORTANT: Before committing any new code, first run the app and make sure
 that everything is working as intended!
+    - Federico
 
 ---------------------------------------------------------------------------------------------------
 2/25/15
@@ -38,7 +38,4 @@ otherwise they will be ignored when we run the "Test" configuration!
 ---------------------------------------------------------------------------------------------------
 
 Just heard about xstream - its a library that allows you to pass in an object (even custom objects) and stores it as an XML file. Might make things pretty easy on us for file formatting.
--Jake
-
-WOO! ListView now displays a book and a title. (Had to make a custom list class) Anyway, Federico, if you need to add books to it, check out the two class variables (String[] titles and Integer[] imageId) in MainActivity.java. You'll have to create functions to interface with those.
 -Jake
