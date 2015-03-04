@@ -2,8 +2,13 @@
 
 QUEST LOG:
 ~~~~~~~~~~
-Igor(newLayoutLauncher) - Create note XML activity [add new note button, delete button], displays all previously written notes, adds notes to Book object, retrieves notes from Book object.
+Igor(newLayoutLauncher) - Make sure each note activity has a skeleton java file
+to go with it. Create a separate "Add Note Activity" with a large text box for inputting the note
+content, and a smaller EditText for an optional page number. The "Add Note Activity" should pass the
+newly created note object on an intent.
+
 Federico(Iostream Broadswordsman) - Implement rating bar and readstatus button in BookDetails
+
 Jake(RogueFactory) - Implement newActivity from onClicks on the ListView objects.
 
 
