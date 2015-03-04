@@ -12,15 +12,15 @@ import java.util.List;
 /**
  * A Book now stores a title and an image ID
  */
-public class Book implements Serializable{
+public class Book implements Serializable {
     private String title;
     private String author;
 
     private Integer imageId;
     private String publisher;
-    private int readStatus;
+    private int readStatus = 0;             // By default, a book has not yet been read
     private boolean isFavourite;
-    private int customRating;
+    private int rating = 0;                 // By default, a book is not rated
     private int releaseDate;
     private List<Note> notes;
 
@@ -50,7 +50,7 @@ public class Book implements Serializable{
 
     public boolean getIsFavourite() { return isFavourite; }
 
-    public int getCustomRating() { return customRating; }
+    public int getRating() { return rating; }
 
     public int getReleaseDate() { return releaseDate; }
 
@@ -64,7 +64,7 @@ public class Book implements Serializable{
 
     public void setIsFavourite(boolean isFavourite) { this.isFavourite = isFavourite; }
 
-    public void setIsCustomRating(int customRating) { this.customRating = customRating; }
+    public void setRating(int rating) { this.rating = rating; }
 
     public void setReleaseDate(int releaseDate) { this.releaseDate = releaseDate; }
 

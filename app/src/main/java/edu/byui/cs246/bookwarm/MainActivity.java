@@ -30,7 +30,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         // If any new books have been entered by the user, add that new book to our library.
-        addNewBook(library);
+        updateLibrary(library);
 
         // Set up the List View and the Menu button
         setupCustomListView();
@@ -73,19 +73,20 @@ public class MainActivity extends ActionBarActivity {
         // To Kill A Mockingbird
         Book book1 = new Book();
         book1.setTitle("To Kill a Mockingbird");
+        book1.setAuthor("Harper Lee");
         book1.setImageId(R.mipmap.ic_generic_cover);
-        book1.setAuthor("author");
-        book1.setPublisher("publisher");
-        book1.setReadStatus(1);
+        book1.setReadStatus(2);
 
         // The Great Gatsby
         Book book2 = new Book();
         book2.setTitle("The Great Gatsby");
+        book2.setAuthor("F. Scott Fitzgerald");
         book2.setImageId(R.mipmap.ic_generic_cover);
 
         // Pride and Prejudice and Zombies
         Book book3 = new Book();
         book3.setTitle("Pride and Prejudice and Zombies");
+        book3.setAuthor("Seth Grahame-Smith");
         book3.setImageId(R.mipmap.ic_generic_cover);
 
         // Add all of our hard-coded books to the library
@@ -104,11 +105,17 @@ public class MainActivity extends ActionBarActivity {
      *
      * @param library The user's library
      */
-    public void addNewBook(Library library) {
+    public void updateLibrary(Library library) {
         // Check for a new book that may have been added
         Book newBook = (Book) getIntent().getSerializableExtra("newBook");
         if (newBook != null) {
             library.addBook(newBook);
+        }
+
+        // Update any books that may have been changed
+        Book updatedBook = (Book) getIntent().getSerializableExtra("updatedBook");
+        if (updatedBook != null) {
+            library.updateBookInfo(updatedBook);
         }
     }
 

@@ -4,12 +4,48 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="200dp"
-        android:id="@+id/coverIcon"
-        android:layout_margin="15dp"
-        android:contentDescription="@string/bookCoverDescription"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:id="@+id/coverIcon"
+            android:contentDescription="@string/bookCoverDescription"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/title"
+            android:id="@+id/title"
+            android:layout_gravity="right"
+            android:layout_marginTop="30dp"
+            android:layout_alignTop="@+id/coverIcon"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/coverIcon"
+            android:layout_toEndOf="@+id/coverIcon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/author"
+            android:id="@+id/author"
+            android:layout_gravity="right"
+            android:layout_below="@+id/title"
+            android:layout_toRightOf="@+id/coverIcon"
+            android:layout_toEndOf="@+id/coverIcon" />
+
+        </RelativeLayout>
+
+
 
     <Spinner
         android:layout_width="match_parent"
@@ -20,7 +56,10 @@
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ratingBar" />
+        android:id="@+id/ratingBar"
+        android:numStars="5"
+        android:rating="0.0"
+        android:stepSize="1.0"/>
 
     <TextView
         android:layout_width="355dp"

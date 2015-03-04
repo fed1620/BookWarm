@@ -90,4 +90,23 @@ public class Library {
         }
         return imageIds;
     }
+
+    /**
+     * When the book passed in matches a book that is in our library, update the
+     * book to reflect any changes that have been made
+     *
+     * @param book The book to be updated
+     */
+    public void updateBookInfo(Book book) {
+        for (int i = 0; i < numBooks(); ++i) {
+            if (book.getTitle().equals(books.get(i).getTitle())) {
+
+                // Change the read status, the rating, and favorite status of
+                // the book in the library
+                books.get(i).setReadStatus(book.getReadStatus());
+                books.get(i).setRating(book.getRating());
+                books.get(i).setIsFavourite(book.getIsFavourite());
+            }
+        }
+    }
 }

@@ -18,9 +18,11 @@
     // activity_book_details.xml
     <string name="notesButton">Notes</string>
     <string name="bookCoverDescription">Book Cover</string>
+    <string name="title">Title</string>
+    <string name="author">Author</string>
 
     <string-array name="readStatus">
-        <item>Have Not Read Yet</item>
+        <item>Have Not Read</item>
         <item>Reading</item>
         <item>Have Already Read</item>
     </string-array>

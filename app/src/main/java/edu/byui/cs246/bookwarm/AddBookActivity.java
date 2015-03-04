@@ -66,7 +66,7 @@ public class AddBookActivity extends ActionBarActivity {
 
                 // The new book will only be added to the library if the user filled out
                 // all of the necessary fields (For the time being, just the title)
-                if (title != null) {
+                if (title != null && author != null) {
                     if (!title.isEmpty()) {
                         Book newBook = new Book();
                         newBook.setTitle(title);
@@ -78,6 +78,7 @@ public class AddBookActivity extends ActionBarActivity {
                         Intent intentPassBook = new Intent(AddBookActivity.this, MainActivity.class);
                         intentPassBook.putExtra("newBook", newBook);
                         startActivity(intentPassBook);
+                        finish();
                     }
                 }
             }
