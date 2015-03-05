@@ -75,10 +75,6 @@ public class Book implements Serializable {
 
     public void removeNote(int index) { this.notes.remove(index); }
 
-    public void updateNotesDisplay(List<Note> notes) {
-
-    }
-
     public void loadFromFile() {
         try {
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(new FileInputStream("book")));
