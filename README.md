@@ -4,9 +4,7 @@ QUEST LOG:
 ~~~~~~~~~~
 Igor(newLayoutLauncher) - Make sure each note activity has a skeleton java file
 to go with it. Create a separate "Add Note Activity" with a large text box for inputting the note
-content, a smaller EditText for an optional page number, and a button to create the note. 
-Create a java file for that activity that will pass a Note object (via intent.putExtra()) back to NoteDetailsActivity (which
-Jake will be creating) when the Create Note button is pressed.
+content, a smaller EditText for an optional page number, and a button to create the note.
 
 Federico(Iostream Broadswordsman) - Remove the menu button we created, and switch it's functionality to the activity bar in
 MainActivity
