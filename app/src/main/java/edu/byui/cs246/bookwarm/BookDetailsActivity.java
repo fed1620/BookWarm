@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
@@ -29,6 +30,8 @@ public class BookDetailsActivity extends ActionBarActivity {
 
         //jumping to a run function because onCreate is cluttered as fudge
         run();
+
+        setupListNoteButton();
     }
 
 
@@ -199,4 +202,14 @@ public class BookDetailsActivity extends ActionBarActivity {
         });
     }
 
+    void setupListNoteButton() {
+        Button btn = (Button) findViewById(R.id.notesButton);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BookDetailsActivity.this, ListNoteActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 }
