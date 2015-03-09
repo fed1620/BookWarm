@@ -208,6 +208,7 @@ public class BookDetailsActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(BookDetailsActivity.this, ListNoteActivity.class);
+                intent.putExtra("thisBook", thisBook);
                 startActivity(intent);
             }
         });

@@ -88,6 +88,12 @@ public class Book implements Serializable {
         }
     }
 
+    /**
+     * Save three things in a directory:
+     *    1. Book details file
+     *    2. Book cover image
+     *    3. Notes directory
+     */
     public void saveToFile() {
         try {
             FileOutputStream fos = new FileOutputStream("book");

@@ -109,4 +109,13 @@ public class Library {
             }
         }
     }
+
+    /**
+     * Loop through our library and call the save method for each book
+     */
+    public void save() {
+        for (int i = 0; i < numBooks(); ++i) {
+            books.get(i).saveToFile();
+        }
+    }
 }
