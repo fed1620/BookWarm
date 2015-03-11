@@ -8,8 +8,6 @@ import java.util.List;
  * A Book now stores a title and an image ID
  */
 public class Book implements Serializable {
-    private static final String TAG_BOOK = "Book";
-    
     private int        id;                         // To store in our SQLite database
     private String     title;
     private String     author;

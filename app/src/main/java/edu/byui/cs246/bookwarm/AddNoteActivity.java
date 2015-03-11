@@ -79,11 +79,12 @@ public class AddNoteActivity extends ActionBarActivity {
     private Integer buildPageNumber() {
         if (!pageNumber.getText().toString().isEmpty()) {
             String pageNumberContent = pageNumber.getText().toString();
+            Log.i(TAG_ADD_NOTE_ACTIVITY, pageNumberContent);
             if (isInteger(pageNumberContent)) {
                 return new Integer(pageNumberContent);
             } else {
                 Log.e(TAG_ADD_NOTE_ACTIVITY, "The user entered an invalid page number.");
-                //TODO: Implement a 'try again' feature
+                //TODO: Implement a 'try again' feature. For now, return 0.
                 return 0;
             }
         } else {

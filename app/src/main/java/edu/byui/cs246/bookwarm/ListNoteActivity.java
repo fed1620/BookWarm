@@ -3,6 +3,7 @@ package edu.byui.cs246.bookwarm;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,8 @@ import java.util.List;
 
 
 public class ListNoteActivity extends ActionBarActivity {
+    private static final String TAG_LIST_NOTE_ACTVITY = "ListNoteActivity";
+
     Book thisBook;
     List<Note> bookNotes;
     ListView listView;
@@ -73,5 +76,7 @@ public class ListNoteActivity extends ActionBarActivity {
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, bookNotes);
 
         listView.setAdapter(adapter);
+
+        Log.i(TAG_LIST_NOTE_ACTVITY, "Loaded " + bookNotes.size() + " notes.");
     }
 }
