@@ -7,6 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+
+import java.util.List;
 
 
 public class ListNoteActivity extends ActionBarActivity {
@@ -42,6 +45,11 @@ public class ListNoteActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    void createList(List<Note> thisBook) {
+        ListView imageView = (ListView) findViewById(R.id.listNote);
+        //imageView.setAdapter();
+    }
+
     void setupAddNoteButton() {
         Button btn = (Button) findViewById(R.id.addNote);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +57,9 @@ public class ListNoteActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ListNoteActivity.this, AddNoteActivity.class);
                 startActivity(intent);
+                Book thisBook = (Book)getIntent().getSerializableExtra("thisBook");
+
+                createList(thisBook.getNotes());
             }
         });
     }
