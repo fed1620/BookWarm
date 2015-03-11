@@ -127,7 +127,7 @@ public class MainActivity extends ActionBarActivity {
      * Self-explanatory
      */
     private void setupCustomListView() {
-        CustomList adapter = new CustomList(MainActivity.this, library);
+        CustomLibraryList adapter = new CustomLibraryList(MainActivity.this, library);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
 

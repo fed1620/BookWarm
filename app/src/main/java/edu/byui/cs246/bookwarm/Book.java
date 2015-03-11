@@ -1,12 +1,15 @@
 package edu.byui.cs246.bookwarm;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A Book now stores a title and an image ID
  */
 public class Book implements Serializable {
+    private static final String TAG_BOOK = "Book";
+    
     private int        id;                         // To store in our SQLite database
     private String     title;
     private String     author;
@@ -16,6 +19,10 @@ public class Book implements Serializable {
     private int        rating = 0;                 // By default, a book is not rated
     private int        datePublished;
     private List<Note> notes;
+
+    public Book() {
+        notes = new ArrayList<>();
+    }
 
     // Setters and Getters
     public void setId(int id) { this.id = id; }

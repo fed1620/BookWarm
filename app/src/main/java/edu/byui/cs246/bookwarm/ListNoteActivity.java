@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -13,13 +14,20 @@ import java.util.List;
 
 
 public class ListNoteActivity extends ActionBarActivity {
+    Book thisBook;
+    List<Note> bookNotes;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_note);
-        //Intent intent = getIntent();
+
+        thisBook = (Book)getIntent().getSerializableExtra("thisBook");
+        bookNotes = thisBook.getNotes();
+
         setupAddNoteButton();
+        displayNotes();
     }
 
 
@@ -45,22 +53,25 @@ public class ListNoteActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    void createList(List<Note> thisBook) {
-        ListView imageView = (ListView) findViewById(R.id.listNote);
-        //imageView.setAdapter();
-    }
-
     void setupAddNoteButton() {
         Button btn = (Button) findViewById(R.id.addNote);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ListNoteActivity.this, AddNoteActivity.class);
-                startActivity(intent);
-                Book thisBook = (Book)getIntent().getSerializableExtra("thisBook");
 
-                createList(thisBook.getNotes());
+                intent.putExtra("thisBook", thisBook);
+
+                startActivity(intent);
             }
         });
+    }
+
+    //displays the notes in the ListView
+    private void displayNotes() {
+        listView = (ListView) findViewById(R.id.listView);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, bookNotes);
+
+        listView.setAdapter(adapter);
     }
 }

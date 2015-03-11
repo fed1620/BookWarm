@@ -12,7 +12,7 @@ import android.widget.TextView;
 /**
  * The custom ArrayAdapter we'll use to display the library of books
  */
-public class CustomList extends ArrayAdapter<String> {       // Could be ArrayAdapter<Book>
+public class CustomLibraryList extends ArrayAdapter<String> {       // Could be ArrayAdapter<Book>
     private final Activity  context;
     private final Library library;
 
@@ -21,8 +21,8 @@ public class CustomList extends ArrayAdapter<String> {       // Could be ArrayAd
      * @param context context in which it is used
      * @param library the library to be loaded
      */
-    public CustomList(Activity context, Library library) {
-        super(context, R.layout.list_single, library.getBookTitles());
+    public CustomLibraryList(Activity context, Library library) {
+        super(context, R.layout.library_list_single, library.getBookTitles());
 
         this.context = context;
         this.library = library;
@@ -39,7 +39,7 @@ public class CustomList extends ArrayAdapter<String> {       // Could be ArrayAd
     public View getView(int position, View view, ViewGroup parent) {
         //expand the list
         LayoutInflater inflater = context.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.list_single, null, true);
+        View rowView = inflater.inflate(R.layout.library_list_single, null, true);
 
         //retrieve the XML resources and set them up to be changed
         TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
