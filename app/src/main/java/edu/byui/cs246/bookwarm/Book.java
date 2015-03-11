@@ -1,31 +1,25 @@
 package edu.byui.cs246.bookwarm;
 
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A Book now stores a title and an image ID
  */
 public class Book implements Serializable {
-    private String title;
-    private String author;
-
-    private Integer imageId;
-    private String publisher;
-    private int readStatus = 0;             // By default, a book has not yet been read
-    private boolean isFavourite;
-    private int rating = 0;                 // By default, a book is not rated
-    private int releaseDate;
+    private int        id;                         // To store in our SQLite database
+    private String     title;
+    private String     author;
+    private Integer    imageId;
+    private int        readStatus = 0;             // By default, a book has not yet been read
+    private boolean    isFavourite = false;        // By default, a book is not favorited
+    private int        rating = 0;                 // By default, a book is not rated
+    private int        datePublished;
     private List<Note> notes;
+
+    // Setters and Getters
+    public void setId(int id) { this.id = id; }
+    public int  getId()       { return this.id; }
 
     public void setTitle(String title) {
         // Do nothing with an invalid title
@@ -47,21 +41,17 @@ public class Book implements Serializable {
 
     public String getAuthor() { return author; }
 
-    public String getPublisher() { return publisher; }
-
     public int getReadStatus() { return readStatus; }
 
     public boolean getIsFavourite() { return isFavourite; }
 
     public int getRating() { return rating; }
 
-    public int getReleaseDate() { return releaseDate; }
+    public int getDatePublished() { return datePublished; }
 
     public List<Note> getNotes() { return notes; }
 
     public void setAuthor(String author) { this.author = author; }
-
-    public void setPublisher(String publisher) { this.publisher = publisher; }
 
     public void setReadStatus(int readStatus) { this.readStatus = readStatus; }
 
@@ -69,38 +59,15 @@ public class Book implements Serializable {
 
     public void setRating(int rating) { this.rating = rating; }
 
-    public void setReleaseDate(int releaseDate) { this.releaseDate = releaseDate; }
+    public void setDatePublished(int datePublished) { this.datePublished = datePublished; }
 
     public void addNote(Note note) { this.notes.add(note); }
 
     public void removeNote(int index) { this.notes.remove(index); }
 
-    public void loadFromFile() {
-        try {
-            BufferedReader inputReader = new BufferedReader(new InputStreamReader(new FileInputStream("book")));
-            String inputString;
-            List<String> items = new ArrayList<>();
-            while ((inputString = inputReader.readLine()) != null) {
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Save three things in a directory:
-     *    1. Book details file
-     *    2. Book cover image
-     *    3. Notes directory
-     */
-    public void saveToFile() {
-        try {
-            FileOutputStream fos = new FileOutputStream("book");
-
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public String toString() {
+        return "Book [id=" + id + ", title=" + title +
+                ", author=" + author + ']';
     }
 }
