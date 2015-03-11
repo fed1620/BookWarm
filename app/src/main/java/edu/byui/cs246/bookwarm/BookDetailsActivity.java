@@ -112,13 +112,6 @@ public class BookDetailsActivity extends ActionBarActivity {
             bookDescription += "Author: "       + thisBook.getAuthor()    + "\n";
         }
 
-        // And the Publisher
-        if (thisBook.getPublisher() == null) {
-            bookDescription += "Publisher: (Unknown)\n";
-        } else {
-            bookDescription += "Publisher: "    + thisBook.getPublisher() + "\n";
-        }
-
         //'isRead' segment
         switch (thisBook.getReadStatus()) {
             case 0: bookDescription += "Not yet read.\n";
