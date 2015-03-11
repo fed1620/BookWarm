@@ -29,7 +29,7 @@ public class DBManager extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Log message
-        Log.i(TAG_DB_MANAGER, "Creating SQLite DatabaseL " + DATABASE_NAME + "...");
+        Log.i(TAG_DB_MANAGER, "Creating SQLite Database: " + DATABASE_NAME + "...");
 
         // Build an SQL statement that will be used to create the book table
         String CREATE_BOOK_TABLE = "CREATE TABLE books (" +
