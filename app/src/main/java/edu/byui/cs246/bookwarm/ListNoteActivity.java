@@ -21,10 +21,8 @@ public class ListNoteActivity extends ActionBarActivity {
     //Constants:
     private static final String TAG_LIST_NOTE_ACTVITY = "ListNoteActivity";
 
-    //Class variables:
-    Book thisBook;
-    List<Note> bookNotes;
-    ListView listView;
+    //Variables
+    List<Note> listNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +30,13 @@ public class ListNoteActivity extends ActionBarActivity {
         setContentView(R.layout.activity_list_note);
 
         // receive book through intent from BOOK DETAILS ACTIVITY class
-        thisBook = (Book)getIntent().getSerializableExtra("thisBook");
+        Book thisBook = (Book)getIntent().getSerializableExtra("thisBook");
+        listNotes = thisBook.getNotes();
+
         // display the list
         displayNotes();
 
+        // setup button
         setupAddNoteButton();
     }
 
@@ -84,22 +85,16 @@ public class ListNoteActivity extends ActionBarActivity {
      * Delivers data from list to display
      */
     private void displayNotes() {
-        //testing...
-        Book test = new Book();
-        Note note = new Note();
-        note.setNoteContent("test");
-        note.setPageNumber(1);
-        note.setId(11);
-        test.addNote(note);
-        test.addNote(note);
-        test.addNote(note);
-        test.addNote(note);
-        
-        listView = (ListView) findViewById(R.id.listView);
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, bookNotes);
+        // create view
+        ListView listView = (ListView) findViewById(R.id.listView);
 
+        // create adapter
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listNotes);
+
+        // set adapter to view
         listView.setAdapter(adapter);
 
-        Log.i(TAG_LIST_NOTE_ACTVITY, "Loaded " + bookNotes.size() + " notes.");
+        // log number of notes
+        Log.i(TAG_LIST_NOTE_ACTVITY, "Loaded " + listNotes.size() + " notes.");
     }
 }
