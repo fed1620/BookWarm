@@ -59,6 +59,9 @@ public class AddNoteActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Self-explanatory
+     */
     private void setupCreateNoteButton() {
         Button createNoteButton = (Button) findViewById(R.id.createNote);
         createNoteButton.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +79,10 @@ public class AddNoteActivity extends ActionBarActivity {
         });
     }
 
+    /**
+     * Build the page number for the Note.
+     * @return returns the page number for the note entered. If none was entered, it is 0.
+     */
     private Integer buildPageNumber() {
         if (!pageNumber.getText().toString().isEmpty()) {
             String pageNumberContent = pageNumber.getText().toString();
@@ -92,6 +99,11 @@ public class AddNoteActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * Checks to see if a string is an integer as efficiently as possible.
+     * @param str The string to be check.
+     * @return A bool whether or not the string is an integer.
+     */
     //lovingly ripped off from:
     // http://stackoverflow.com/questions/237159/whats-the-best-way-to-check-to-see-if-a-string-represents-an-integer-in-java
     public static boolean isInteger(String str) {

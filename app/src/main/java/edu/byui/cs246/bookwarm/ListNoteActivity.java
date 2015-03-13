@@ -3,6 +3,7 @@ package edu.byui.cs246.bookwarm;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,13 @@ import java.util.List;
  * Implements list of notes page
  */
 public class ListNoteActivity extends ActionBarActivity {
+    //Constants:
+    private static final String TAG_LIST_NOTE_ACTVITY = "ListNoteActivity";
+
+    //Class variables:
+    Book thisBook;
+    List<Note> bookNotes;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +32,9 @@ public class ListNoteActivity extends ActionBarActivity {
         setContentView(R.layout.activity_list_note);
 
         // receive book through intent from BOOK DETAILS ACTIVITY class
-        Book thisBook = (Book)getIntent().getSerializableExtra("thisBook");
+        thisBook = (Book)getIntent().getSerializableExtra("thisBook");
         // display the list
-        displayList(thisBook);
+        displayNotes();
 
         setupAddNoteButton();
     }
@@ -55,31 +63,6 @@ public class ListNoteActivity extends ActionBarActivity {
     }
 
     /**
-     * CREATE LIST
-     * Delivers data from list to display
-     * @param thisBook
-     */
-    void displayList(Book thisBook) {
-        //testing...
-        Book test = new Book();
-        Note note = new Note();
-        note.setNoteContent("test");
-        note.setPageNumber(1);
-        note.setId(11);
-        test.addNote(note);
-        test.addNote(note);
-        test.addNote(note);
-        test.addNote(note);
-
-        // create list
-        ListView listView = (ListView) findViewById(R.id.listNote);
-        // create adapter
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, test.getNotes());
-        // send adapter to display
-        listView.setAdapter(arrayAdapter);
-    }
-
-    /**
      * SETUP ADD NOTE BUTTON
      * Creates ADD NOTE ACTIVITY class by intent
      **/
@@ -94,5 +77,29 @@ public class ListNoteActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * DISPLAY NOTES
+     * Delivers data from list to display
+     */
+    private void displayNotes() {
+        //testing...
+        Book test = new Book();
+        Note note = new Note();
+        note.setNoteContent("test");
+        note.setPageNumber(1);
+        note.setId(11);
+        test.addNote(note);
+        test.addNote(note);
+        test.addNote(note);
+        test.addNote(note);
+        
+        listView = (ListView) findViewById(R.id.listView);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, bookNotes);
+
+        listView.setAdapter(adapter);
+
+        Log.i(TAG_LIST_NOTE_ACTVITY, "Loaded " + bookNotes.size() + " notes.");
     }
 }

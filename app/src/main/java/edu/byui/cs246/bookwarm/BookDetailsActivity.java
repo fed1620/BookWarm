@@ -195,6 +195,9 @@ public class BookDetailsActivity extends ActionBarActivity {
         });
     }
 
+    /**
+     * Self-explanatory
+     */
     void setupListNoteButton() {
         Button btn = (Button) findViewById(R.id.notesButton);
         btn.setOnClickListener(new View.OnClickListener() {
