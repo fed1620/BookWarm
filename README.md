@@ -2,11 +2,11 @@
 
 QUEST LOG:
 ~~~~~~~~~~
-Igor(newLayoutLauncher) - Implement Dark UI theme
+Igor(newLayoutLauncher) - Organize and write comments for your implemented code.
 
-Federico(Iostream Broadswordsman) - Create SQLite database
+Federico(Iostream Broadswordsman) - SQLite database work
 
-Jake(RogueFactory) - Implement the java for Note activities
+Jake(RogueFactory) - Organize and write comments for your implemented code.
 
 NOTES FOR TEAM MEMBERS GO HERE:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
