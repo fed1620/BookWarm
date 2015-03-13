@@ -23,6 +23,7 @@ public class ListNoteActivity extends ActionBarActivity {
 
     //Variables
     List<Note> listNotes;
+    Book thisBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,7 @@ public class ListNoteActivity extends ActionBarActivity {
         setContentView(R.layout.activity_list_note);
 
         // receive book through intent from BOOK DETAILS ACTIVITY class
-        Book thisBook = (Book)getIntent().getSerializableExtra("thisBook");
+        thisBook = (Book)getIntent().getSerializableExtra("thisBook");
         listNotes = thisBook.getNotes();
 
         // display the list
@@ -74,6 +75,9 @@ public class ListNoteActivity extends ActionBarActivity {
             public void onClick(View v) {
                 // create intent
                 Intent intent = new Intent(ListNoteActivity.this, AddNoteActivity.class);
+
+                intent.putExtra("thisBook", thisBook);
+
                 // run intent
                 startActivity(intent);
             }
@@ -86,7 +90,7 @@ public class ListNoteActivity extends ActionBarActivity {
      */
     private void displayNotes() {
         // create view
-        ListView listView = (ListView) findViewById(R.id.listView);
+        ListView listView = (ListView) findViewById(R.id.listNote);
 
         // create adapter
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listNotes);
