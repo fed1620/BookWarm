@@ -13,10 +13,14 @@ import android.widget.ListView;
 
 import java.util.List;
 
-
+/**
+ * Java for the List Note Activity
+ */
 public class ListNoteActivity extends ActionBarActivity {
+    //Constants:
     private static final String TAG_LIST_NOTE_ACTVITY = "ListNoteActivity";
 
+    //Class variables:
     Book thisBook;
     List<Note> bookNotes;
     ListView listView;
@@ -56,6 +60,9 @@ public class ListNoteActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Self-explanatory
+     */
     void setupAddNoteButton() {
         Button btn = (Button) findViewById(R.id.addNote);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +77,9 @@ public class ListNoteActivity extends ActionBarActivity {
         });
     }
 
-    //displays the notes in the ListView
+    /**
+     * Setting up the adapter for the note ListView and populating it.
+     */
     private void displayNotes() {
         listView = (ListView) findViewById(R.id.listView);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, bookNotes);
