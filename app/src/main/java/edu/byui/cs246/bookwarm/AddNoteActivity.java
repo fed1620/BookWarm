@@ -33,6 +33,9 @@ public class AddNoteActivity extends ActionBarActivity {
         pageNumber  = (TextView) findViewById(R.id.pageNumber);
         noteContent = (TextView) findViewById(R.id.noteContent);
 
+        // We are supposed to load notes from the sqllite at this point
+        noteContent.setText("lol");
+
         setupCreateNoteButton();
     }
 
