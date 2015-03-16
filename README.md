@@ -2,11 +2,13 @@
 
 QUEST LOG:
 ~~~~~~~~~~
-Igor(newLayoutLauncher) - Organize and write comments for your implemented code.
+Igor(newLayoutLauncher) - Figure out Add Note bug
 
-Federico(Iostream Broadswordsman) - SQLite database work
+Federico(Iostream Broadswordsman) - Continue SQLite database work: Debug addBook() / getBook()
 
-Jake(RogueFactory) - Organize and write comments for your implemented code.
+Jake(RogueFactory) - Pizza pizza = new Pizza(LittleCaeser's);
+                     pizza.administerSlice(Igor);
+                     pizza.administerSlice(Federico);
 
 NOTES FOR TEAM MEMBERS GO HERE:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
