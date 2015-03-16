@@ -8,18 +8,38 @@ import java.util.List;
  * A Book now stores a title and an image ID
  */
 public class Book implements Serializable {
-    private int        id;                         // To store in our SQLite database
+    private int        id;                     // To store in our SQLite database
     private String     title;
     private String     author;
     private Integer    imageId;
-    private int        readStatus = 0;             // By default, a book has not yet been read
-    private boolean    isFavourite = false;        // By default, a book is not favorited
-    private int        rating = 0;                 // By default, a book is not rated
+    private int        readStatus;             // By default, a book has not yet been read
+    private boolean    isFavourite;            // By default, a book is not favorited
+    private int        rating;                 // By default, a book is not rated
     private int        datePublished;
-    private List<Note> notes;
+    private List<Note> notes = new ArrayList<>();
 
+    // Default Constructor
     public Book() {
-        notes = new ArrayList<>();
+        this.title         = null;
+        this.author        = null;
+        this.imageId       = null;
+        this.readStatus    = 0;
+        this.isFavourite   = false;
+        this.rating        = 0;
+        this.datePublished = 0;
+        this.notes = new ArrayList<>();
+    }
+
+    // Non-Default constructor
+    public Book(String title, String author) {
+        this.title         = title;
+        this.author        = author;
+        this.imageId       = null;
+        this.readStatus    = 0;
+        this.isFavourite   = false;
+        this.rating        = 0;
+        this.datePublished = 0;
+        this.notes = new ArrayList<>();
     }
 
     // Setters and Getters
