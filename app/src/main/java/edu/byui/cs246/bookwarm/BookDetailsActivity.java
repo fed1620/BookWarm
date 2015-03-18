@@ -67,7 +67,9 @@ public class BookDetailsActivity extends ActionBarActivity {
         finish();
     }
 
-    //The 'main' of this activity
+    /**
+     * The 'main' of this activity.
+     */
     private void run() {
         if (getIntent().getSerializableExtra("thisBook") == null) {
             return;
@@ -78,7 +80,9 @@ public class BookDetailsActivity extends ActionBarActivity {
         setupRatingBarListener();
     }
 
-    // Fill out the display information
+    /**
+     * Builds the display to show the book details.
+     */
     private void setupDisplay() {
         // Set the element variables
         ImageView coverIcon = (ImageView) findViewById(R.id.coverIcon);
@@ -100,7 +104,9 @@ public class BookDetailsActivity extends ActionBarActivity {
         bookInfo.setText(bookDescription);
     }
 
-    // Build a single string to represent the book's information
+    /**
+     * Builds the String that shows the Title, Author, and whether or not the book is read.
+     */
     private void buildInfoString() {
         // Assign the Title
         bookDescription =  "Title: "        + thisBook.getTitle()     + "\n";
@@ -121,7 +127,6 @@ public class BookDetailsActivity extends ActionBarActivity {
             case 2: bookDescription += "Already read.\n";
                 break;
         }
-        //finished 'isRead' segment
     }
 
     /**

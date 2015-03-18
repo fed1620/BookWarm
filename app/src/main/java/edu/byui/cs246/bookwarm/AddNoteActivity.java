@@ -13,7 +13,9 @@ import android.widget.TextView;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * Adds Note
+ */
 public class AddNoteActivity extends ActionBarActivity {
     private static final String TAG_ADD_NOTE_ACTIVITY = "AddNoteActivity";
 
@@ -109,6 +111,8 @@ public class AddNoteActivity extends ActionBarActivity {
      */
     //lovingly ripped off from:
     // http://stackoverflow.com/questions/237159/whats-the-best-way-to-check-to-see-if-a-string-represents-an-integer-in-java
+    // @param str String
+    // @return decides if str is integer
     public static boolean isInteger(String str) {
         if (str == null) {
             return false;
