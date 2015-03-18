@@ -16,7 +16,7 @@ public class Book implements Serializable {
     private boolean    isFavourite;            // By default, a book is not favorited
     private int        rating;                 // By default, a book is not rated
     private int        datePublished;
-    private List<Note> notes = new ArrayList<>();
+    private ArrayList<String> notes;
 
     // Default Constructor
     public Book() {
@@ -39,7 +39,7 @@ public class Book implements Serializable {
         this.isFavourite   = false;
         this.rating        = 0;
         this.datePublished = 0;
-        this.notes = new ArrayList<>();
+        this.notes = new ArrayList<String>();
     }
 
     // Setters and Getters
@@ -74,7 +74,7 @@ public class Book implements Serializable {
 
     public int getDatePublished() { return datePublished; }
 
-    public List<Note> getNotes() { return notes; }
+    public ArrayList<String> getNotes() { return notes; }
 
     public void setAuthor(String author) { this.author = author; }
 
@@ -86,7 +86,7 @@ public class Book implements Serializable {
 
     public void setDatePublished(int datePublished) { this.datePublished = datePublished; }
 
-    public void addNote(Note note) { this.notes.add(note); }
+    public void addNote(String note) { this.notes.add(note); }
 
     public void removeNote(int index) { this.notes.remove(index); }
 

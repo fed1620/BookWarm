@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class ListNoteActivity extends ActionBarActivity {
     private static final String TAG_LIST_NOTE_ACTVITY = "ListNoteActivity";
 
     //Variables
-    List<Note> listNotes;
+    ArrayList<String> listNotes;
     Book thisBook;
 
     @Override
@@ -31,6 +32,7 @@ public class ListNoteActivity extends ActionBarActivity {
         setContentView(R.layout.activity_list_note);
 
         // receive book through intent from BOOK DETAILS ACTIVITY class
+        thisBook = new Book();
         thisBook = (Book)getIntent().getSerializableExtra("thisBook");
         listNotes = thisBook.getNotes();
 
