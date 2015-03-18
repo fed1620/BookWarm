@@ -30,10 +30,10 @@ public class CustomLibraryList extends ArrayAdapter<String> {       // Could be 
 
     /**
      * Decide what gets shown in the ListView
-     * @param position
-     * @param view
-     * @param parent
-     * @return
+     * @param position The location of the user's 'click'.
+     * @param view     Mainly for resuability, but largely obselete in this context. We just need to meet the @Override conditions.
+     * @param parent   In this case, the parent is the List containing the Book view.
+     * @return         Returns a view of the customized Book view in the list row.
      */
     @Override
     public View getView(int position, View view, ViewGroup parent) {
