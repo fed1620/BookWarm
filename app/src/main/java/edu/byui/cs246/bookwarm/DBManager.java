@@ -32,7 +32,7 @@ public class DBManager extends SQLiteOpenHelper {
         // Build an SQL statement that will be used to create the book table
         String CREATE_BOOK_TABLE =
                 "CREATE TABLE books (" +
-                "  id     INTEGER PRIMARY KEY" +
+                "  id     INTEGER PRIMARY KEY AUTOINCREMENT" +
                 ", title  TEXT " +
                 ", author TEXT)";
 
@@ -84,15 +84,18 @@ public class DBManager extends SQLiteOpenHelper {
     /**
      * Retrieve a Book from the database, and return it as a Book object
      *
-     * @param id The ID of the book
+     * @param title The title of the book
      * @return Returns the book
      */
-    public Book getBook(int id){
+    public Book getBook(String title){
         // 1. Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
         // The query
-        final String QUERY = "SELECT * FROM " + TABLE_BOOKS; //" WHERE " + KEY_ID + " = " + id;
+        final String QUERY = "SELECT * FROM " + TABLE_BOOKS + " WHERE " + KEY_TITLE + " = \'" + title + "\';";
+
+        // Print the query
+        Log.i(TAG_DB_MANAGER, QUERY);
 
         // 2. Build the cursor
         Cursor cursor = db.rawQuery(QUERY, null);
