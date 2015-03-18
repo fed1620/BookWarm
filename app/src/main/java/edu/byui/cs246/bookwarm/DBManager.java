@@ -36,6 +36,11 @@ public class DBManager extends SQLiteOpenHelper {
                 ", title  TEXT " +
                 ", author TEXT)";
 
+        // Drop the table before we create it
+        final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_BOOKS + ';';
+        Log.i(TAG_DB_MANAGER, DROP_TABLE);
+        db.execSQL(DROP_TABLE);
+
         // Run the statement
         db.execSQL(CREATE_BOOK_TABLE);
     }
@@ -95,7 +100,7 @@ public class DBManager extends SQLiteOpenHelper {
         final String QUERY = "SELECT * FROM " + TABLE_BOOKS + " WHERE " + KEY_TITLE + " = \'" + title + "\';";
 
         // Print the query
-        Log.i(TAG_DB_MANAGER, QUERY);
+        //Log.i(TAG_DB_MANAGER, QUERY);
 
         // 2. Build the cursor
         Cursor cursor = db.rawQuery(QUERY, null);
@@ -111,9 +116,11 @@ public class DBManager extends SQLiteOpenHelper {
         Book book = new Book();
 
         if (cursor != null && cursor.moveToFirst()) {
+            Log.i(TAG_DB_MANAGER, "---------------------------------------------------------------");
             Log.i(TAG_DB_MANAGER, "ID:     " + cursor.getInt(cursor.getColumnIndex(KEY_ID)));
             Log.i(TAG_DB_MANAGER, "TITLE:  " + cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
             Log.i(TAG_DB_MANAGER, "AUTHOR: " + cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
+            Log.i(TAG_DB_MANAGER, "---------------------------------------------------------------");
 
             book.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
             book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));

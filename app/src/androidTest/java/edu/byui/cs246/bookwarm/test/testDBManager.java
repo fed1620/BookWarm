@@ -12,7 +12,7 @@ import edu.byui.cs246.bookwarm.R;
  */
 public class testDBManager extends AndroidTestCase {
     private static final String TAG_DB_MANAGER   = "DBManager";
-    /*
+
     public void testAddBook() {
         // Instantiate our test database
         DBManager db = new DBManager(getContext());
@@ -51,14 +51,15 @@ public class testDBManager extends AndroidTestCase {
 
         // Display the book
         Log.i(TAG_DB_MANAGER, "Retrieved book: " + fetchedBook1.toString());
-    }*/
+    }
 
     // Test this after testGetBook() is working
 
 
-    public void testGetTwoBooks() {
+    public void testGetThreeBooks() {
         // Instantiate our test database
         DBManager db = new DBManager(getContext());
+        db.onCreate(db.getWritableDatabase());
 
         // Create three books
         Book book1 = new Book("Head First Java", "Bert Bates and Kathy Sierra");
@@ -84,9 +85,9 @@ public class testDBManager extends AndroidTestCase {
         Book fetchedBook3 = db.getBook(book3.getTitle());
 
         // Display the book
-        Log.i(TAG_DB_MANAGER, "Retrieved book: " + fetchedBook1.toString());
-        Log.i(TAG_DB_MANAGER, "Retrieved book: " + fetchedBook2.toString());
-        Log.i(TAG_DB_MANAGER, "Retrieved book: " + fetchedBook3.toString());
+        Log.i(TAG_DB_MANAGER, "Retrieved book:   " + fetchedBook1.toString());
+        Log.i(TAG_DB_MANAGER, "Retrieved book:   " + fetchedBook2.toString());
+        Log.i(TAG_DB_MANAGER, "Retrieved book:   " + fetchedBook3.toString());
 
     }
 
