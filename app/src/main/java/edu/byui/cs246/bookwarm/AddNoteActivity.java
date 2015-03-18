@@ -18,7 +18,7 @@ public class AddNoteActivity extends ActionBarActivity {
     private static final String TAG_ADD_NOTE_ACTIVITY = "AddNoteActivity";
 
     Book thisBook;
-    Note newNote;
+    //Note newNote;
     TextView pageNumber;
     TextView noteContent;
 
@@ -28,13 +28,9 @@ public class AddNoteActivity extends ActionBarActivity {
         setContentView(R.layout.activity_add_note);
 
         thisBook = (Book) getIntent().getSerializableExtra("thisBook");
-        newNote = new Note();
-
-        pageNumber  = (TextView) findViewById(R.id.pageNumber);
-        noteContent = (TextView) findViewById(R.id.noteContent);
 
         // We are supposed to load notes from the sqllite at this point
-        noteContent.setText("lol");
+        //noteContent.setText("");
 
         setupCreateNoteButton();
     }
@@ -70,10 +66,14 @@ public class AddNoteActivity extends ActionBarActivity {
         createNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newNote.setPageNumber(buildPageNumber());
-                newNote.setNoteContent(noteContent.getText().toString());
+                pageNumber  = (TextView) findViewById(R.id.pageNumber);
+                noteContent = (TextView) findViewById(R.id.noteContent);
 
-                thisBook.addNote(newNote);
+                //newNote = new Note();
+                //newNote.setPageNumber(buildPageNumber());
+                //newNote.setNoteContent(noteContent.getText().toString());
+
+                thisBook.addNote(noteContent.getText().toString());
 
                 Intent intent = new Intent(AddNoteActivity.this, ListNoteActivity.class);
                 intent.putExtra("thisBook", thisBook);
