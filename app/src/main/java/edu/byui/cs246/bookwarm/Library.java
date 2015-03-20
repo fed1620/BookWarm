@@ -43,10 +43,10 @@ public class Library {
      */
     public void addBookToDatabase(Book book) {
         if (book == null) {
-            System.out.println("ERROR: Cannot add a book with value: null");
+            Log.i(TAG_LIBRARY, "ERROR: Cannot add a book with value: null");
             return;
         }
-        books.add(book);
+        db.addBook(book);
     }
 
     /**
@@ -55,7 +55,7 @@ public class Library {
      */
     public void deleteBook(Book condemnedBook) {
         if (condemnedBook == null) {
-            System.out.println("ERROR: Cannot delete a book with value: null");
+            Log.i(TAG_LIBRARY, "ERROR: Cannot delete a book with value: null");
             return;
         }
         books.remove(condemnedBook);

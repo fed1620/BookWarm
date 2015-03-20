@@ -7,7 +7,6 @@ import java.util.List;
 
 import edu.byui.cs246.bookwarm.Book;
 import edu.byui.cs246.bookwarm.Library;
-import edu.byui.cs246.bookwarm.R;
 
 /**
  * Tests the Library class
