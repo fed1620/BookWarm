@@ -14,10 +14,10 @@ Federico(Iostream Broadswordsman) - sql SQL SQLLLLLLLLL {
                                     }
 
 Jake(RogueFactory) - Fun with Google Books.
+~~~~~~~~~~~
 
 NOTES FOR TEAM MEMBERS GO HERE:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+-------------------------------
 3/4/15
 
 Always make sure that each activity has a .java file associated with it! For clarity, make sure
