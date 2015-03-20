@@ -3,17 +3,38 @@ package edu.byui.cs246.bookwarm;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * A library is a list of books
  */
 public class Library {
+    // Eager Singleton
+    private static final Library instance = new Library();
+    private Library() {}
+    public static Library getInstance() {return instance;}
+
+    // Instantiate the database
+    private DBManager db = new DBManager(App.getAppContext());
     private List<Book> books = new ArrayList<>();
+
 
     /**
      * Add a book object to the list of books
      * @param book The book to be added
      */
     public void addBook(Book book) {
+        if (book == null) {
+            System.out.println("ERROR: Cannot add a book with value: null");
+            return;
+        }
+        books.add(book);
+    }
+
+    /**
+     * Add a book object to the database of books
+     * @param book The book to be added
+     */
+    public void addBookToDatabase(Book book) {
         if (book == null) {
             System.out.println("ERROR: Cannot add a book with value: null");
             return;

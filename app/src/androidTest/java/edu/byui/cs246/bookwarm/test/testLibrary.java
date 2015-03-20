@@ -1,6 +1,6 @@
 package edu.byui.cs246.bookwarm.test;
 
-import junit.framework.TestCase;
+import android.test.AndroidTestCase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import edu.byui.cs246.bookwarm.R;
 /**
  * Tests the Library class
  */
-public class testLibrary extends TestCase {
+public class testLibrary extends AndroidTestCase {
 
     /**
      * Test the following methods:
@@ -22,7 +22,7 @@ public class testLibrary extends TestCase {
      */
     public void test1() {
         // The library we will be using for this test
-        Library library = new Library();
+        Library library = Library.getInstance();
 
         // Library should not contain any books yet...
         assertEquals(0, library.numBooks());
@@ -56,7 +56,7 @@ public class testLibrary extends TestCase {
      */
     public void test2() {
         // The library we will be using for this test
-        Library library = new Library();
+        Library library = Library.getInstance();
 
         // Create four different books
         Book book1 = new Book();
