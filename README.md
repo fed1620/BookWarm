@@ -7,7 +7,11 @@ Igor(newLayoutLauncher) - Page number is ignored if 0
                           Activity names in-app are user friendly
                           Make notes persistent
 
-Federico(Iostream Broadswordsman) - sql SQL SQLLLLLLLLL
+Federico(Iostream Broadswordsman) - sql SQL SQLLLLLLLLL {
+                                    getAllBooks()
+                                    update()
+                                    delete()
+                                    }
 
 Jake(RogueFactory) - Fun with Google Books.
 
