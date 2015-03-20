@@ -1,5 +1,7 @@
 package edu.byui.cs246.bookwarm;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,9 @@ import java.util.List;
  * A library is a list of books
  */
 public class Library {
+    /** Log tag */
+    private static final String TAG_LIBRARY = "Library";
+
     // Eager Singleton
     private static final Library instance = new Library();
     private Library() {}
@@ -16,7 +21,6 @@ public class Library {
     // Instantiate the database
     private DBManager db = new DBManager(App.getAppContext());
     private List<Book> books = new ArrayList<>();
-
 
     /**
      * Add a book object to the list of books
@@ -128,6 +132,15 @@ public class Library {
                 books.get(i).setRating(book.getRating());
                 books.get(i).setIsFavourite(book.getIsFavourite());
             }
+        }
+    }
+
+    /**
+     * Display all of the books in the library
+     */
+    public void display() {
+        for (Book book : books) {
+            Log.i(TAG_LIBRARY, book.toString());
         }
     }
 }
