@@ -2,13 +2,14 @@
 
 QUEST LOG:
 ~~~~~~~~~~
-Igor(newLayoutLauncher) - Figure out Add Note bug
+Igor(newLayoutLauncher) - Page number is ignored if 0
+                          Back Button should take the user from ListNoteActivity to BookDetails instead of AddNote
+                          Activity names in-app are user friendly
+                          Make notes persistent
 
-Federico(Iostream Broadswordsman) - Continue SQLite database work: Debug addBook() / getBook()
+Federico(Iostream Broadswordsman) - sql SQL SQLLLLLLLLL
 
-Jake(RogueFactory) - Pizza pizza = new Pizza(LittleCaeser's);
-                     pizza.administerSlice(Igor);
-                     pizza.administerSlice(Federico);
+Jake(RogueFactory) - Fun with Google Books.
 
 NOTES FOR TEAM MEMBERS GO HERE:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
