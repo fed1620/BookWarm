@@ -20,7 +20,7 @@ public class AddNoteActivity extends ActionBarActivity {
     private static final String TAG_ADD_NOTE_ACTIVITY = "AddNoteActivity";
 
     Book thisBook;
-    //Note newNote;
+    Note newNote;
     TextView pageNumber;
     TextView noteContent;
 
@@ -71,11 +71,11 @@ public class AddNoteActivity extends ActionBarActivity {
                 pageNumber  = (TextView) findViewById(R.id.pageNumber);
                 noteContent = (TextView) findViewById(R.id.noteContent);
 
-                //newNote = new Note();
-                //newNote.setPageNumber(buildPageNumber());
-                //newNote.setNoteContent(noteContent.getText().toString());
+                newNote = new Note();
+                newNote.setPageNumber(buildPageNumber());
+                newNote.setNoteContent(noteContent.getText().toString());
 
-                thisBook.addNote(noteContent.getText().toString());
+                thisBook.addNote(newNote);
 
                 Intent intent = new Intent(AddNoteActivity.this, ListNoteActivity.class);
                 intent.putExtra("thisBook", thisBook);

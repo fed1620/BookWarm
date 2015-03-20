@@ -23,7 +23,7 @@ public class ListNoteActivity extends ActionBarActivity {
     private static final String TAG_LIST_NOTE_ACTVITY = "ListNoteActivity";
 
     //Variables
-    ArrayList<String> listNotes;
+    ArrayList<Note> listNotes;
     Book thisBook;
 
     @Override
@@ -87,6 +87,18 @@ public class ListNoteActivity extends ActionBarActivity {
     }
 
     /**
+     * CONVERT NOTES
+     */
+    private String[] convertNotes() {
+        String notes[] = new String[listNotes.size()];
+        for(int i = 0; i < listNotes.size(); ++i) {
+            notes[i] = "Page " + listNotes.get(i).getPageNumber() + ".\n" + listNotes.get(i).getNoteContent();
+        }
+
+        return notes;
+    }
+
+    /**
      * DISPLAY NOTES
      * Delivers data from list to display
      */
@@ -95,7 +107,7 @@ public class ListNoteActivity extends ActionBarActivity {
         ListView listView = (ListView) findViewById(R.id.listNote);
 
         // create adapter
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listNotes);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, convertNotes());
 
         // set adapter to view
         listView.setAdapter(adapter);
