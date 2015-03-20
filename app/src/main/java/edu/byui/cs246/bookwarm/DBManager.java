@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * An SQLite Database to store the user's books and notes
  *
@@ -140,5 +143,36 @@ public class DBManager extends SQLiteOpenHelper {
 
         // 5. return book
         return book;
+    }
+
+    public List<Book> getAllBooks() {
+        // The list of books that will be our library
+        List<Book> books = new ArrayList<>();
+
+        // Get the reference to the writable database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Build the query
+        final String QUERY = "SELECT * FROM " + TABLE_BOOKS + ';';
+
+        // Build the cursor
+        Cursor cursor = db.rawQuery(QUERY, null);
+
+        // For every row in the table, build a book and add it to the list
+        Book book;
+        if (cursor.moveToFirst()) {
+            do {
+                book = new Book();
+                book.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
+                book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
+                book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
+
+                // Add it to the list of books
+                Log.i(TAG_DB_MANAGER, "Adding book to list: " + book.toString());
+                books.add(book);
+
+            } while (cursor.moveToNext());
+        }
+        return books;
     }
 }
