@@ -142,6 +142,28 @@ public class testDBManager extends AndroidTestCase {
         Log.i(TAG_DB_MANAGER, "Retrieved book:   " + fetchedBook3.toString());
     }
 
+    public void testSize() {
+        // Instantiate a database
+        DBManager db = new DBManager(getContext());
+        db.onCreate(db.getWritableDatabase());
+
+        // Check the size (should be 0)
+        assertEquals(0, db.size());
+
+        // Create books to go into the database
+        Book book1 = new Book("Divergent", "Veronica Roth");
+        Book book2 = new Book("Insurgent", "Veronica Roth");
+        Book book3 = new Book("Allegiant", "Veronica Roth");
+
+        // Add the books to the database
+        db.addBook(book1);
+        db.addBook(book2);
+        db.addBook(book3);
+
+        // Check the size (should be 3)
+        assertEquals(3, db.size());
+    }
+
     /**
      * Add a book to the database, and then update it
      */

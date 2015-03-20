@@ -207,4 +207,29 @@ public class DBManager extends SQLiteOpenHelper {
         // Log
         Log.i(TAG_DB_MANAGER, "Removed book: " + book.toString());
     }
+
+    public int size() {
+        // The integer we will be returning
+        int i = 0;
+
+        // 1. Get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Build the query
+        final String QUERY = "SELECT * FROM " + TABLE_BOOKS + ';';
+
+        // Build the cursor
+        Cursor cursor = db.rawQuery(QUERY, null);
+
+        // Count every row in the table
+        if (cursor.moveToFirst()) {
+            do {
+                ++i;
+            } while (cursor.moveToNext());
+        }
+        // Close the cursor
+        cursor.close();
+
+        return i;
+    }
 }
