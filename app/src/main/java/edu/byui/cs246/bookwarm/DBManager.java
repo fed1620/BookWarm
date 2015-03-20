@@ -23,6 +23,7 @@ public class DBManager extends SQLiteOpenHelper {
     private static final String   KEY_ID           = "id";         // BOOKS table column 1
     private static final String   KEY_TITLE        = "title";      // BOOKS table column 2
     private static final String   KEY_AUTHOR       = "author";     // BOOKS table column 3
+    private static final String[] COLUMNS = {KEY_ID, KEY_TITLE, KEY_AUTHOR};
 
     // Default constructor
     public DBManager(Context context) {super(context, DATABASE_NAME, null, DATABASE_VERSION);}
@@ -69,7 +70,7 @@ public class DBManager extends SQLiteOpenHelper {
         }
 
         // For logging, so we can se the results later when we run the app
-        Log.i(TAG_DB_MANAGER, "Adding [Book " + book.getId() + "]: " +  book.toString());
+        Log.i(TAG_DB_MANAGER, "Adding Book: " +  book.toString());
 
         // 1. Get the reference to our database
         SQLiteDatabase db = this.getWritableDatabase();
@@ -80,27 +81,31 @@ public class DBManager extends SQLiteOpenHelper {
         values.put(KEY_AUTHOR, book.getAuthor());     // Author
 
         // 3. Insert into the table
-        db.insert(TABLE_BOOKS, null, values);
+        long idInsert = db.insert(TABLE_BOOKS, null, values);
+
+        // Set the ID of the book
+        book.setId((int)idInsert);
     }
 
     /**
      * Retrieve a Book from the database, and return it as a Book object
      *
-     * @param title The title of the book
+     * @param id The id of the book
      * @return Returns the book
      */
-    public Book getBook(String title){
+    public Book getBook(int id){
         // 1. Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // The query
-        final String QUERY = "SELECT * FROM " + TABLE_BOOKS + " WHERE " + KEY_TITLE + " = \'" + title + "\';";
-
-        // Print the query
-        //Log.i(TAG_DB_MANAGER, QUERY);
-
-        // 2. Build the cursor
-        Cursor cursor = db.rawQuery(QUERY, null);
+        // Build the cursor
+        Cursor cursor = db.query(TABLE_BOOKS,
+                                COLUMNS,
+                                " id = ?",
+                                new String[] {String.valueOf(id)},
+                                null,
+                                null,
+                                null,
+                                null);
 
         // 3. If we got results get the first one
         if (cursor != null) {
@@ -113,13 +118,12 @@ public class DBManager extends SQLiteOpenHelper {
         Book book = new Book();
 
         if (cursor != null && cursor.moveToFirst()) {
-            Log.i(TAG_DB_MANAGER, "---------------------------------------------------------------");
+            Log.i(TAG_DB_MANAGER, "_______________________________________________________________");
             Log.i(TAG_DB_MANAGER, "ID:     " + cursor.getInt(cursor.getColumnIndex(KEY_ID)));
             Log.i(TAG_DB_MANAGER, "TITLE:  " + cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
             Log.i(TAG_DB_MANAGER, "AUTHOR: " + cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
             Log.i(TAG_DB_MANAGER, "---------------------------------------------------------------");
 
-            book.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
             book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
             book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
 
@@ -128,9 +132,6 @@ public class DBManager extends SQLiteOpenHelper {
         } else {
             Log.i(TAG_DB_MANAGER, "ERROR: moveToFirst() returned FALSE");
         }
-
-        //log
-        Log.i(TAG_DB_MANAGER, "Getting [Book " + book.getId() + "]: " + book.toString());
 
         // 5. return book
         return book;
@@ -154,19 +155,29 @@ public class DBManager extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 book = new Book();
-                book.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
                 book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
                 book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
-
-                // Add it to the list of books
-                Log.i(TAG_DB_MANAGER, "Adding book to list: " + book.toString());
                 books.add(book);
-
             } while (cursor.moveToNext());
         }
         // Close the cursor
         cursor.close();
 
         return books;
+    }
+    public void updateBook(Book book) {
+        // Get reference to the writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Put the new information into a ContentValues
+        ContentValues values = new ContentValues();
+        values.put(KEY_TITLE, book.getTitle());       // Title
+        values.put(KEY_AUTHOR, book.getAuthor());     // Author
+
+        // Update the row
+        db.update(TABLE_BOOKS, values, KEY_ID+" = ?", new String[] {String.valueOf(book.getId())});
+
+        // Close the database
+        db.close();
     }
 }
