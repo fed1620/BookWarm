@@ -36,6 +36,30 @@ public class testDBManager extends AndroidTestCase {
     }
 
     /**
+     * Add a book to the database, and then remove it
+     */
+    public void testDeleteBook() {
+        // Instantiate a database
+        DBManager db = new DBManager(getContext());
+        db.onCreate(db.getWritableDatabase());
+
+        // Create a book
+        Book book = new Book("Charlie and the Chocolate Factory", "Roald Dahl");
+
+        // Add it to the database
+        db.addBook(book);
+
+        // Get the book
+        Log.i(TAG_DB_MANAGER, "Retrieved book:   " + db.getBook(book.getId()));
+
+        // Remove it from the database
+        db.deleteBook(book);
+
+        // Try to get the book
+        Log.i(TAG_DB_MANAGER, "Retrieved book:   " + db.getBook(book.getId()));
+    }
+
+    /**
      * Get a book from the database
      */
     public void testGetBook() {
@@ -118,6 +142,9 @@ public class testDBManager extends AndroidTestCase {
         Log.i(TAG_DB_MANAGER, "Retrieved book:   " + fetchedBook3.toString());
     }
 
+    /**
+     * Add a book to the database, and then update it
+     */
     public void testUpdateBook() {
         // Instantiate a database
         DBManager db = new DBManager(getContext());
@@ -138,6 +165,5 @@ public class testDBManager extends AndroidTestCase {
 
         // Get the book again
         Log.i(TAG_DB_MANAGER, "Retrieved book:   " + db.getBook(book.getId()));
-
     }
 }

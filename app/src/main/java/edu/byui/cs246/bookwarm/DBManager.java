@@ -137,6 +137,10 @@ public class DBManager extends SQLiteOpenHelper {
         return book;
     }
 
+    /**
+     * Return all books in the database
+     * @return Returns a List of Book objects
+     */
     public List<Book> getBooks() {
         // The list of books that will be our library
         List<Book> books = new ArrayList<>();
@@ -165,6 +169,11 @@ public class DBManager extends SQLiteOpenHelper {
 
         return books;
     }
+
+    /**
+     * Update a Book
+     * @param book The up-to-date Book object
+     */
     public void updateBook(Book book) {
         // Get reference to the writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -179,5 +188,23 @@ public class DBManager extends SQLiteOpenHelper {
 
         // Close the database
         db.close();
+    }
+
+    /**
+     * Remove a book from the database
+     * @param book The book to be deleted
+     */
+    public void deleteBook(Book book) {
+        // Get the reference to the writable database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Delete the book
+        db.delete(TABLE_BOOKS, KEY_ID + " = ?", new String[] {String.valueOf(book.getId())});
+
+        // Close the database
+        db.close();
+
+        // Log
+        Log.i(TAG_DB_MANAGER, "Removed book: " + book.toString());
     }
 }
