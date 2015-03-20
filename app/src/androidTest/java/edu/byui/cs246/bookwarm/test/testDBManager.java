@@ -36,6 +36,24 @@ public class testDBManager extends AndroidTestCase {
     }
 
     /**
+     * Add a book, and then see whether or not it is in the database
+     */
+    public void testContainsBook() {
+        // Instantiate a database
+        DBManager db = new DBManager(getContext());
+        db.onCreate(db.getWritableDatabase());
+
+        // Create a book
+        Book book = new Book("Where the Wild Things Are", "Maurice Sendak");
+
+        // Add it to the database
+        db.addBook(book);
+
+        // Check if the book is in the database
+        assertEquals(true, db.containsBook(book));
+    }
+
+    /**
      * Add a book to the database, and then remove it
      */
     public void testDeleteBook() {

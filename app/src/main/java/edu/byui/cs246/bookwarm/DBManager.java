@@ -208,6 +208,10 @@ public class DBManager extends SQLiteOpenHelper {
         Log.i(TAG_DB_MANAGER, "Removed book: " + book.toString());
     }
 
+    /**
+     * How many books are in our database?
+     * @return Returns the number of books
+     */
     public int size() {
         // The integer we will be returning
         int i = 0;
@@ -231,5 +235,48 @@ public class DBManager extends SQLiteOpenHelper {
         cursor.close();
 
         return i;
+    }
+
+    /**
+     * Return true if a book is contained in the database
+     * @param book This book is either in the database, or it isn't
+     * @return Returns true if the book is in the database
+     */
+    public boolean containsBook(Book book){
+        // By default, a book is not in the database
+        boolean isInDB = false;
+
+        // 1. Get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Build the cursor
+        Cursor cursor = db.query(TABLE_BOOKS,
+                COLUMNS,
+                " id = ?",
+                new String[] {String.valueOf(book.getId())},
+                null,
+                null,
+                null,
+                null);
+
+        // 3. If we got results get the first one
+        if (cursor != null) {
+            cursor.moveToFirst();      // Returns false if the cursor is empty
+        } else {
+            Log.i(TAG_DB_MANAGER, "ERROR: Cursor is null!");
+        }
+
+        // 4. build book object
+        if (cursor != null && cursor.moveToFirst()) {
+            isInDB = true;
+
+            // Free the cursor
+            cursor.close();
+        } else {
+            Log.i(TAG_DB_MANAGER, "ERROR: moveToFirst() returned FALSE");
+        }
+
+        // 5. return book
+        return isInDB;
     }
 }
