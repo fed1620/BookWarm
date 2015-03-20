@@ -69,6 +69,12 @@ public class DBManager extends SQLiteOpenHelper {
             return;
         }
 
+        // Make sure the book isn't already in the database
+        if (containsBook(book)) {
+            Log.e(TAG_DB_MANAGER, "Database already contains book: " + book.getTitle());
+            return;
+        }
+
         // For logging, so we can se the results later when we run the app
         Log.i(TAG_DB_MANAGER, "Adding Book: " +  book.toString());
 
@@ -238,11 +244,11 @@ public class DBManager extends SQLiteOpenHelper {
     }
 
     /**
-     * Return true if a book is contained in the database
+     * Return true if a book is contained in the database (based on the title)
      * @param book This book is either in the database, or it isn't
      * @return Returns true if the book is in the database
      */
-    public boolean containsBook(Book book){
+    public boolean containsBook(Book book) {
         // By default, a book is not in the database
         boolean isInDB = false;
 
@@ -252,8 +258,8 @@ public class DBManager extends SQLiteOpenHelper {
         // Build the cursor
         Cursor cursor = db.query(TABLE_BOOKS,
                 COLUMNS,
-                " id = ?",
-                new String[] {String.valueOf(book.getId())},
+                " title = ?",
+                new String[] {book.getTitle()},
                 null,
                 null,
                 null,

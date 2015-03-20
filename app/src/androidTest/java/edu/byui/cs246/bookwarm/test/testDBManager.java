@@ -51,6 +51,13 @@ public class testDBManager extends AndroidTestCase {
 
         // Check if the book is in the database
         assertEquals(true, db.containsBook(book));
+
+        // Attempt to add the same book to the database
+        db.addBook(book);
+
+        // Attemp to add a bogus clone to the database
+        Book book2 = new Book("Where the Wild Things Are", "Fake Author");
+        db.addBook(book2);
     }
 
     /**
