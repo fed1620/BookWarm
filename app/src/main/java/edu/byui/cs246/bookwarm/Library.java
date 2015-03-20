@@ -28,7 +28,10 @@ public class Library {
      */
     public void addBook(Book book) {
         if (book == null) {
-            System.out.println("ERROR: Cannot add a book with value: null");
+            Log.i(TAG_LIBRARY, "ERROR: Cannot add a book with value: null");
+            return;
+        } else if (book.getTitle() == null || book.getAuthor() == null) {
+            Log.i(TAG_LIBRARY, "ERROR: Cannot add a book with null title/author");
             return;
         }
         books.add(book);
@@ -139,8 +142,11 @@ public class Library {
      * Display all of the books in the library
      */
     public void display() {
+        Log.i(TAG_LIBRARY, "Library contains the following " + numBooks() + " book(s): ");
+        Log.i(TAG_LIBRARY, "_______________________________");
         for (Book book : books) {
             Log.i(TAG_LIBRARY, book.toString());
         }
+        Log.i(TAG_LIBRARY, "-------------------------------");
     }
 }

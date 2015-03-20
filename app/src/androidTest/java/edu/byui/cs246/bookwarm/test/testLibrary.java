@@ -28,14 +28,14 @@ public class testLibrary extends AndroidTestCase {
         assertEquals(0, library.numBooks());
 
         // Create a book to add to the library
-        Book book1 = new Book();
+        Book book1 = new Book("Where the Red Fern Grows","Wilson Rawls");
         library.addBook(book1);
 
         // Library should now contain 1 book
         assertEquals(1, library.numBooks());
 
         // Add another book to the library
-        Book book2 = new Book();
+        Book book2 = new Book("The Giver", "Lois Lowry");
         library.addBook(book2);
 
         // Library should now contain 2 books
@@ -46,6 +46,12 @@ public class testLibrary extends AndroidTestCase {
 
         // Library should now contain 1 book
         assertEquals(1, library.numBooks());
+
+        // Remove the last book
+        library.deleteBook(book2);
+
+        // Library should now contain 0 books
+        assertEquals(0, library.numBooks());
     }
 
     /**
@@ -56,24 +62,14 @@ public class testLibrary extends AndroidTestCase {
      */
     public void test2() {
         // The library we will be using for this test
-        Library library = Library.getInstance();
+        Library library = Library.getInstance();       // This is the same library from test1()
+        library.display();                             // There should not be any books
 
         // Create four different books
-        Book book1 = new Book();
-        book1.setTitle("Where the Red Fern Grows");
-        book1.setImageId(R.mipmap.ic_generic_cover);
-
-        Book book2 = new Book();
-        book2.setTitle("Catcher in the Rye");
-        book2.setImageId(R.mipmap.ic_generic_cover);
-
-        Book book3 = new Book();
-        book3.setTitle("The Giver");
-        book3.setImageId(R.mipmap.ic_generic_cover);
-
-        Book book4 = new Book();
-        book4.setTitle("Head First Java");
-        book4.setImageId(R.mipmap.ic_generic_cover);
+        Book book1 = new Book("Where the Red Fern Grows","Wilson Rawls");
+        Book book2 = new Book("Catcher in the Rye", "J.D. Salinger");
+        Book book3 = new Book("The Giver", "Lois Lowry");
+        Book book4 = new Book("Head First Java", "Bert Bates and Kathy Sierra");
 
         // Insert each these books into a list of Books, AND into
         // our library
@@ -87,6 +83,7 @@ public class testLibrary extends AndroidTestCase {
         library.addBook(book2);
         library.addBook(book3);
         library.addBook(book4);
+        library.display();
 
         // We expect getBooks() to return the same list of Books that
         // we ourselves created
