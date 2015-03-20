@@ -3,6 +3,8 @@ package edu.byui.cs246.bookwarm.test;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
+import java.util.List;
+
 import edu.byui.cs246.bookwarm.Book;
 import edu.byui.cs246.bookwarm.DBManager;
 import edu.byui.cs246.bookwarm.R;
@@ -13,6 +15,9 @@ import edu.byui.cs246.bookwarm.R;
 public class testDBManager extends AndroidTestCase {
     private static final String TAG_DB_MANAGER   = "DBManager";
 
+    /**
+     * Adds two books to the database
+     */
     public void testAddBook() {
         // Instantiate our test database
         DBManager db = new DBManager(getContext());
@@ -33,7 +38,9 @@ public class testDBManager extends AndroidTestCase {
         db.addBook(bookNull);
     }
 
-
+    /**
+     * Get a book from the database
+     */
     public void testGetBook() {
         // Instantiate our test database
         DBManager db = new DBManager(getContext());
@@ -53,9 +60,37 @@ public class testDBManager extends AndroidTestCase {
         Log.i(TAG_DB_MANAGER, "Retrieved book: " + fetchedBook1.toString());
     }
 
-    // Test this after testGetBook() is working
+    /**
+     * Get a list of Books from the database
+     */
+    public void testGetBooks() {
+        // Instantiate our test database
+        DBManager db = new DBManager(getContext());
+        db.onCreate(db.getWritableDatabase());
 
+        // Create three books
+        Book book1 = new Book("Head First Java", "Bert Bates and Kathy Sierra");
+        Book book2 = new Book("Head First Design Patterns", "Bert Bates and Kathy Sierra");
+        Book book3 = new Book("Procedural Programming in C++", "James Helfrich");
 
+        // Add the books to the database
+        db.addBook(book1);
+        db.addBook(book2);
+        db.addBook(book3);
+
+        // Attempt to get the books
+        List<Book> books = db.getBooks();
+
+        // Display the retrieved book list
+        Log.i(TAG_DB_MANAGER, "Retrieved " + books.size() + " books from the database:");
+        for (Book book : books) {
+            Log.i(TAG_DB_MANAGER, book.toString());
+        }
+    }
+
+    /**
+     * Individually get three books from the database
+     */
     public void testGetThreeBooks() {
         // Instantiate our test database
         DBManager db = new DBManager(getContext());
@@ -88,7 +123,5 @@ public class testDBManager extends AndroidTestCase {
         Log.i(TAG_DB_MANAGER, "Retrieved book:   " + fetchedBook1.toString());
         Log.i(TAG_DB_MANAGER, "Retrieved book:   " + fetchedBook2.toString());
         Log.i(TAG_DB_MANAGER, "Retrieved book:   " + fetchedBook3.toString());
-
     }
-
 }

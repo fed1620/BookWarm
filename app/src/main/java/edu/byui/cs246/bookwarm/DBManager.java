@@ -81,12 +81,6 @@ public class DBManager extends SQLiteOpenHelper {
 
         // 3. Insert into the table
         db.insert(TABLE_BOOKS, null, values);
-
-        // 4. Close the database
-        db.close();
-
-        // Display a success message
-        // Log.i(TAG_DB_MANAGER, "Successfully added [Book " + book.getId() + "] to database: " + DATABASE_NAME);
     }
 
     /**
@@ -135,9 +129,6 @@ public class DBManager extends SQLiteOpenHelper {
             Log.i(TAG_DB_MANAGER, "ERROR: moveToFirst() returned FALSE");
         }
 
-        // Close the database
-        db.close();
-
         //log
         Log.i(TAG_DB_MANAGER, "Getting [Book " + book.getId() + "]: " + book.toString());
 
@@ -145,7 +136,7 @@ public class DBManager extends SQLiteOpenHelper {
         return book;
     }
 
-    public List<Book> getAllBooks() {
+    public List<Book> getBooks() {
         // The list of books that will be our library
         List<Book> books = new ArrayList<>();
 
@@ -173,6 +164,9 @@ public class DBManager extends SQLiteOpenHelper {
 
             } while (cursor.moveToNext());
         }
+        // Close the cursor
+        cursor.close();
+
         return books;
     }
 }
