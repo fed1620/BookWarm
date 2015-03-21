@@ -7,6 +7,7 @@ import java.util.List;
 
 import edu.byui.cs246.bookwarm.Book;
 import edu.byui.cs246.bookwarm.DBManager;
+import edu.byui.cs246.bookwarm.R;
 
 /**
  * Tests our SQLite database class
@@ -18,28 +19,23 @@ public class testDBManager extends AndroidTestCase {
      * Adds two books to the database
      */
     public void testAddBook() {
-        // Instantiate our test database
+        // Instantiate the database
         DBManager db = new DBManager(getContext());
 
-        // Create a book
-        Book book = new Book("Head First Java", "Bert Bates and Kathy Sierra");
+        // Instantiate two the books
+        Book book1  = new Book("Head First Java", "Bert Bates and Kathy Sierra");
+        Book book2  = new Book("Head First Design Patterns", "Bert Bates and Kathy Sierra");
 
-        // Add the book to the database
-        db.addBook(book);
-
-        // Create a bad book
-        Book bookNull = null;
-
-        // Add the bad book
-        // noinspection ConstantConditions
-        db.addBook(bookNull);
+        // Add the books to the database
+        db.addBook(book1);
+        db.addBook(book2);
     }
 
     /**
-     * Add a book, and then see whether or not it is in the database
+     * See whether or not a given book is in the database
      */
     public void testContainsBook() {
-        // Instantiate a database
+        // Instantiate the database
         DBManager db = new DBManager(getContext());
         db.onCreate(db.getWritableDatabase());
 
@@ -61,23 +57,20 @@ public class testDBManager extends AndroidTestCase {
     }
 
     /**
-     * Add a book to the database, and then remove it
+     * Remove a book from the database
      */
     public void testDeleteBook() {
-        // Instantiate a database
+        // Instantiate the database
         DBManager db = new DBManager(getContext());
         db.onCreate(db.getWritableDatabase());
 
-        // Create a book
+        // Instatiate a book
         Book book = new Book("Charlie and the Chocolate Factory", "Roald Dahl");
 
         // Add it to the database
         db.addBook(book);
 
-        // Get the book
-        Log.i(TAG_DB_MANAGER, "Retrieved book:   " + db.getBook(book.getId()));
-
-        // Remove it from the database
+        // Remove book from the database
         db.deleteBook(book);
 
         // Try to get the book
@@ -88,18 +81,21 @@ public class testDBManager extends AndroidTestCase {
      * Get a book from the database
      */
     public void testGetBook() {
-        // Instantiate our test database
+        // Instantiate the database
         DBManager db = new DBManager(getContext());
         db.onCreate(db.getWritableDatabase());
 
         // Create a book
-        Book book = new Book("Head First Design Patterns", "Bert Bates and Kathy Sierra");
+        Book book = new Book("Head First Java", "Bert Bates and Kathy Sierra");
+        book.setImageId(R.mipmap.ic_generic_cover);
+        book.setReadStatus(2);
+        book.setIsFavourite(true);
+        book.setRating(5);
 
-        // Add the books to the database
+        // Attempt to add a book
         db.addBook(book);
-        Log.i(TAG_DB_MANAGER, book.getTitle() + " has an ID of: " + book.getId());
 
-        // Attempt to get the book
+        // Attempt to get a book
         Book fetchedBook = db.getBook(book.getId());
 
         // Display the book
@@ -110,21 +106,21 @@ public class testDBManager extends AndroidTestCase {
      * Get a list of Books from the database
      */
     public void testGetBooks() {
-        // Instantiate our test database
+        // Instantiate the database
         DBManager db = new DBManager(getContext());
         db.onCreate(db.getWritableDatabase());
 
-        // Create three textbooks
-        Book book1 = new Book("What's the Worst That Could Happen", "Greg Craven");
-        Book book2 = new Book("Writing With Style", "John Trimble");
-        Book book3 = new Book("Procedural Programming in C++", "James Helfrich");
+        // Instantiate three books
+        Book book1 = new Book("Divergent", "Veronica Roth");
+        Book book2 = new Book("Insurgent", "Veronica Roth");
+        Book book3 = new Book("Allegiant", "Veronica Roth");
 
-        // Add the books to the database
+        // Add them to the database
         db.addBook(book1);
         db.addBook(book2);
         db.addBook(book3);
 
-        // Attempt to get the books
+        // Attempt to get the books from the database
         List<Book> books = db.getBooks();
 
         // Display the retrieved book list
@@ -138,19 +134,20 @@ public class testDBManager extends AndroidTestCase {
      * Individually get three books from the database
      */
     public void testGetThreeBooks() {
-        // Instantiate our test database
+        // Instantiate the database
         DBManager db = new DBManager(getContext());
         db.onCreate(db.getWritableDatabase());
 
-        // Create three books
-        Book book1 = new Book("The Hunger Games", "Suzanne Collins");
-        Book book2 = new Book("Catching Fire", "Suzanne Collins");
-        Book book3 = new Book("Mockingjay", "Suzanne Collins");
+        // Instantiate three books
+        Book book1  = new Book("The Hunger Games", "Suzanne Collins");
+        Book book2  = new Book("Catching Fire", "Suzanne Collins");
+        Book book3  = new Book("Mockingjay", "Suzanne Collins");
 
-        // Add the books to the database
+        // Add them to the database
         db.addBook(book1);
         db.addBook(book2);
         db.addBook(book3);
+
         // What are their IDs?
         Log.i(TAG_DB_MANAGER, book1.getTitle() + " has an ID of: " + book1.getId());
         Log.i(TAG_DB_MANAGER, book2.getTitle() + " has an ID of: " + book2.getId());
@@ -161,52 +158,62 @@ public class testDBManager extends AndroidTestCase {
         Book fetchedBook2 = db.getBook(book2.getId());
         Book fetchedBook3 = db.getBook(book3.getId());
 
-        // Display the book
+        // Display the books
         Log.i(TAG_DB_MANAGER, "Retrieved book:   " + fetchedBook1.toString());
         Log.i(TAG_DB_MANAGER, "Retrieved book:   " + fetchedBook2.toString());
         Log.i(TAG_DB_MANAGER, "Retrieved book:   " + fetchedBook3.toString());
     }
 
     public void testSize() {
-        // Instantiate a database
+        // Instantiate the database
         DBManager db = new DBManager(getContext());
         db.onCreate(db.getWritableDatabase());
 
         // Check the size (should be 0)
         assertEquals(0, db.size());
 
-        // Create books to go into the database
-        Book book1 = new Book("Divergent", "Veronica Roth");
-        Book book2 = new Book("Insurgent", "Veronica Roth");
-        Book book3 = new Book("Allegiant", "Veronica Roth");
+        // Instantiate three books
+        Book book1  = new Book("What's the Worst That Could Happen", "Greg Craven");
+        Book book2  = new Book("Writing With Style", "John Trimble");
+        Book book3  = new Book("Procedural Programming in C++", "James Helfrich");
 
-        // Add the books to the database
+        // Add them to the database
         db.addBook(book1);
         db.addBook(book2);
         db.addBook(book3);
 
         // Check the size (should be 3)
         assertEquals(3, db.size());
+
+        // Create books to go into the database
+        Book book4 = new Book("The Lord of the Rings: The Fellowship of the Ring", "J.R.R. Tolkein");
+        Book book5 = new Book("The Lord of the Rings: The Two Towers", "J.R.R. Tolkein");
+        Book book6 = new Book("The Lord of the Rings: The Return of the King", "J.R.R. Tolkein");
+
+        // Add the books to the database
+        db.addBook(book4);
+        db.addBook(book5);
+        db.addBook(book6);
+
+        // Check the size (should be 6)
+        assertEquals(6, db.size());
     }
 
     /**
-     * Add a book to the database, and then update it
+     * Update a book in the database
      */
     public void testUpdateBook() {
-        // Instantiate a database
+        // Instantiate the database
         DBManager db = new DBManager(getContext());
         db.onCreate(db.getWritableDatabase());
 
         // Create a book
         Book book = new Book("Ender's Game", "Orson Scott Card");
 
-        // Insert it into the database
+        // Add the book
         db.addBook(book);
 
-        // Get the book
-        Log.i(TAG_DB_MANAGER, "Retrieved book:   " + db.getBook(book.getId()));
-
-        // Update the book
+        // Update a book
         book.setTitle("Ender's Shadow");
         db.updateBook(book);
 
