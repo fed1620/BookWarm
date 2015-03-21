@@ -1,12 +1,25 @@
 package edu.byui.cs246.bookwarm;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * A library is a list of books
  */
 public class Library {
+    /** Log tag */
+    private static final String TAG_LIBRARY = "Library";
+
+    // Eager Singleton
+    private static final Library instance = new Library();
+    private Library() {}
+    public static Library getInstance() {return instance;}
+
+    // Instantiate the database
+    private DBManager db = new DBManager(App.getAppContext());
     private List<Book> books = new ArrayList<>();
 
     /**
@@ -15,10 +28,25 @@ public class Library {
      */
     public void addBook(Book book) {
         if (book == null) {
-            System.out.println("ERROR: Cannot add a book with value: null");
+            Log.i(TAG_LIBRARY, "ERROR: Cannot add a book with value: null");
+            return;
+        } else if (book.getTitle() == null || book.getAuthor() == null) {
+            Log.i(TAG_LIBRARY, "ERROR: Cannot add a book with null title/author");
             return;
         }
         books.add(book);
+    }
+
+    /**
+     * Add a book object to the database of books
+     * @param book The book to be added
+     */
+    public void addBookToDatabase(Book book) {
+        if (book == null) {
+            Log.i(TAG_LIBRARY, "ERROR: Cannot add a book with value: null");
+            return;
+        }
+        db.addBook(book);
     }
 
     /**
@@ -27,7 +55,7 @@ public class Library {
      */
     public void deleteBook(Book condemnedBook) {
         if (condemnedBook == null) {
-            System.out.println("ERROR: Cannot delete a book with value: null");
+            Log.i(TAG_LIBRARY, "ERROR: Cannot delete a book with value: null");
             return;
         }
         books.remove(condemnedBook);
@@ -108,5 +136,17 @@ public class Library {
                 books.get(i).setIsFavourite(book.getIsFavourite());
             }
         }
+    }
+
+    /**
+     * Display all of the books in the library
+     */
+    public void display() {
+        Log.i(TAG_LIBRARY, "Library contains the following " + numBooks() + " book(s): ");
+        Log.i(TAG_LIBRARY, "_______________________________");
+        for (Book book : books) {
+            Log.i(TAG_LIBRARY, book.toString());
+        }
+        Log.i(TAG_LIBRARY, "-------------------------------");
     }
 }

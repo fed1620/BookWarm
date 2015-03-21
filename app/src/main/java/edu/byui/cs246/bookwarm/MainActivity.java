@@ -1,5 +1,6 @@
 package edu.byui.cs246.bookwarm;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import android.widget.ListView;
 
 public class MainActivity extends ActionBarActivity {
     /*--------------------------------------------------------------------------------------------*/
-    public static Library library = new Library(); // Needs to be static, so that a new library
+    public Library library = Library.getInstance(); // Needs to be static, so that a new library
     public ListView  list;                         // is not created every time we switch back to
                                                    // the main activity
     /*--------------------------------------------------------------------------------------------*/

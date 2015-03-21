@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * An SQLite Database to store the user's books and notes
  *
@@ -20,6 +23,7 @@ public class DBManager extends SQLiteOpenHelper {
     private static final String   KEY_ID           = "id";         // BOOKS table column 1
     private static final String   KEY_TITLE        = "title";      // BOOKS table column 2
     private static final String   KEY_AUTHOR       = "author";     // BOOKS table column 3
+    private static final String[] COLUMNS = {KEY_ID, KEY_TITLE, KEY_AUTHOR};
 
     // Default constructor
     public DBManager(Context context) {super(context, DATABASE_NAME, null, DATABASE_VERSION);}
@@ -65,8 +69,14 @@ public class DBManager extends SQLiteOpenHelper {
             return;
         }
 
+        // Make sure the book isn't already in the database
+        if (containsBook(book)) {
+            Log.e(TAG_DB_MANAGER, "Database already contains book: " + book.getTitle());
+            return;
+        }
+
         // For logging, so we can se the results later when we run the app
-        Log.i(TAG_DB_MANAGER, "Adding [Book " + book.getId() + "]: " +  book.toString());
+        Log.i(TAG_DB_MANAGER, "Adding Book: " +  book.toString());
 
         // 1. Get the reference to our database
         SQLiteDatabase db = this.getWritableDatabase();
@@ -77,33 +87,31 @@ public class DBManager extends SQLiteOpenHelper {
         values.put(KEY_AUTHOR, book.getAuthor());     // Author
 
         // 3. Insert into the table
-        db.insert(TABLE_BOOKS, null, values);
+        long idInsert = db.insert(TABLE_BOOKS, null, values);
 
-        // 4. Close the database
-        db.close();
-
-        // Display a success message
-        // Log.i(TAG_DB_MANAGER, "Successfully added [Book " + book.getId() + "] to database: " + DATABASE_NAME);
+        // Set the ID of the book
+        book.setId((int)idInsert);
     }
 
     /**
      * Retrieve a Book from the database, and return it as a Book object
      *
-     * @param title The title of the book
+     * @param id The id of the book
      * @return Returns the book
      */
-    public Book getBook(String title){
+    public Book getBook(int id){
         // 1. Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // The query
-        final String QUERY = "SELECT * FROM " + TABLE_BOOKS + " WHERE " + KEY_TITLE + " = \'" + title + "\';";
-
-        // Print the query
-        //Log.i(TAG_DB_MANAGER, QUERY);
-
-        // 2. Build the cursor
-        Cursor cursor = db.rawQuery(QUERY, null);
+        // Build the cursor
+        Cursor cursor = db.query(TABLE_BOOKS,
+                                COLUMNS,
+                                " id = ?",
+                                new String[] {String.valueOf(id)},
+                                null,
+                                null,
+                                null,
+                                null);
 
         // 3. If we got results get the first one
         if (cursor != null) {
@@ -116,13 +124,12 @@ public class DBManager extends SQLiteOpenHelper {
         Book book = new Book();
 
         if (cursor != null && cursor.moveToFirst()) {
-            Log.i(TAG_DB_MANAGER, "---------------------------------------------------------------");
+            Log.i(TAG_DB_MANAGER, "_______________________________________________________________");
             Log.i(TAG_DB_MANAGER, "ID:     " + cursor.getInt(cursor.getColumnIndex(KEY_ID)));
             Log.i(TAG_DB_MANAGER, "TITLE:  " + cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
             Log.i(TAG_DB_MANAGER, "AUTHOR: " + cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
             Log.i(TAG_DB_MANAGER, "---------------------------------------------------------------");
 
-            book.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
             book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
             book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
 
@@ -132,13 +139,150 @@ public class DBManager extends SQLiteOpenHelper {
             Log.i(TAG_DB_MANAGER, "ERROR: moveToFirst() returned FALSE");
         }
 
+        // 5. return book
+        return book;
+    }
+
+    /**
+     * Return all books in the database
+     * @return Returns a List of Book objects
+     */
+    public List<Book> getBooks() {
+        // The list of books that will be our library
+        List<Book> books = new ArrayList<>();
+
+        // Get the reference to the writable database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Build the query
+        final String QUERY = "SELECT * FROM " + TABLE_BOOKS + ';';
+
+        // Build the cursor
+        Cursor cursor = db.rawQuery(QUERY, null);
+
+        // For every row in the table, build a book and add it to the list
+        Book book;
+        if (cursor.moveToFirst()) {
+            do {
+                book = new Book();
+                book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
+                book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
+                books.add(book);
+            } while (cursor.moveToNext());
+        }
+        // Close the cursor
+        cursor.close();
+
+        return books;
+    }
+
+    /**
+     * Update a Book
+     * @param book The up-to-date Book object
+     */
+    public void updateBook(Book book) {
+        // Get reference to the writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Put the new information into a ContentValues
+        ContentValues values = new ContentValues();
+        values.put(KEY_TITLE, book.getTitle());       // Title
+        values.put(KEY_AUTHOR, book.getAuthor());     // Author
+
+        // Update the row
+        db.update(TABLE_BOOKS, values, KEY_ID+" = ?", new String[] {String.valueOf(book.getId())});
+
+        // Close the database
+        db.close();
+    }
+
+    /**
+     * Remove a book from the database
+     * @param book The book to be deleted
+     */
+    public void deleteBook(Book book) {
+        // Get the reference to the writable database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Delete the book
+        db.delete(TABLE_BOOKS, KEY_ID + " = ?", new String[] {String.valueOf(book.getId())});
+
         // Close the database
         db.close();
 
-        //log
-        Log.i(TAG_DB_MANAGER, "Getting [Book " + book.getId() + "]: " + book.toString());
+        // Log
+        Log.i(TAG_DB_MANAGER, "Removed book: " + book.toString());
+    }
+
+    /**
+     * How many books are in our database?
+     * @return Returns the number of books
+     */
+    public int size() {
+        // The integer we will be returning
+        int i = 0;
+
+        // 1. Get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Build the query
+        final String QUERY = "SELECT * FROM " + TABLE_BOOKS + ';';
+
+        // Build the cursor
+        Cursor cursor = db.rawQuery(QUERY, null);
+
+        // Count every row in the table
+        if (cursor.moveToFirst()) {
+            do {
+                ++i;
+            } while (cursor.moveToNext());
+        }
+        // Close the cursor
+        cursor.close();
+
+        return i;
+    }
+
+    /**
+     * Return true if a book is contained in the database (based on the title)
+     * @param book This book is either in the database, or it isn't
+     * @return Returns true if the book is in the database
+     */
+    public boolean containsBook(Book book) {
+        // By default, a book is not in the database
+        boolean isInDB = false;
+
+        // 1. Get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Build the cursor
+        Cursor cursor = db.query(TABLE_BOOKS,
+                COLUMNS,
+                " title = ?",
+                new String[] {book.getTitle()},
+                null,
+                null,
+                null,
+                null);
+
+        // 3. If we got results get the first one
+        if (cursor != null) {
+            cursor.moveToFirst();      // Returns false if the cursor is empty
+        } else {
+            Log.i(TAG_DB_MANAGER, "ERROR: Cursor is null!");
+        }
+
+        // 4. build book object
+        if (cursor != null && cursor.moveToFirst()) {
+            isInDB = true;
+
+            // Free the cursor
+            cursor.close();
+        } else {
+            Log.i(TAG_DB_MANAGER, "ERROR: moveToFirst() returned FALSE");
+        }
 
         // 5. return book
-        return book;
+        return isInDB;
     }
 }
