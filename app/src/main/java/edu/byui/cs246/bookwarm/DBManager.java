@@ -16,14 +16,28 @@ import java.util.List;
  * Sources referenced: http://hmkcode.com/android-simple-sqlite-database-tutorial/
  */
 public class DBManager extends SQLiteOpenHelper {
-    private static final String   TAG_DB_MANAGER   = "DBManager";  // Log Tag
-    private static final int      DATABASE_VERSION = 1;            // The database version
-    private static final String   DATABASE_NAME    = "LibraryDB";  // The name of the database
-    private static final String   TABLE_BOOKS      = "books";      // The name of the books table
-    private static final String   KEY_ID           = "id";         // BOOKS table column 1
-    private static final String   KEY_TITLE        = "title";      // BOOKS table column 2
-    private static final String   KEY_AUTHOR       = "author";     // BOOKS table column 3
-    private static final String[] COLUMNS = {KEY_ID, KEY_TITLE, KEY_AUTHOR};
+    private static final String   TAG_DB_MANAGER   = "DBManager";     // Log Tag
+    private static final int      DATABASE_VERSION = 1;               // The database version
+    private static final String   DATABASE_NAME    = "LibraryDB";     // The name of the database
+    private static final String   TABLE_BOOKS      = "books";         // The name of the books table
+    private static final String   KEY_ID           = "id";            // BOOKS table column 1
+    private static final String   KEY_TITLE        = "title";         // BOOKS table column 2
+    private static final String   KEY_AUTHOR       = "author";        // BOOKS table column 3
+    private static final String   KEY_IMAGE        = "image_id";      // BOOKS table column 4
+    private static final String   KEY_STATUS       = "read_status";   // BOOKS table column 5
+    private static final String   KEY_FAVORITE     = "favorite";      // BOOKS table column 6
+    private static final String   KEY_RATING       = "rating";        // BOOKS table column 7
+    private static final String   KEY_DATE         = "date";          // BOOKS table column 8
+
+
+    private static final String[] COLUMNS = {KEY_ID,
+                                             KEY_TITLE,
+                                             KEY_AUTHOR,
+                                             KEY_IMAGE,
+                                             KEY_STATUS,
+                                             KEY_FAVORITE,
+                                             KEY_RATING,
+                                             KEY_DATE};
 
     // Default constructor
     public DBManager(Context context) {super(context, DATABASE_NAME, null, DATABASE_VERSION);}
@@ -36,9 +50,14 @@ public class DBManager extends SQLiteOpenHelper {
         // Build an SQL statement that will be used to create the book table
         String CREATE_BOOK_TABLE =
                 "CREATE TABLE books (" +
-                "  id     INTEGER PRIMARY KEY AUTOINCREMENT" +
-                ", title  TEXT " +
-                ", author TEXT)";
+                "  id          INTEGER PRIMARY KEY AUTOINCREMENT" +
+                ", title       TEXT" +
+                ", author      TEXT" +
+                ", image_id    INTEGER" +
+                ", read_status INTEGER" +
+                ", favorite    INTEGER" +
+                ", rating      INTEGER" +
+                ", date        INTEGER);";
 
         // Drop the table before we create it
         final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_BOOKS + ';';
@@ -83,8 +102,13 @@ public class DBManager extends SQLiteOpenHelper {
 
         // 2. Create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_TITLE, book.getTitle());       // Title
-        values.put(KEY_AUTHOR, book.getAuthor());     // Author
+        values.put(KEY_TITLE,    book.getTitle());          // Title
+        values.put(KEY_AUTHOR,   book.getAuthor());         // Author
+        values.put(KEY_IMAGE,    book.getImageId());        // ImageId
+        values.put(KEY_STATUS,   book.getReadStatus());     // Read Status
+        values.put(KEY_FAVORITE, book.getIsFavourite());    // Favorite status
+        values.put(KEY_RATING,   book.getRating());         // Rating
+        values.put(KEY_DATE,     book.getDatePublished());  // Author
 
         // 3. Insert into the table
         long idInsert = db.insert(TABLE_BOOKS, null, values);
@@ -112,14 +136,6 @@ public class DBManager extends SQLiteOpenHelper {
                                 null,
                                 null,
                                 null);
-
-        // 3. If we got results get the first one
-        if (cursor != null) {
-            cursor.moveToFirst();      // Returns false if the cursor is empty
-        } else {
-            Log.i(TAG_DB_MANAGER, "ERROR: Cursor is null!");
-        }
-
         // 4. build book object
         Book book = new Book();
 
@@ -132,10 +148,23 @@ public class DBManager extends SQLiteOpenHelper {
 
             book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
             book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
+            book.setImageId(cursor.getInt(cursor.getColumnIndex(KEY_IMAGE)));
+            book.setReadStatus(cursor.getInt(cursor.getColumnIndex(KEY_STATUS)));
+
+            if (cursor.getInt(cursor.getColumnIndex(KEY_FAVORITE)) == 0) {
+                book.setIsFavourite(false);
+            } else {
+                book.setIsFavourite(true);
+            }
+
+            book.setRating(cursor.getInt(cursor.getColumnIndex(KEY_RATING)));
+            book.setDatePublished(cursor.getInt(cursor.getColumnIndex(KEY_DATE)));
 
             // Free the cursor
             cursor.close();
-        } else {
+        } else if (cursor == null) {
+            Log.i(TAG_DB_MANAGER, "ERROR: Cursor is null!");
+        } else if (!cursor.moveToFirst()) {
             Log.i(TAG_DB_MANAGER, "ERROR: moveToFirst() returned FALSE");
         }
 
@@ -167,6 +196,17 @@ public class DBManager extends SQLiteOpenHelper {
                 book = new Book();
                 book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
                 book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
+                book.setImageId(cursor.getInt(cursor.getColumnIndex(KEY_IMAGE)));
+                book.setReadStatus(cursor.getInt(cursor.getColumnIndex(KEY_STATUS)));
+
+                if (cursor.getInt(cursor.getColumnIndex(KEY_FAVORITE)) == 0) {
+                    book.setIsFavourite(false);
+                } else {
+                    book.setIsFavourite(true);
+                }
+
+                book.setRating(cursor.getInt(cursor.getColumnIndex(KEY_RATING)));
+                book.setDatePublished(cursor.getInt(cursor.getColumnIndex(KEY_DATE)));
                 books.add(book);
             } while (cursor.moveToNext());
         }
@@ -186,8 +226,13 @@ public class DBManager extends SQLiteOpenHelper {
 
         // Put the new information into a ContentValues
         ContentValues values = new ContentValues();
-        values.put(KEY_TITLE, book.getTitle());       // Title
-        values.put(KEY_AUTHOR, book.getAuthor());     // Author
+        values.put(KEY_TITLE,    book.getTitle());          // Title
+        values.put(KEY_AUTHOR,   book.getAuthor());         // Author
+        values.put(KEY_IMAGE,    book.getImageId());        // ImageId
+        values.put(KEY_STATUS,   book.getReadStatus());     // Read Status
+        values.put(KEY_FAVORITE, book.getIsFavourite());    // Favorite status
+        values.put(KEY_RATING,   book.getRating());         // Rating
+        values.put(KEY_DATE,     book.getDatePublished());  // Author
 
         // Update the row
         db.update(TABLE_BOOKS, values, KEY_ID+" = ?", new String[] {String.valueOf(book.getId())});
@@ -265,21 +310,12 @@ public class DBManager extends SQLiteOpenHelper {
                 null,
                 null);
 
-        // 3. If we got results get the first one
-        if (cursor != null) {
-            cursor.moveToFirst();      // Returns false if the cursor is empty
-        } else {
-            Log.i(TAG_DB_MANAGER, "ERROR: Cursor is null!");
-        }
-
         // 4. build book object
         if (cursor != null && cursor.moveToFirst()) {
             isInDB = true;
 
             // Free the cursor
             cursor.close();
-        } else {
-            Log.i(TAG_DB_MANAGER, "ERROR: moveToFirst() returned FALSE");
         }
 
         // 5. return book
