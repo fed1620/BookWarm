@@ -7,6 +7,7 @@ import java.util.List;
 
 import edu.byui.cs246.bookwarm.Book;
 import edu.byui.cs246.bookwarm.DBManager;
+import edu.byui.cs246.bookwarm.R;
 
 /**
  * Tests our SQLite database class
@@ -84,7 +85,12 @@ public class testDBManager extends AndroidTestCase {
         DBManager db = new DBManager(getContext());
         db.onCreate(db.getWritableDatabase());
 
+        // Create a book
         Book book = new Book("Head First Java", "Bert Bates and Kathy Sierra");
+        book.setImageId(R.mipmap.ic_generic_cover);
+        book.setReadStatus(2);
+        book.setIsFavourite(true);
+        book.setRating(5);
 
         // Attempt to add a book
         db.addBook(book);

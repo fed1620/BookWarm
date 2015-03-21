@@ -141,9 +141,14 @@ public class DBManager extends SQLiteOpenHelper {
 
         if (cursor != null && cursor.moveToFirst()) {
             Log.i(TAG_DB_MANAGER, "_______________________________________________________________");
-            Log.i(TAG_DB_MANAGER, "ID:     " + cursor.getInt(cursor.getColumnIndex(KEY_ID)));
-            Log.i(TAG_DB_MANAGER, "TITLE:  " + cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
-            Log.i(TAG_DB_MANAGER, "AUTHOR: " + cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
+            Log.i(TAG_DB_MANAGER, "ID:        " + cursor.getInt(cursor.getColumnIndex(KEY_ID)));
+            Log.i(TAG_DB_MANAGER, "TITLE:     " + cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
+            Log.i(TAG_DB_MANAGER, "AUTHOR:    " + cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
+            Log.i(TAG_DB_MANAGER, "IMAGE:     " + cursor.getInt(cursor.getColumnIndex(KEY_IMAGE)));
+            Log.i(TAG_DB_MANAGER, "STATUS:    " + cursor.getInt(cursor.getColumnIndex(KEY_STATUS)));
+            Log.i(TAG_DB_MANAGER, "FAVORITE:  " + cursor.getInt(cursor.getColumnIndex(KEY_FAVORITE)));
+            Log.i(TAG_DB_MANAGER, "RATING:    " + cursor.getInt(cursor.getColumnIndex(KEY_RATING)));
+            Log.i(TAG_DB_MANAGER, "DATE:      " + cursor.getInt(cursor.getColumnIndex(KEY_DATE)));
             Log.i(TAG_DB_MANAGER, "---------------------------------------------------------------");
 
             book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
