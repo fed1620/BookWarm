@@ -99,6 +99,7 @@ public class ListNoteActivity extends ActionBarActivity {
 
     /**
      * CONVERT NOTES
+     * Converts notes into List Activity format
      */
     private String[] convertNotes() {
         String notes[] = new String[listNotes.size()];
