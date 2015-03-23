@@ -31,9 +31,6 @@ public class AddNoteActivity extends ActionBarActivity {
 
         thisBook = (Book) getIntent().getSerializableExtra("thisBook");
 
-        // We are supposed to load notes from the sqllite at this point
-        //noteContent.setText("");
-
         setupCreateNoteButton();
     }
 

@@ -29,8 +29,8 @@
         <item>Reading</item>
         <item>Have Already Read</item>
     </string-array>
-    <string name="title_activity_list_note">ListNoteActivity</string>
-    <string name="title_activity_add_note">AddNote</string>
+    <string name="title_activity_list_note">Notes</string>
+    <string name="title_activity_add_note">Add Note</string>
 
 
 </resources>

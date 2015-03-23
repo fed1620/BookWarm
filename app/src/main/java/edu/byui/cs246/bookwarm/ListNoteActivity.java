@@ -67,6 +67,17 @@ public class ListNoteActivity extends ActionBarActivity {
     }
 
     /**
+     * ON BACK PRESSED
+     * Returns the user to Book Details Activity if Back button is pressed
+     */
+    @Override
+    public void onBackPressed () {
+        Intent intent = new Intent(ListNoteActivity.this, BookDetailsActivity.class);
+        intent.putExtra("thisBook", thisBook);
+        startActivity(intent);
+    }
+
+    /**
      * SETUP ADD NOTE BUTTON
      * Creates ADD NOTE ACTIVITY class by intent
      **/
@@ -92,7 +103,13 @@ public class ListNoteActivity extends ActionBarActivity {
     private String[] convertNotes() {
         String notes[] = new String[listNotes.size()];
         for(int i = 0; i < listNotes.size(); ++i) {
-            notes[i] = "Page " + listNotes.get(i).getPageNumber() + ".\n" + listNotes.get(i).getNoteContent();
+            if(listNotes.get(i).getPageNumber() != 0) {
+                notes[i] = "Page " + listNotes.get(i).getPageNumber() + ".\n";
+            }
+            else
+                notes[i] = "";
+
+            notes[i] += listNotes.get(i).getNoteContent();
         }
 
         return notes;
