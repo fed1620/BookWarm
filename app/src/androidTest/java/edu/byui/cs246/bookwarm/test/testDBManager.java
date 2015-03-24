@@ -209,6 +209,7 @@ public class testDBManager extends AndroidTestCase {
 
         // Create a book
         Book book = new Book("Ender's Game", "Orson Scott Card");
+        book.setImageId(R.mipmap.ic_generic_cover);
 
         // Add the book
         db.addBook(book);
@@ -219,5 +220,7 @@ public class testDBManager extends AndroidTestCase {
 
         // Get the book again
         Log.i(TAG_DB_MANAGER, "Retrieved book:   " + db.getBook(book.getId()));
+
+        db.close();
     }
 }

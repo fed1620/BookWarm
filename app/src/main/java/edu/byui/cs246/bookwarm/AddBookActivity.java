@@ -3,6 +3,7 @@ package edu.byui.cs246.bookwarm;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,8 +15,8 @@ import android.widget.EditText;
  */
 public class AddBookActivity extends ActionBarActivity {
 
-    public String title;
-    public String author;
+    public String  title;
+    public String  author;
     public Integer imageID = R.mipmap.ic_generic_cover;        // For now, this is always the same
 
     @Override
@@ -67,19 +68,24 @@ public class AddBookActivity extends ActionBarActivity {
                 author = bookAuthor.getText().toString();
 
                 // The new book will only be added to the library if the user filled out
-                // all of the necessary fields (For the time being, just the title)
+                // all of the necessary fields (title and author)
                 if (title != null && author != null) {
-                    if (!title.isEmpty()) {
-                        Book newBook = new Book();
-                        newBook.setTitle(title);
-                        newBook.setAuthor(author);
+                    if (!title.isEmpty() && !author.isEmpty()) {
+                        // Create the new book
+                        Book newBook = new Book(title, author);
                         newBook.setImageId(imageID);
 
-                        // Create a new intent that we will use to pass the book
-                        // back to the main activity
-                        Intent intentPassBook = new Intent(AddBookActivity.this, MainActivity.class);
-                        intentPassBook.putExtra("newBook", newBook);
-                        startActivity(intentPassBook);
+                        // Add the book and display a message
+                        if (!Library.getInstance().contains(newBook)) {
+                            Library.getInstance().addBook(newBook);
+                            Log.i("DBManager", "Added Book: " + newBook.toString() + " with an ID of: " + newBook.getId());
+                        } else {
+                            Log.e("DBManager", "Database already contains book: " + newBook.getTitle());
+                        }
+
+                        // Return to the main activity
+                        Intent intent = new Intent(AddBookActivity.this, MainActivity.class);
+                        startActivity(intent);
                         finish();
                     }
                 }

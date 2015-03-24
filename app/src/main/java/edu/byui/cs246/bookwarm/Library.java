@@ -1,13 +1,13 @@
 package edu.byui.cs246.bookwarm;
 
+import android.content.Context;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * A library is a list of books
+ * A library functions as a wrapper for our SQLite database of Book objects
  */
 public class Library {
     /** Log tag */
@@ -18,9 +18,8 @@ public class Library {
     private Library() {}
     public static Library getInstance() {return instance;}
 
-    // Instantiate the database
-    private DBManager db = new DBManager(App.getAppContext());
-    private List<Book> books = new ArrayList<>();
+    // The database that our library will use
+    private DBManager  db;
 
     /**
      * Add a book object to the list of books
@@ -28,25 +27,37 @@ public class Library {
      */
     public void addBook(Book book) {
         if (book == null) {
-            Log.i(TAG_LIBRARY, "ERROR: Cannot add a book with value: null");
+            Log.e(TAG_LIBRARY, "ERROR: Cannot add a book with value: null");
             return;
         } else if (book.getTitle() == null || book.getAuthor() == null) {
-            Log.i(TAG_LIBRARY, "ERROR: Cannot add a book with null title/author");
+            Log.e(TAG_LIBRARY, "ERROR: Cannot add a book with null title/author");
             return;
         }
-        books.add(book);
+        this.db.addBook(book);
     }
 
     /**
-     * Add a book object to the database of books
-     * @param book The book to be added
+     * Clear the library of all books
      */
-    public void addBookToDatabase(Book book) {
-        if (book == null) {
-            Log.i(TAG_LIBRARY, "ERROR: Cannot add a book with value: null");
-            return;
+    public void clear() {this.db.clear();}
+
+    /**
+     * Does the book already exist in our database?
+     * @param book The book to be searched for
+     * @return Returns true if the book is already in the database
+     */
+    public boolean contains(Book book) { return this.db.containsBook(book);}
+
+    /**
+     * Display all of the books in the library
+     */
+    public void display() {
+        Log.i(TAG_LIBRARY, "Library contains the following " + numBooks() + " book(s): ");
+        Log.i(TAG_LIBRARY, "_______________________________");
+        for (Book book : getBooks()) {
+            Log.i(TAG_LIBRARY, book.toString());
         }
-        db.addBook(book);
+        Log.i(TAG_LIBRARY, "-------------------------------");
     }
 
     /**
@@ -55,41 +66,38 @@ public class Library {
      */
     public void deleteBook(Book condemnedBook) {
         if (condemnedBook == null) {
-            Log.i(TAG_LIBRARY, "ERROR: Cannot delete a book with value: null");
+            Log.e(TAG_LIBRARY, "ERROR: Cannot delete a book with value: null");
             return;
         }
-        books.remove(condemnedBook);
+        this.db.deleteBook(condemnedBook);
     }
 
     /**
-     * How many books are in our library
-     *
-     * @return Returns an integer representing the number of books in the library
+     * Get a book from the database
+     * @return Returns a book
      */
-    public int numBooks() {
-        if (getBooks().size() < 0) {
-            System.out.println("ERROR: Library contains invalid number of books");
-            return 0;
+    public Book getBook(int id) {
+        if (this.db == null) {
+            Log.e(TAG_LIBRARY, "ERROR: Database object is null");
+            return null;
         }
-        return getBooks().size();
+        return this.db.getBook(id);
     }
 
     /**
      * A getter that will return our list of books
-     *
      * @return Returns List<Book> books
      */
     public List<Book> getBooks() {
-        if (books == null) {
-            System.out.println("ERROR: list of books is null");
+        if (this.db == null) {
+            Log.e(TAG_LIBRARY, "ERROR: Database object is null");
             return null;
         }
-        return this.books;
+        return this.db.getBooks();
     }
 
     /**
      * This method will return an array of every book title in our Library
-     *
      * @return returns an array of Strings (book titles)
      */
     public String[] getBookTitles() {
@@ -105,7 +113,6 @@ public class Library {
 
     /**
      * This method will return an array of image ID numbers
-     *
      * @return returns an array of ints (image IDs)
      */
     public Integer[] getImageIds() {
@@ -120,33 +127,30 @@ public class Library {
     }
 
     /**
-     * When the book passed in matches a book that is in our library, update the
-     * book to reflect any changes that have been made
-     *
-     * @param book The book to be updated
+     * Instantiate the database from the main activity
      */
-    public void updateBookInfo(Book book) {
-        for (int i = 0; i < numBooks(); ++i) {
-            if (book.getTitle().equals(books.get(i).getTitle())) {
-
-                // Change the read status, the rating, and favorite status of
-                // the book in the library
-                books.get(i).setReadStatus(book.getReadStatus());
-                books.get(i).setRating(book.getRating());
-                books.get(i).setIsFavourite(book.getIsFavourite());
-            }
+    public void instantiateDatabase(Context context) {
+        if (db == null) {
+            db = new DBManager(context);
         }
     }
 
     /**
-     * Display all of the books in the library
+     * How many books are in our library
+     * @return Returns an integer representing the number of books in the library
      */
-    public void display() {
-        Log.i(TAG_LIBRARY, "Library contains the following " + numBooks() + " book(s): ");
-        Log.i(TAG_LIBRARY, "_______________________________");
-        for (Book book : books) {
-            Log.i(TAG_LIBRARY, book.toString());
+    public int numBooks() {
+        if (getBooks().size() < 0) {
+            Log.e(TAG_LIBRARY, "ERROR: Library contains invalid number of books");
+            return 0;
         }
-        Log.i(TAG_LIBRARY, "-------------------------------");
+        return this.db.size();
     }
+
+    /**
+     * Update the book in the database
+     * @param book The book to be updated
+     */
+    public void updateBook(Book book) {this.db.updateBook(book);}
+
 }

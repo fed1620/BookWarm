@@ -1,6 +1,5 @@
 package edu.byui.cs246.bookwarm;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -13,9 +12,8 @@ import android.widget.ListView;
 
 public class MainActivity extends ActionBarActivity {
     /*--------------------------------------------------------------------------------------------*/
-    public Library library = Library.getInstance(); // Needs to be static, so that a new library
-    public ListView  list;                         // is not created every time we switch back to
-                                                   // the main activity
+    public Library  library = Library.getInstance(); // Singleton
+    public ListView list;
     /*--------------------------------------------------------------------------------------------*/
 
     @Override
@@ -23,14 +21,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // The library should be initially 'created' (or in the future: 'loaded' from a file)
-        // ONLY once
-        if (library.numBooks() == 0) {
-            createLibrary(library);
-        }
-
-        // If any new books have been entered by the user, add that new book to our library.
-        updateLibrary(library);
+        // Instantiate the database
+        library.instantiateDatabase(this);
 
         // Set up the List View
         setupCustomListView();
@@ -66,65 +58,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Create (In the future: load from a file) the user's library
-     * This method should only be called one time
-     *
-     * @param library The library object that will store the user's library of books
-     */
-    public void createLibrary(Library library) {
-        // ** For the time being, we are simply creating a hard-coded library
-        // ** In the future, this will be loaded from a file!
-
-        // To Kill A Mockingbird
-        Book book1 = new Book();
-        book1.setTitle("To Kill a Mockingbird");
-        book1.setAuthor("Harper Lee");
-        book1.setImageId(R.mipmap.ic_generic_cover);
-        book1.setReadStatus(2);
-
-        // The Great Gatsby
-        Book book2 = new Book();
-        book2.setTitle("The Great Gatsby");
-        book2.setAuthor("F. Scott Fitzgerald");
-        book2.setImageId(R.mipmap.ic_generic_cover);
-
-        // Pride and Prejudice and Zombies
-        Book book3 = new Book();
-        book3.setTitle("Pride and Prejudice and Zombies");
-        book3.setAuthor("Seth Grahame-Smith");
-        book3.setImageId(R.mipmap.ic_generic_cover);
-
-        // Add all of our hard-coded books to the library
-        library.addBook(book1);
-        library.addBook(book2);
-        library.addBook(book3);
-    }
-
-    /**
-     * If a new book object was passed to this activity via an intent, this method
-     * will simply add that new book to the user's library
-     *
-     * (NOTE: This method will likely be made obsolete in the future, when instead of
-     * passing the new book back to this activity, we will simply write the book
-     * to the library file and it will automatically be loaded along with the other ones)
-     *
-     * @param library The user's library
-     */
-    public void updateLibrary(Library library) {
-        // Check for a new book that may have been added
-        Book newBook = (Book) getIntent().getSerializableExtra("newBook");
-        if (newBook != null) {
-            library.addBook(newBook);
-        }
-
-        // Update any books that may have been changed
-        Book updatedBook = (Book) getIntent().getSerializableExtra("updatedBook");
-        if (updatedBook != null) {
-            library.updateBookInfo(updatedBook);
-        }
-    }
-
-    /**
      * Self-explanatory
      */
     private void setupCustomListView() {
@@ -147,5 +80,13 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * Clear the books from the library, and re-display the listview
+     */
+    public void clearLibrary(View view) {
+        library.clear();
+        setupCustomListView();
     }
 }

@@ -8,6 +8,7 @@
 
     // activity_main.xml
     <string name="title_activity_menu">Menu</string>
+    <string name="clear">Clear Library</string>
 
     // activity_menu.xml
     <string name="title_activity_add_book">Add New Book</string>
@@ -25,9 +26,9 @@
     <string name="author">Author</string>
 
     <string-array name="readStatus">
-        <item>Have Not Read</item>
-        <item>Reading</item>
-        <item>Have Already Read</item>
+        <item>I haven\'t read this book yet</item>
+        <item>I\'m reading this book right now</item>
+        <item>I\'ve already read this book before</item>
     </string-array>
     <string name="title_activity_list_note">Notes</string>
     <string name="title_activity_add_note">Add Note</string>

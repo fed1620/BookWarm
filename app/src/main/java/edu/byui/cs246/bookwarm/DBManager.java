@@ -16,10 +16,10 @@ import java.util.List;
  * Sources referenced: http://hmkcode.com/android-simple-sqlite-database-tutorial/
  */
 public class DBManager extends SQLiteOpenHelper {
-    private static final String   TAG_DB_MANAGER   = "DBManager";     // Log Tag
     private static final int      DATABASE_VERSION = 1;               // The database version
+    private static final String   TAG_DB_MANAGER   = "DBManager";     // Log Tag
     private static final String   DATABASE_NAME    = "LibraryDB";     // The name of the database
-    private static final String   TABLE_BOOKS      = "books";         // The name of the books table
+    private static final String   TABLE_BOOKS      = "books";         // The name of the BOOKS table
     private static final String   KEY_ID           = "id";            // BOOKS table column 1
     private static final String   KEY_TITLE        = "title";         // BOOKS table column 2
     private static final String   KEY_AUTHOR       = "author";        // BOOKS table column 3
@@ -28,9 +28,7 @@ public class DBManager extends SQLiteOpenHelper {
     private static final String   KEY_FAVORITE     = "favorite";      // BOOKS table column 6
     private static final String   KEY_RATING       = "rating";        // BOOKS table column 7
     private static final String   KEY_DATE         = "date";          // BOOKS table column 8
-
-
-    private static final String[] COLUMNS = {KEY_ID,
+    private static final String[] COLUMNS = {KEY_ID,                  // Every column in BOOKS
                                              KEY_TITLE,
                                              KEY_AUTHOR,
                                              KEY_IMAGE,
@@ -44,9 +42,6 @@ public class DBManager extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Log message
-        Log.i(TAG_DB_MANAGER, "Creating SQLite Database: " + DATABASE_NAME + "...");
-
         // Build an SQL statement that will be used to create the book table
         String CREATE_BOOK_TABLE =
                 "CREATE TABLE books (" +
@@ -59,10 +54,8 @@ public class DBManager extends SQLiteOpenHelper {
                 ", rating      INTEGER" +
                 ", date        INTEGER);";
 
-        // Drop the table before we create it
-        final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_BOOKS + ';';
-        Log.i(TAG_DB_MANAGER, DROP_TABLE);
-        db.execSQL(DROP_TABLE);
+        // Log message
+        Log.i(TAG_DB_MANAGER, "Creating table: " + TABLE_BOOKS + "...");
 
         // Run the statement
         db.execSQL(CREATE_BOOK_TABLE);
@@ -82,6 +75,9 @@ public class DBManager extends SQLiteOpenHelper {
      * @param book The book to be added
      */
     public void addBook(Book book) {
+        // Get the reference to our database
+        SQLiteDatabase db = this.getWritableDatabase();
+
         // Make sure the book is not null
         if (book == null) {
             Log.e(TAG_DB_MANAGER, "Attempted to add null-referenced book");
@@ -94,13 +90,7 @@ public class DBManager extends SQLiteOpenHelper {
             return;
         }
 
-        // For logging, so we can se the results later when we run the app
-        Log.i(TAG_DB_MANAGER, "Adding Book: " +  book.toString());
-
-        // 1. Get the reference to our database
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        // 2. Create ContentValues to add key "column"/value
+        // 2. Create ContentValues and add the different column values
         ContentValues values = new ContentValues();
         values.put(KEY_TITLE,    book.getTitle());          // Title
         values.put(KEY_AUTHOR,   book.getAuthor());         // Author
@@ -110,7 +100,7 @@ public class DBManager extends SQLiteOpenHelper {
         values.put(KEY_RATING,   book.getRating());         // Rating
         values.put(KEY_DATE,     book.getDatePublished());  // Author
 
-        // 3. Insert into the table
+        // Insert the values into the table
         long idInsert = db.insert(TABLE_BOOKS, null, values);
 
         // Set the ID of the book
@@ -129,14 +119,14 @@ public class DBManager extends SQLiteOpenHelper {
 
         // Build the cursor
         Cursor cursor = db.query(TABLE_BOOKS,
-                                COLUMNS,
-                                " id = ?",
-                                new String[] {String.valueOf(id)},
-                                null,
-                                null,
-                                null,
-                                null);
-        // 4. build book object
+                                 COLUMNS,
+                                 " id = ?",
+                                 new String[] {String.valueOf(id)},
+                                 null,
+                                 null,
+                                 null,
+                                 null);
+        // Build a book object
         Book book = new Book();
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -151,19 +141,20 @@ public class DBManager extends SQLiteOpenHelper {
             Log.i(TAG_DB_MANAGER, "DATE:      " + cursor.getInt(cursor.getColumnIndex(KEY_DATE)));
             Log.i(TAG_DB_MANAGER, "---------------------------------------------------------------");
 
+            book.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
             book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
             book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
             book.setImageId(cursor.getInt(cursor.getColumnIndex(KEY_IMAGE)));
             book.setReadStatus(cursor.getInt(cursor.getColumnIndex(KEY_STATUS)));
+            book.setRating(cursor.getInt(cursor.getColumnIndex(KEY_RATING)));
+            book.setDatePublished(cursor.getInt(cursor.getColumnIndex(KEY_DATE)));
 
+            // Convert the integer back to a boolean value
             if (cursor.getInt(cursor.getColumnIndex(KEY_FAVORITE)) == 0) {
                 book.setIsFavourite(false);
             } else {
                 book.setIsFavourite(true);
             }
-
-            book.setRating(cursor.getInt(cursor.getColumnIndex(KEY_RATING)));
-            book.setDatePublished(cursor.getInt(cursor.getColumnIndex(KEY_DATE)));
 
             // Free the cursor
             cursor.close();
@@ -173,7 +164,7 @@ public class DBManager extends SQLiteOpenHelper {
             Log.i(TAG_DB_MANAGER, "ERROR: moveToFirst() returned FALSE");
         }
 
-        // 5. return book
+        // Return the book object
         return book;
     }
 
@@ -182,7 +173,7 @@ public class DBManager extends SQLiteOpenHelper {
      * @return Returns a List of Book objects
      */
     public List<Book> getBooks() {
-        // The list of books that will be our library
+        // The list of books in the database
         List<Book> books = new ArrayList<>();
 
         // Get the reference to the writable database
@@ -194,24 +185,26 @@ public class DBManager extends SQLiteOpenHelper {
         // Build the cursor
         Cursor cursor = db.rawQuery(QUERY, null);
 
-        // For every row in the table, build a book and add it to the list
+        // For every row in the table, build a book object and add it to the list
         Book book;
         if (cursor.moveToFirst()) {
             do {
                 book = new Book();
+                book.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
                 book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
                 book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
                 book.setImageId(cursor.getInt(cursor.getColumnIndex(KEY_IMAGE)));
                 book.setReadStatus(cursor.getInt(cursor.getColumnIndex(KEY_STATUS)));
+                book.setRating(cursor.getInt(cursor.getColumnIndex(KEY_RATING)));
+                book.setDatePublished(cursor.getInt(cursor.getColumnIndex(KEY_DATE)));
 
+                // Convert the integer back to a boolean value
                 if (cursor.getInt(cursor.getColumnIndex(KEY_FAVORITE)) == 0) {
                     book.setIsFavourite(false);
                 } else {
                     book.setIsFavourite(true);
                 }
 
-                book.setRating(cursor.getInt(cursor.getColumnIndex(KEY_RATING)));
-                book.setDatePublished(cursor.getInt(cursor.getColumnIndex(KEY_DATE)));
                 books.add(book);
             } while (cursor.moveToNext());
         }
@@ -242,8 +235,9 @@ public class DBManager extends SQLiteOpenHelper {
         // Update the row
         db.update(TABLE_BOOKS, values, KEY_ID+" = ?", new String[] {String.valueOf(book.getId())});
 
-        // Close the database
-        db.close();
+        // Log message
+        Log.i(TAG_DB_MANAGER, "Updated book: " + book.toString());
+
     }
 
     /**
@@ -257,9 +251,6 @@ public class DBManager extends SQLiteOpenHelper {
         // Delete the book
         db.delete(TABLE_BOOKS, KEY_ID + " = ?", new String[] {String.valueOf(book.getId())});
 
-        // Close the database
-        db.close();
-
         // Log
         Log.i(TAG_DB_MANAGER, "Removed book: " + book.toString());
     }
@@ -272,7 +263,7 @@ public class DBManager extends SQLiteOpenHelper {
         // The integer we will be returning
         int i = 0;
 
-        // 1. Get reference to readable DB
+        // Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Build the query
@@ -302,20 +293,20 @@ public class DBManager extends SQLiteOpenHelper {
         // By default, a book is not in the database
         boolean isInDB = false;
 
-        // 1. Get reference to readable DB
+        // Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Build the cursor
         Cursor cursor = db.query(TABLE_BOOKS,
-                COLUMNS,
-                " title = ?",
-                new String[] {book.getTitle()},
-                null,
-                null,
-                null,
-                null);
+                                 COLUMNS,
+                                 " title = ?",
+                                 new String[] {book.getTitle()},
+                                 null,
+                                 null,
+                                 null,
+                                 null);
 
-        // 4. build book object
+        // If the cursor moves to the correct row, then the book is in the database
         if (cursor != null && cursor.moveToFirst()) {
             isInDB = true;
 
@@ -323,7 +314,27 @@ public class DBManager extends SQLiteOpenHelper {
             cursor.close();
         }
 
-        // 5. return book
         return isInDB;
+    }
+
+    /**
+     * Clear the database
+     */
+    public void clear() {
+        // If the database is empty, do nothing
+        if (size() == 0) {
+            return;
+        }
+
+        // Get the reference to this database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Drop the books table
+        final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_BOOKS + ';';
+        Log.i(TAG_DB_MANAGER, "Dropping table: " + TABLE_BOOKS + "...");
+        db.execSQL(DROP_TABLE);
+
+        // Recreate it
+        this.onCreate(db);
     }
 }

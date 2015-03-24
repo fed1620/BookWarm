@@ -1,5 +1,4 @@
 package edu.byui.cs246.bookwarm;
-//some code lovingly ripped off from: http://www.learn2crack.com/2013/10/android-custom-listview-images-text-example.html
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -11,10 +10,11 @@ import android.widget.TextView;
 
 /**
  * The custom ArrayAdapter we'll use to display the library of books
+ * Reference: http://www.learn2crack.com/2013/10/android-custom-listview-images-text-example.html
  */
-public class CustomLibraryList extends ArrayAdapter<String> {       // Could be ArrayAdapter<Book>
-    private final Activity  context;
-    private final Library library;
+public class CustomLibraryList extends ArrayAdapter<String> {
+    private final Activity context;
+    private final Library  library;
 
     /**
      * Constructor for the class

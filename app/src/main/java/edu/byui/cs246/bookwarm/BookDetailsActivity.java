@@ -20,7 +20,7 @@ import android.widget.TextView;
  * the user to access the Notes relating to the book, set the read status, and rate the book
  */
 public class BookDetailsActivity extends ActionBarActivity {
-    private Book thisBook;
+    private Book   thisBook;
     private String bookDescription;
 
     @Override
@@ -28,12 +28,9 @@ public class BookDetailsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
 
-        //jumping to a run function because onCreate is cluttered as fudge
+        // jumping to a run function because onCreate is cluttered as fudge
         run();
-
-        setupListNoteButton();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,11 +56,12 @@ public class BookDetailsActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        // When the user presses the back key, send the book (along with any changes made to it)
-        // back to the main activity
-        Intent intentPassBook = new Intent(BookDetailsActivity.this, MainActivity.class);
-        intentPassBook.putExtra("updatedBook", thisBook);
-        startActivity(intentPassBook);
+        // First, update the book
+        Library.getInstance().updateBook(thisBook);
+
+        // Then, return to the main activity
+        Intent intent = new Intent(BookDetailsActivity.this, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 
@@ -71,13 +69,17 @@ public class BookDetailsActivity extends ActionBarActivity {
      * The 'main' of this activity.
      */
     private void run() {
-        if (getIntent().getSerializableExtra("thisBook") == null) {
-            return;
-        }
+        // Do nothing with an invalid book
+        if (getIntent().getSerializableExtra("thisBook") == null) {return;}
+
+        // Get the book from the main activity
         thisBook = (Book)getIntent().getSerializableExtra("thisBook");
+
+        // Set up the various layout elements
         setupDisplay();
         setupSpinner();
         setupRatingBarListener();
+        setupListNoteButton();
     }
 
     /**
@@ -108,15 +110,9 @@ public class BookDetailsActivity extends ActionBarActivity {
      * Builds the String that shows the Title, Author, and whether or not the book is read.
      */
     private void buildInfoString() {
-        // Assign the Title
+        // Assign the Title and Author
         bookDescription =  "Title: "        + thisBook.getTitle()     + "\n";
-
-        // And the author
-        if (thisBook.getAuthor() == null) {
-            bookDescription += "Author: (Unknown)\n";
-        } else {
-            bookDescription += "Author: "       + thisBook.getAuthor()    + "\n";
-        }
+        bookDescription += "Author: "       + thisBook.getAuthor()    + "\n";
 
         //'isRead' segment
         switch (thisBook.getReadStatus()) {
@@ -208,10 +204,12 @@ public class BookDetailsActivity extends ActionBarActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // First, update the book
+                Library.getInstance().updateBook(thisBook);
+
+                // Then, pass the book to the Note Activity
                 Intent intent = new Intent(BookDetailsActivity.this, ListNoteActivity.class);
-
-                intent.putExtra("thisBook", thisBook);
-
+                intent.putExtra("thisBook", Library.getInstance().getBook(thisBook.getId()));
                 startActivity(intent);
             }
         });

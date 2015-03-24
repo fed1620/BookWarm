@@ -23,7 +23,7 @@ public class ListNoteActivity extends ActionBarActivity {
     private static final String TAG_LIST_NOTE_ACTVITY = "ListNoteActivity";
 
     //Variables
-    ArrayList<Note> listNotes;
+    List<Note> listNotes;
     Book thisBook;
 
     @Override
