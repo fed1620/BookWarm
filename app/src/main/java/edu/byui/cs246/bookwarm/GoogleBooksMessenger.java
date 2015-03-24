@@ -12,6 +12,15 @@ public class GoogleBooksMessenger {
     String googleURL;
     String BookWarmAPIKey;
     String charset;
+    String serverResponse;
+
+    /**
+     * Mostly here for test purposes.
+     * @return The string version of the server's response
+     */
+    public String getServerRespons() {
+        return serverResponse;
+    }
 
     /**
      * Default constructor. Mostly just using it to initialize variables
@@ -30,7 +39,7 @@ public class GoogleBooksMessenger {
     public void searchGoogleBooks(String query) {
         //TODO: Implement thread searching
         try {
-            System.out.println(getResponse(query).toString()); //test println for now. Wanna see what the server returns
+            serverResponse = getResponse(query).toString();
         } catch (IOException e) {
             e.printStackTrace();
         }
