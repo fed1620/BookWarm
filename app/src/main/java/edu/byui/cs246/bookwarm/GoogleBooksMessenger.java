@@ -18,7 +18,7 @@ public class GoogleBooksMessenger {
      * Mostly here for test purposes.
      * @return The string version of the server's response
      */
-    public String getServerRespons() {
+    public String getServerResponse() {
         return serverResponse;
     }
 
