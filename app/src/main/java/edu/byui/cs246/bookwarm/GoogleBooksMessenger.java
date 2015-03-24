@@ -40,6 +40,12 @@ public class GoogleBooksMessenger {
         //TODO: Implement thread searching
         try {
             serverResponse = getResponse(query).toString();
+
+            //test prints
+            //TODO: Get rid of this eventually
+            System.out.println("SERVER RESPONSE..............");
+            System.out.println(serverResponse);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
