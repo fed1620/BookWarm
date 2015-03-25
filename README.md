@@ -2,18 +2,11 @@
 
 QUEST LOG:
 ~~~~~~~~~~
-Igor(newLayoutLauncher) - Page number is ignored if 0
-                          Back Button should take the user from ListNoteActivity to BookDetails instead of AddNote
-                          Activity names in-app are user friendly
-                          Make notes persistent
+Igor(newLayoutLauncher) - Adding activity for deciding how to add a book
 
-Federico(Iostream Broadswordsman) - sql SQL SQLLLLLLLLL {
-                                    getAllBooks()
-                                    update()
-                                    delete()
-                                    }
+Federico(Iostream Broadswordsman) - Create Notes table in SQLite database
 
-Jake(RogueFactory) - Fun with Google Books.
+Jake(RogueFactory) - Moar fun with Google Books!
 ~~~~~~~~~~~
 
 NOTES FOR TEAM MEMBERS GO HERE:
