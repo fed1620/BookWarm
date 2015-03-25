@@ -49,7 +49,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         if (id == R.id.add_new_book) {
-            Intent intent = new Intent(MainActivity.this, AddBookActivity.class);
+            Intent intent = new Intent(MainActivity.this, AddBookMethod.class);
             startActivity(intent);
             return true;
         }

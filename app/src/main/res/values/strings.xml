@@ -32,6 +32,7 @@
     </string-array>
     <string name="title_activity_list_note">Notes</string>
     <string name="title_activity_add_note">Add Note</string>
+    <string name="title_activity_add_book_method">AddBookMethod</string>
 
 
 </resources>
