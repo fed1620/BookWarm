@@ -8,7 +8,7 @@ import android.view.MenuItem;
 /**
  * Created by Jake on 3/16/2015.
  */
-public class BookSearchInputActivity extends ActionBarActivity {
+public class bookSearchInputActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
