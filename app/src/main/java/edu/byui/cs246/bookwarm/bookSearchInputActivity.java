@@ -4,25 +4,15 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 /**
  * Created by Jake on 3/16/2015.
  */
-public class bookSearchInputActivity extends ActionBarActivity {
-    //variables go here
-    EditText titleSearchInput;
-    Button searchButton;
-    GoogleBooksMessenger messenger;
-
+public class BookSearchInputActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_search_input);
-
-        run();
     }
 
     @Override
@@ -47,33 +37,4 @@ public class bookSearchInputActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Our new 'main'. Less cluttered this way.
-     */
-    private void run() {
-        setupVariables();
-        setupSearchButtonListener();
-    }
-
-    /**
-     * Function to intialize any class variables.
-     */
-    private void setupVariables() {
-        titleSearchInput = (EditText) findViewById(R.id.titleSearchInput);
-        searchButton     = (Button)   findViewById(R.id.searchButton);
-        messenger        = new GoogleBooksMessenger();
-    }
-
-    /**
-     * Self-explanatory
-     */
-    private void setupSearchButtonListener() {
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //This is wehere the magic happens.
-                messenger.searchGoogleBooks(titleSearchInput.getText().toString());
-            }
-        });
-    }
 }
