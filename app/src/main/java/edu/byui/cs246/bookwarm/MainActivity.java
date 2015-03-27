@@ -25,9 +25,6 @@ public class MainActivity extends ActionBarActivity {
         // Instantiate the database
         library.instantiateDatabase(this);
 
-        // For testing purposes
-        test();
-
         // Set up the List View
         setupCustomListView();
     }
@@ -61,7 +58,7 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void test() {
+    public void test(View view) {
         // Create a book with two notes
         Book book = new Book("Test Book", "Author");
         book.setImageId(R.mipmap.ic_generic_cover);
@@ -79,6 +76,7 @@ public class MainActivity extends ActionBarActivity {
         } else {
             Log.e("DBManager", "Database already contains book: " + book.getTitle());
         }
+        setupCustomListView();
     }
 
     /**

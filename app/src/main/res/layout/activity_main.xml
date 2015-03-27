@@ -21,4 +21,14 @@
         android:layout_centerHorizontal="true"
         android:onClick="clearLibrary"/>
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/test"
+        android:id="@+id/button2"
+        android:layout_above="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:onClick="test"/>
+
 </RelativeLayout>

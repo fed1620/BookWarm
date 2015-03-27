@@ -9,6 +9,7 @@
     // activity_main.xml
     <string name="title_activity_menu">Menu</string>
     <string name="clear">Clear Library</string>
+    <string name="test"> Add Test Book</string>
 
     // activity_menu.xml
     <string name="title_activity_add_book">Add New Book</string>
