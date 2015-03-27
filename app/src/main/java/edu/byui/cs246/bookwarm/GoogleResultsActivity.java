@@ -6,20 +6,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 /**
- * Created by Jake on 3/16/2015.
- * Java for the activity where the user inputs a search to Google Books
+ * Created by Jake on 3/26/2015.
  */
-public class bookSearchInputActivity extends ActionBarActivity {
+public class GoogleResultsActivity extends ActionBarActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_search_input);
+        setContentView(R.layout.activity_add_book_method);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_book_details, menu);
+        getMenuInflater().inflate(R.menu.menu_add_book_method, menu);
         return true;
     }
 
@@ -37,5 +38,4 @@ public class bookSearchInputActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }
