@@ -18,7 +18,7 @@ public class AddBookMethod extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book_method);
 
-        setupAddBookManuallyButton();
+        setupButtons();
     }
 
 
@@ -45,10 +45,18 @@ public class AddBookMethod extends ActionBarActivity {
     }
 
     /**
+     * Macro for setting up all the buttons here.
+     */
+    private void setupButtons() {
+        setupAddBookManuallyButton();
+        setupAddBookGoogleButton();
+    }
+
+    /**
      * SETUP ADD NOTE BUTTON
      * Creates ADD NOTE ACTIVITY class by intent
      **/
-    void setupAddBookManuallyButton() {
+    private void setupAddBookManuallyButton() {
         Button btn = (Button) findViewById(R.id.manually);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +68,19 @@ public class AddBookMethod extends ActionBarActivity {
 
                 // run intent
                 startActivity(intent);
+            }
+        });
+    }
+
+    /**
+     * Sets up a listener for the Google button
+     */
+    private void setupAddBookGoogleButton() {
+        Button btn = (Button) findViewById(R.id.google);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
