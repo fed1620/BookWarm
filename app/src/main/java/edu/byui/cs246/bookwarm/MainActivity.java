@@ -3,6 +3,7 @@ package edu.byui.cs246.bookwarm;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,9 @@ public class MainActivity extends ActionBarActivity {
 
         // Instantiate the database
         library.instantiateDatabase(this);
+
+        // For testing purposes
+        test();
 
         // Set up the List View
         setupCustomListView();
@@ -55,6 +59,26 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void test() {
+        // Create a book with two notes
+        Book book = new Book("Test Book", "Author");
+        book.setImageId(R.mipmap.ic_generic_cover);
+        book.addNote(new Note("This is a test note"));
+        book.addNote(new Note(250, "This is a note with a page number"));
+
+        // Add the book and display a message
+        if (!Library.getInstance().contains(book)) {
+            Library.getInstance().addBook(book);
+            Log.i("DBManager", "Added Book: " + book.toString() + " with an ID of: " + book.getId());
+            for (Note note : book.getNotes()) {
+                Log.i("DBManager", "Added Note with an ID of: " + note.getId() +
+                " corresponding to Book " + note.getBookId());
+            }
+        } else {
+            Log.e("DBManager", "Database already contains book: " + book.getTitle());
+        }
     }
 
     /**

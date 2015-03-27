@@ -42,11 +42,13 @@ public class DBManager extends SQLiteOpenHelper {
     // Notes table
     private static final String   TABLE_NOTES  = "notes";             // The name of the NOTES table
     private static final String   KEY_NOTE_ID  = "id";                // NOTES table column 1
-    private static final String   KEY_PAGE     = "page_number";       // NOTES table column 2
-    private static final String   KEY_CONTENT  = "content";           // NOTES table column 3
-    private static final String[] COLUMNS_NOTE = {KEY_ID,             // Every column in NOTES
-                                                  KEY_TITLE,
-                                                  KEY_AUTHOR};
+    private static final String   KEY_BOOK_ID  = "book_id";           // NOTES table column 2
+    private static final String   KEY_PAGE     = "page_number";       // NOTES table column 3
+    private static final String   KEY_CONTENT  = "content";           // NOTES table column 4
+    private static final String[] COLUMNS_NOTE = {KEY_NOTE_ID,        // Every column in NOTES
+                                                  KEY_BOOK_ID,
+                                                  KEY_PAGE,
+                                                  KEY_CONTENT};
 
     // Default constructor
     public DBManager(Context context) {super(context, DATABASE_NAME, null, DATABASE_VERSION);}
@@ -75,6 +77,7 @@ public class DBManager extends SQLiteOpenHelper {
         String CREATE_NOTES_TABLE =
                 "CREATE TABLE notes (" +
                         "  id          INTEGER PRIMARY KEY AUTOINCREMENT" +
+                        ", book_id     INTEGER" +
                         ", page_number INTEGER" +
                         ", content     TEXT);";
 
@@ -129,6 +132,23 @@ public class DBManager extends SQLiteOpenHelper {
 
         // Set the ID of the book
         book.setId((int)idInsert);
+
+        // If the Book contains Notes, insert them into the Notes table
+        if (book.getNotes().size() != 0) {
+            for (Note note : book.getNotes()) {
+                ContentValues valuesNote = new ContentValues();
+                valuesNote.put(KEY_BOOK_ID, book.getId());                  // BookId
+                valuesNote.put(KEY_PAGE,    note.getPageNumber());          // Page Number
+                valuesNote.put(KEY_CONTENT, note.getNoteContent());         // Content
+
+                // Insert the values into the note table
+                long idNoteInsert = db.insert(TABLE_NOTES, null, valuesNote);
+
+                // Set the Note's id and the Note's bookId
+                note.setId((int)idNoteInsert);
+                note.setBookId(book.getId());
+            }
+        }
     }
 
     /**
@@ -141,7 +161,7 @@ public class DBManager extends SQLiteOpenHelper {
         // 1. Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // Build the cursor
+        // Build the book cursor
         Cursor cursor = db.query(TABLE_BOOKS,
                                  COLUMNS,
                                  " id = ?",
@@ -150,6 +170,16 @@ public class DBManager extends SQLiteOpenHelper {
                                  null,
                                  null,
                                  null);
+
+        // Build the notes cursor
+        Cursor noteCursor = db.query(TABLE_NOTES,
+                                     COLUMNS_NOTE,
+                                     " book_id = ?",
+                                     new String[] {String.valueOf(id)},
+                                     null,
+                                     null,
+                                     null,
+                                     null);
         // Build a book object
         Book book = new Book();
 
@@ -179,13 +209,31 @@ public class DBManager extends SQLiteOpenHelper {
             } else {
                 book.setIsFavourite(true);
             }
-
-            // Free the cursor
-            cursor.close();
         } else if (cursor == null) {
             Log.i(TAG_DB_MANAGER, "ERROR: Cursor is null!");
         } else if (!cursor.moveToFirst()) {
             Log.i(TAG_DB_MANAGER, "ERROR: moveToFirst() returned FALSE");
+        }
+
+        // Check if the book has notes
+        if (noteCursor != null && noteCursor.moveToFirst() && cursor != null && cursor.moveToFirst()) {
+            if (noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)) == cursor.getInt(cursor.getColumnIndex(KEY_ID))) {
+                Log.i(TAG_DB_MANAGER, "The book: " + book.toString() + " contains notes!");
+                do {
+                    Note note = new Note();
+                    note.setId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_NOTE_ID)));
+                    note.setBookId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)));
+                    note.setPageNumber(noteCursor.getInt(noteCursor.getColumnIndex(KEY_PAGE)));
+                    note.setNoteContent(noteCursor.getString(noteCursor.getColumnIndex(KEY_CONTENT)));
+                    book.addNote(note);
+                } while (noteCursor.moveToNext());
+            }
+            // Free the note cursor
+            noteCursor.close();
+        }
+        // Free the book cursor
+        if (cursor != null) {
+            cursor.close();
         }
 
         // Return the book object
