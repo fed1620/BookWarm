@@ -105,7 +105,7 @@ public class ListNoteActivity extends ActionBarActivity {
         String notes[] = new String[listNotes.size()];
         for(int i = 0; i < listNotes.size(); ++i) {
             if(listNotes.get(i).getPageNumber() != 0) {
-                notes[i] = "Page " + listNotes.get(i).getPageNumber() + ".\n";
+                notes[i] = "(Page " + listNotes.get(i).getPageNumber() + ")\n";
             }
             else
                 notes[i] = "";

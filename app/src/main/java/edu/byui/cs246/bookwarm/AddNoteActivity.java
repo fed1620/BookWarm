@@ -73,6 +73,7 @@ public class AddNoteActivity extends ActionBarActivity {
                 newNote.setNoteContent(noteContent.getText().toString());
 
                 thisBook.addNote(newNote);
+                Library.getInstance().updateBook(thisBook);
 
                 Intent intent = new Intent(AddNoteActivity.this, ListNoteActivity.class);
                 intent.putExtra("thisBook", thisBook);

@@ -117,7 +117,7 @@ public class DBManager extends SQLiteOpenHelper {
             return;
         }
 
-        // 2. Create ContentValues and add the different column values
+        // Create ContentValues and add the different column values
         ContentValues values = new ContentValues();
         values.put(KEY_TITLE,    book.getTitle());          // Title
         values.put(KEY_AUTHOR,   book.getAuthor());         // Author
@@ -158,7 +158,7 @@ public class DBManager extends SQLiteOpenHelper {
      * @return Returns the book
      */
     public Book getBook(int id){
-        // 1. Get reference to readable DB
+        // Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Build the book cursor
@@ -184,17 +184,6 @@ public class DBManager extends SQLiteOpenHelper {
         Book book = new Book();
 
         if (cursor != null && cursor.moveToFirst()) {
-            Log.i(TAG_DB_MANAGER, "_______________________________________________________________");
-            Log.i(TAG_DB_MANAGER, "ID:        " + cursor.getInt(cursor.getColumnIndex(KEY_ID)));
-            Log.i(TAG_DB_MANAGER, "TITLE:     " + cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
-            Log.i(TAG_DB_MANAGER, "AUTHOR:    " + cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
-            Log.i(TAG_DB_MANAGER, "IMAGE:     " + cursor.getInt(cursor.getColumnIndex(KEY_IMAGE)));
-            Log.i(TAG_DB_MANAGER, "STATUS:    " + cursor.getInt(cursor.getColumnIndex(KEY_STATUS)));
-            Log.i(TAG_DB_MANAGER, "FAVORITE:  " + cursor.getInt(cursor.getColumnIndex(KEY_FAVORITE)));
-            Log.i(TAG_DB_MANAGER, "RATING:    " + cursor.getInt(cursor.getColumnIndex(KEY_RATING)));
-            Log.i(TAG_DB_MANAGER, "DATE:      " + cursor.getInt(cursor.getColumnIndex(KEY_DATE)));
-            Log.i(TAG_DB_MANAGER, "---------------------------------------------------------------");
-
             book.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
             book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
             book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
@@ -218,7 +207,6 @@ public class DBManager extends SQLiteOpenHelper {
         // Check if the book has notes
         if (noteCursor != null && noteCursor.moveToFirst() && cursor != null && cursor.moveToFirst()) {
             if (noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)) == cursor.getInt(cursor.getColumnIndex(KEY_ID))) {
-                Log.i(TAG_DB_MANAGER, "The book: " + book.toString() + " contains notes!");
                 do {
                     Note note = new Note();
                     note.setId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_NOTE_ID)));
@@ -287,7 +275,7 @@ public class DBManager extends SQLiteOpenHelper {
                         null,
                         null);
 
-                if (noteCursor != null && noteCursor.moveToFirst() && cursor.moveToFirst()) {
+                if (noteCursor != null && noteCursor.moveToFirst()) {
                     if (noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)) == cursor.getInt(cursor.getColumnIndex(KEY_ID))) {
                         do {
                             Note note = new Note();
@@ -329,6 +317,25 @@ public class DBManager extends SQLiteOpenHelper {
         values.put(KEY_RATING,   book.getRating());         // Rating
         values.put(KEY_DATE,     book.getDatePublished());  // Author
 
+            // Only insert the notes that aren't already in the database
+            for (Note note : book.getNotes()) {
+                if (!containsNote(note)) {
+                    ContentValues valuesNote = new ContentValues();
+                    valuesNote.put(KEY_BOOK_ID, book.getId());                  // BookId
+                    valuesNote.put(KEY_PAGE,    note.getPageNumber());          // Page Number
+                    valuesNote.put(KEY_CONTENT, note.getNoteContent());         // Content
+
+                    // Insert the values into the note table
+                    long idNoteInsert = db.insert(TABLE_NOTES, null, valuesNote);
+
+                    // Set the Note's id and the Note's bookId
+                    note.setId((int)idNoteInsert);
+                    note.setBookId(book.getId());
+
+                    Log.i(TAG_DB_MANAGER, "Inserted new note for Book " + book.getId() + " with an ID of " + note.getId());
+                }
+            }
+
         // Update the row
         db.update(TABLE_BOOKS, values, KEY_ID+" = ?", new String[] {String.valueOf(book.getId())});
 
@@ -348,8 +355,26 @@ public class DBManager extends SQLiteOpenHelper {
         // Delete the book
         db.delete(TABLE_BOOKS, KEY_ID + " = ?", new String[] {String.valueOf(book.getId())});
 
+        // Delete any notes associated with the book
+        db.delete(TABLE_NOTES, KEY_BOOK_ID + " = ?", new String[] {String.valueOf(book.getId())});
+
         // Log
         Log.i(TAG_DB_MANAGER, "Removed book: " + book.toString());
+    }
+
+    /**
+     * Remove a note from the database
+     * @param note The note to be deleted
+     */
+    public void deleteNote(Note note) {
+        // Get the reference to the writable database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Delete a specific note
+        db.delete(TABLE_NOTES, KEY_NOTE_ID + " = ?", new String[] {String.valueOf(note.getId())});
+
+        // Log
+        Log.i(TAG_DB_MANAGER, "Removed note: " + note.toString());
     }
 
     /**
@@ -411,6 +436,38 @@ public class DBManager extends SQLiteOpenHelper {
             cursor.close();
         }
 
+        return isInDB;
+    }
+
+    /**
+     * Return true if a note is contained in the database (based on the id)
+     * @param note This note is either in the database, or it isn't
+     * @return Returns true if the note is in the database
+     */
+    public boolean containsNote(Note note) {
+        // By default, a note is not in the database
+        boolean isInDB = false;
+
+        // Get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Build the cursor
+        Cursor cursor = db.query(TABLE_NOTES,
+                                 COLUMNS_NOTE,
+                                 " id = ?",
+                                 new String[] {String.valueOf(note.getId())},
+                                 null,
+                                 null,
+                                 null,
+                                 null);
+
+        // If the cursor moves to the correct row, then the note is in the database
+        if (cursor != null && cursor.moveToFirst()) {
+            isInDB = true;
+
+            // Free the cursor
+            cursor.close();
+        }
         return isInDB;
     }
 
