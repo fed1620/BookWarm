@@ -277,6 +277,31 @@ public class DBManager extends SQLiteOpenHelper {
                     book.setIsFavourite(true);
                 }
 
+                // Build the notes cursor
+                Cursor noteCursor = db.query(TABLE_NOTES,
+                        COLUMNS_NOTE,
+                        " book_id = ?",
+                        new String[] {String.valueOf(cursor.getInt(cursor.getColumnIndex(KEY_ID)))},
+                        null,
+                        null,
+                        null,
+                        null);
+
+                if (noteCursor != null && noteCursor.moveToFirst() && cursor.moveToFirst()) {
+                    if (noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)) == cursor.getInt(cursor.getColumnIndex(KEY_ID))) {
+                        do {
+                            Note note = new Note();
+                            note.setId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_NOTE_ID)));
+                            note.setBookId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)));
+                            note.setPageNumber(noteCursor.getInt(noteCursor.getColumnIndex(KEY_PAGE)));
+                            note.setNoteContent(noteCursor.getString(noteCursor.getColumnIndex(KEY_CONTENT)));
+                            book.addNote(note);
+                        } while (noteCursor.moveToNext());
+                    }
+                    // Free the note cursor
+                    noteCursor.close();
+                }
+
                 books.add(book);
             } while (cursor.moveToNext());
         }
@@ -294,7 +319,7 @@ public class DBManager extends SQLiteOpenHelper {
         // Get reference to the writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Put the new information into a ContentValues
+        // Put the book information into a ContentValues
         ContentValues values = new ContentValues();
         values.put(KEY_TITLE,    book.getTitle());          // Title
         values.put(KEY_AUTHOR,   book.getAuthor());         // Author
