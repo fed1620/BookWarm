@@ -19,6 +19,8 @@ public class DBManager extends SQLiteOpenHelper {
     private static final int      DATABASE_VERSION = 1;               // The database version
     private static final String   TAG_DB_MANAGER   = "DBManager";     // Log Tag
     private static final String   DATABASE_NAME    = "LibraryDB";     // The name of the database
+
+    // Books table
     private static final String   TABLE_BOOKS      = "books";         // The name of the BOOKS table
     private static final String   KEY_ID           = "id";            // BOOKS table column 1
     private static final String   KEY_TITLE        = "title";         // BOOKS table column 2
@@ -36,6 +38,15 @@ public class DBManager extends SQLiteOpenHelper {
                                              KEY_FAVORITE,
                                              KEY_RATING,
                                              KEY_DATE};
+
+    // Notes table
+    private static final String   TABLE_NOTES  = "notes";             // The name of the NOTES table
+    private static final String   KEY_NOTE_ID  = "id";                // NOTES table column 1
+    private static final String   KEY_PAGE     = "page_number";       // NOTES table column 2
+    private static final String   KEY_CONTENT  = "content";           // NOTES table column 3
+    private static final String[] COLUMNS_NOTE = {KEY_ID,             // Every column in NOTES
+                                                  KEY_TITLE,
+                                                  KEY_AUTHOR};
 
     // Default constructor
     public DBManager(Context context) {super(context, DATABASE_NAME, null, DATABASE_VERSION);}
@@ -59,6 +70,19 @@ public class DBManager extends SQLiteOpenHelper {
 
         // Run the statement
         db.execSQL(CREATE_BOOK_TABLE);
+
+        // Build an SQL statement that will be used to create the Notes table
+        String CREATE_NOTES_TABLE =
+                "CREATE TABLE notes (" +
+                        "  id          INTEGER PRIMARY KEY AUTOINCREMENT" +
+                        ", page_number INTEGER" +
+                        ", content     TEXT);";
+
+        // Log message
+        Log.i(TAG_DB_MANAGER, "Creating table: " + TABLE_NOTES + "...");
+
+        // Run the statement
+        db.execSQL(CREATE_NOTES_TABLE);
     }
 
     @Override
@@ -330,9 +354,14 @@ public class DBManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // Drop the books table
-        final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_BOOKS + ';';
+        final String DROP_TABLE_BOOKS = "DROP TABLE IF EXISTS " + TABLE_BOOKS + ';';
         Log.i(TAG_DB_MANAGER, "Dropping table: " + TABLE_BOOKS + "...");
-        db.execSQL(DROP_TABLE);
+        db.execSQL(DROP_TABLE_BOOKS);
+
+        // Drop the notes table
+        final String DROP_TABLE_NOTES = "DROP TABLE IF EXISTS " + TABLE_NOTES + ';';
+        Log.i(TAG_DB_MANAGER, "Dropping table: " + TABLE_NOTES + "...");
+        db.execSQL(DROP_TABLE_NOTES);
 
         // Recreate it
         this.onCreate(db);
