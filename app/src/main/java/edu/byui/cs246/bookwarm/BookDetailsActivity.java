@@ -79,6 +79,7 @@ public class BookDetailsActivity extends ActionBarActivity {
         setupSpinner();
         setupRatingBarListener();
         setupListNoteButton();
+        setupFavoriteButton();
     }
 
     /**
@@ -178,6 +179,38 @@ public class BookDetailsActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * When the user clicks the button, set the favorite status accordingly
+     * @param view The view that is clicked
+     */
+    public void changeFavoriteStatus(View view) {
+        if (!thisBook.getIsFavourite()) {
+            // Add the book as a Favorite
+            thisBook.setIsFavourite(true);
+            Button button = (Button) findViewById(R.id.button3);
+            button.setText("Remove From Favorites");
+        } else {
+            // Remove the book from Favorites
+            thisBook.setIsFavourite(false);
+            Button button = (Button) findViewById(R.id.button3);
+            button.setText("Add To Favorites");
+        }
+    }
+
+    /**
+     * Set the initial text of the button, depending on the status
+     */
+    public void setupFavoriteButton() {
+        if (!thisBook.getIsFavourite()) {
+            Button button = (Button)findViewById(R.id.button3);
+            button.setText("Add To Favorites");
+        } else {
+            Button button = (Button)findViewById(R.id.button3);
+            button.setText("Remove From Favorites");
+        }
+
     }
 
     /**

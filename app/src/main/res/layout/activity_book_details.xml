@@ -62,7 +62,7 @@
         android:stepSize="1.0" />
 
     <Button
-        android:layout_width="150dp"
+        android:layout_width="200dp"
         android:layout_height="0dp"
         android:text="@string/notesButton"
         android:id="@+id/notesButton"
@@ -72,18 +72,19 @@
         android:layout_marginTop="35dp" />
 
     <Button
-        android:layout_width="150dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="@string/favoriteButton"
         android:id="@+id/button3"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:onClick="changeFavoriteStatus"/>
 
     <Button
-        android:layout_width="150dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="@string/deleteButton"
         android:id="@+id/button4"
         android:layout_gravity="center_horizontal"
-        android:onClick = "removeBook"/>
+        android:onClick ="removeBook"/>
 
 </LinearLayout>
