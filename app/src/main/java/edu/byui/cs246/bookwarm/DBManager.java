@@ -58,7 +58,7 @@ public class DBManager extends SQLiteOpenHelper {
         // Build an SQL statement that will be used to create the book table
         String CREATE_BOOK_TABLE =
                 "CREATE TABLE books (" +
-                "  id          INTEGER PRIMARY KEY AUTOINCREMENT" +
+                "  id          INTEGER PRIMARY KEY" +
                 ", title       TEXT" +
                 ", author      TEXT" +
                 ", image_id    INTEGER" +
@@ -67,24 +67,20 @@ public class DBManager extends SQLiteOpenHelper {
                 ", rating      INTEGER" +
                 ", date        INTEGER);";
 
-        // Log message
-        Log.i(TAG_DB_MANAGER, "Creating table: " + TABLE_BOOKS + "...");
-
-        // Run the statement
-        db.execSQL(CREATE_BOOK_TABLE);
-
         // Build an SQL statement that will be used to create the Notes table
         String CREATE_NOTES_TABLE =
                 "CREATE TABLE notes (" +
-                        "  id          INTEGER PRIMARY KEY AUTOINCREMENT" +
+                        "  id          INTEGER PRIMARY KEY" +
                         ", book_id     INTEGER" +
                         ", page_number INTEGER" +
                         ", content     TEXT);";
 
-        // Log message
+        // Log messages
+        Log.i(TAG_DB_MANAGER, "Creating table: " + TABLE_BOOKS + "...");
         Log.i(TAG_DB_MANAGER, "Creating table: " + TABLE_NOTES + "...");
 
-        // Run the statement
+        // Run the statements
+        db.execSQL(CREATE_BOOK_TABLE);
         db.execSQL(CREATE_NOTES_TABLE);
     }
 
@@ -92,6 +88,7 @@ public class DBManager extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop the outdated book table if it already exists
         db.execSQL("DROP TABLE IF EXISTS books");
+        db.execSQL("DROP TABLE IF EXISTS notes");
 
         // Create the new book table
         this.onCreate(db);
@@ -267,14 +264,15 @@ public class DBManager extends SQLiteOpenHelper {
 
                 // Build the notes cursor
                 Cursor noteCursor = db.query(TABLE_NOTES,
-                        COLUMNS_NOTE,
-                        " book_id = ?",
-                        new String[] {String.valueOf(cursor.getInt(cursor.getColumnIndex(KEY_ID)))},
-                        null,
-                        null,
-                        null,
-                        null);
+                                             COLUMNS_NOTE,
+                                             " book_id = ?",
+                                             new String[] {String.valueOf(cursor.getInt(cursor.getColumnIndex(KEY_ID)))},
+                                             null,
+                                             null,
+                                             null,
+                                             null);
 
+                // Get all of the notes that correspond to this book
                 if (noteCursor != null && noteCursor.moveToFirst()) {
                     if (noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)) == cursor.getInt(cursor.getColumnIndex(KEY_ID))) {
                         do {
@@ -293,7 +291,7 @@ public class DBManager extends SQLiteOpenHelper {
                 books.add(book);
             } while (cursor.moveToNext());
         }
-        // Close the cursor
+        // Free the book cursor
         cursor.close();
 
         return books;
@@ -341,7 +339,6 @@ public class DBManager extends SQLiteOpenHelper {
 
         // Log message
         Log.i(TAG_DB_MANAGER, "Updated book: " + book.toString());
-
     }
 
     /**
@@ -435,7 +432,6 @@ public class DBManager extends SQLiteOpenHelper {
             // Free the cursor
             cursor.close();
         }
-
         return isInDB;
     }
 

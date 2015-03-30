@@ -21,7 +21,6 @@ import android.widget.TextView;
  */
 public class BookDetailsActivity extends ActionBarActivity {
     private Book   thisBook;
-    private String bookDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +87,6 @@ public class BookDetailsActivity extends ActionBarActivity {
     private void setupDisplay() {
         // Set the element variables
         ImageView coverIcon = (ImageView) findViewById(R.id.coverIcon);
-        TextView  bookInfo  = (TextView)  findViewById(R.id.bookInfo);
         TextView  title     = (TextView)  findViewById(R.id.title);
         TextView  author    = (TextView)  findViewById(R.id.author);
 
@@ -98,31 +96,6 @@ public class BookDetailsActivity extends ActionBarActivity {
         // Display the title and author Text Views
         title.setText(thisBook.getTitle());
         author.setText(thisBook.getAuthor());
-
-        // Set up the book information (separate function because it's extensive...)
-        buildInfoString();
-
-        // Assign the final string
-        bookInfo.setText(bookDescription);
-    }
-
-    /**
-     * Builds the String that shows the Title, Author, and whether or not the book is read.
-     */
-    private void buildInfoString() {
-        // Assign the Title and Author
-        bookDescription =  "Title: "        + thisBook.getTitle()     + "\n";
-        bookDescription += "Author: "       + thisBook.getAuthor()    + "\n";
-
-        //'isRead' segment
-        switch (thisBook.getReadStatus()) {
-            case 0: bookDescription += "Not yet read.\n";
-                break;
-            case 1: bookDescription += "Reading right now.\n";
-                break;
-            case 2: bookDescription += "Already read.\n";
-                break;
-        }
     }
 
     /**
@@ -152,23 +125,15 @@ public class BookDetailsActivity extends ActionBarActivity {
 
                 // Depending on which item is selected in the drop-down menu, a different
                 // read status will be assigned
-                TextView  bookInfo  = (TextView)  findViewById(R.id.bookInfo);
-
                 switch(spinner.getSelectedItemPosition()) {
                     case 0:
                         thisBook.setReadStatus(0);
-                        buildInfoString();
-                        bookInfo.setText(bookDescription);
                         break;
                     case 1:
                         thisBook.setReadStatus(1);
-                        buildInfoString();
-                        bookInfo.setText(bookDescription);
                         break;
                     case 2:
                         thisBook.setReadStatus(2);
-                        buildInfoString();
-                        bookInfo.setText(bookDescription);
                         break;
                 }
             }
@@ -199,7 +164,7 @@ public class BookDetailsActivity extends ActionBarActivity {
     /**
      * Self-explanatory
      */
-    void setupListNoteButton() {
+    public void setupListNoteButton() {
         Button btn = (Button) findViewById(R.id.notesButton);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,5 +178,17 @@ public class BookDetailsActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * Delete the book from the library
+     */
+    public void removeBook(View view) {
+        // Delete the book from the database
+        Library.getInstance().deleteBook(thisBook);
+
+        // Return to the main activity
+        Intent intent = new Intent(BookDetailsActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }

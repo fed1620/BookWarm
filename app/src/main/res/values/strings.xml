@@ -21,10 +21,13 @@
     <string name="authorHint">Author</string>
 
     // activity_book_details.xml
-    <string name="notesButton">Notes</string>
     <string name="bookCoverDescription">Book Cover</string>
     <string name="title">Title</string>
     <string name="author">Author</string>
+    <string name="notesButton">Notes</string>
+    <string name="deleteButton">Remove Book</string>
+    <string name="favoriteButton">Add To Favorites</string>
+
 
     <string-array name="readStatus">
         <item>I haven\'t read this book yet</item>
