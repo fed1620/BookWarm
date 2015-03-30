@@ -2,11 +2,25 @@
 
 QUEST LOG:
 ~~~~~~~~~~
-Igor(newLayoutLauncher) - Adding activity for deciding how to add a book
+Igor(newLayoutLauncher) - Library sorting
+                        - Sort by: Title
+                        - Sort by: Author
+                        - Sort by: Favorite status
+                        - BookWarm icon!
+                        - Test on Nexus device!
 
-Federico(Iostream Broadswordsman) - Create Notes table in SQLite database
+Federico(Iostream Broadswordsman) - Create activity_main_empty.xml layout for empty library
+                                  - Create delete button for detailed book view
+                                  - Create "Add to Favorite" button for detailed book view
+                                  - Remove redundancies from detailed book view
+                                  - Create a way to pop up a menu to delete/edit notes
+                                  - Floating action button to add a new book
+                                  - BookWarm icon!
 
-Jake(RogueFactory) - Moar fun with Google Books!
+Jake(RogueFactory) - Get a more detailed / hi-res book icon
+                   - Stare at A-SYNC task until eyes water
+                   - Do not allow blank notes to be created
+                   - BookWarm icon!
 ~~~~~~~~~~~
 
 NOTES FOR TEAM MEMBERS GO HERE:
@@ -57,6 +71,3 @@ otherwise they will be ignored when we run the "Test" configuration!
 
     - Federico
 ---------------------------------------------------------------------------------------------------
-
-Just heard about xstream - its a library that allows you to pass in an object (even custom objects) and stores it as an XML file. Might make things pretty easy on us for file formatting.
--Jake
