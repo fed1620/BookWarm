@@ -20,13 +20,18 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         // Instantiate the database
         library.instantiateDatabase(this);
 
-        // Set up the List View
-        setupCustomListView();
+        // If the library is empty, go to the special activity
+        if (library.numBooks() == 0) {
+            setContentView(R.layout.activity_main_empty);
+        } else {
+            setContentView(R.layout.activity_main);
+            // Set up the List View
+            setupCustomListView();
+        }
     }
 
 
@@ -105,10 +110,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Clear the books from the library, and re-display the listview
+     * When this method is called, go to the add book activity
+     * @param view The view that was pressed
      */
-    public void clearLibrary(View view) {
-        library.clear();
-        setupCustomListView();
+    public void addBookActivity(View view) {
+        // Go to the add book activity
+        Intent intent = new Intent(MainActivity.this, AddBookMethod.class);
+        startActivity(intent);
     }
 }

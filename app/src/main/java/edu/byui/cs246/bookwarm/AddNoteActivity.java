@@ -28,6 +28,10 @@ public class AddNoteActivity extends ActionBarActivity {
 
         thisBook = (Book) getIntent().getSerializableExtra("thisBook");
 
+        // Give focus to the text box
+        noteContent = (TextView) findViewById(R.id.editText);
+        noteContent.requestFocus();
+
         setupCreateNoteButton();
     }
 
@@ -63,16 +67,18 @@ public class AddNoteActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 pageNumber  = (TextView) findViewById(R.id.pageNumber);
-                noteContent = (TextView) findViewById(R.id.noteContent);
+                noteContent = (TextView) findViewById(R.id.editText);
 
-                if (noteContent.getText() != null) {
-                    newNote = new Note();
-                    newNote.setPageNumber(buildPageNumber());
-                    newNote.setNoteContent(noteContent.getText().toString());
-
-                    thisBook.addNote(newNote);
-                    Library.getInstance().updateBook(thisBook);
+                if (noteContent.getText().toString().isEmpty()) {
+                    return;
                 }
+
+                newNote = new Note();
+                newNote.setPageNumber(buildPageNumber());
+                newNote.setNoteContent(noteContent.getText().toString());
+
+                thisBook.addNote(newNote);
+                Library.getInstance().updateBook(thisBook);
 
                 Intent intent = new Intent(AddNoteActivity.this, ListNoteActivity.class);
                 intent.putExtra("thisBook", thisBook);
