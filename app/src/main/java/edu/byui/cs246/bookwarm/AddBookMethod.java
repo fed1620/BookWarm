@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 
 public class AddBookMethod extends ActionBarActivity {
@@ -80,7 +81,10 @@ public class AddBookMethod extends ActionBarActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                GoogleBooksMessenger messenger = new GoogleBooksMessenger();
+                EditText googleQueryText = (EditText) findViewById(R.id.googleQuery);
 
+                messenger.searchGoogleBooks(googleQueryText.getText().toString());
             }
         });
     }

@@ -1,5 +1,7 @@
 package edu.byui.cs246.bookwarm;
 
+import android.os.AsyncTask;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -8,11 +10,12 @@ import java.net.URLConnection;
 /**
  * Created by Jake on 3/20/2015.
  */
-public class GoogleBooksMessenger {
+public class GoogleBooksMessenger extends AsyncTask {
     String googleURL;
     String BookWarmAPIKey;
     String charset;
     String serverResponse;
+    String query;
 
     /**
      * Mostly here for test purposes.
@@ -31,13 +34,8 @@ public class GoogleBooksMessenger {
         charset        = "UTF-8";
     }
 
-    /**
-     * The 'main' of this function.
-     * TODO: Complete this header and make sure it returns something meaningful
-     * @param query A string representing whatever the user inputted for a search. Does not need prior modification.
-     */
-    public void searchGoogleBooks(String query) {
-        //TODO: Implement thread searching
+    @Override
+    protected Object doInBackground(Object[] params) {
         try {
             serverResponse = getResponse(query).toString();
 
@@ -49,6 +47,21 @@ public class GoogleBooksMessenger {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return null;
+    }
+
+    /**
+     * The 'main' of this function.
+     * TODO: Complete this header and make sure it returns something meaningful
+     * @param query A string representing whatever the user inputted for a search. Does not need prior modification.
+     */
+    public void searchGoogleBooks(String query) {
+        this.query = query;
+
+        //arbitraty variable - we only need it so we can call doInBackground
+        Object[] params = new Object[0];
+        doInBackground(params);
     }
 
     /**
@@ -63,9 +76,8 @@ public class GoogleBooksMessenger {
         connection.setRequestProperty("Accept-Charset", charset);
 
         //actually getting the response
-        InputStream response = connection.getInputStream();
 
-        return response;
+        return connection.getInputStream();
     }
 
     /**

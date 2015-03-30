@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="Google"
         android:id="@+id/google"
-        android:layout_above="@+id/manually"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -19,10 +19,9 @@
         android:layout_height="wrap_content"
         android:text="Manually"
         android:id="@+id/manually"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="77dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/google"
-        android:layout_alignStart="@+id/google" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,4 +31,13 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="66dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/googleQuery"
+        android:hint="google query"
+        android:layout_above="@+id/google"
+        android:layout_centerHorizontal="true"
+        android:background="#ff888888" />
 </RelativeLayout>
