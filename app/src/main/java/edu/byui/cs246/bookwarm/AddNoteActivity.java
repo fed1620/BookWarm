@@ -10,9 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Date;
-import java.util.List;
-
 /**
  * Adds Note
  */
@@ -68,12 +65,14 @@ public class AddNoteActivity extends ActionBarActivity {
                 pageNumber  = (TextView) findViewById(R.id.pageNumber);
                 noteContent = (TextView) findViewById(R.id.noteContent);
 
-                newNote = new Note();
-                newNote.setPageNumber(buildPageNumber());
-                newNote.setNoteContent(noteContent.getText().toString());
+                if (noteContent.getText() != null) {
+                    newNote = new Note();
+                    newNote.setPageNumber(buildPageNumber());
+                    newNote.setNoteContent(noteContent.getText().toString());
 
-                thisBook.addNote(newNote);
-                Library.getInstance().updateBook(thisBook);
+                    thisBook.addNote(newNote);
+                    Library.getInstance().updateBook(thisBook);
+                }
 
                 Intent intent = new Intent(AddNoteActivity.this, ListNoteActivity.class);
                 intent.putExtra("thisBook", thisBook);
