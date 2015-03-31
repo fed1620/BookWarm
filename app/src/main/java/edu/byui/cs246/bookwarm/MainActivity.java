@@ -7,8 +7,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -60,6 +68,12 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
 
+        if (id == R.id.sort) {
+            sortBooks();
+
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -82,6 +96,39 @@ public class MainActivity extends ActionBarActivity {
             Log.e("DBManager", "Database already contains book: " + book.getTitle());
         }
         setupCustomListView();
+    }
+
+    public static void bubble_srt(List<Book> array) {
+        int n = array.size();
+        int k;
+        for (int m = n; m >= 0; m--) {
+            for (int i = 0; i < n - 1; i++) {
+                k = i + 1;
+                if (array.get(i).getTitle().charAt(0) > array.get(k).getTitle().charAt(0)) {
+                    swapNumbers(i, k, array);
+                }
+            }
+        }
+    }
+
+    private static void swapNumbers(int i, int j, List<Book> array) {
+
+        Book temp;
+        temp = array.get(i);
+        array.get(i).setTitle(array.get(j).getTitle());
+        array.get(j).setTitle(temp.getTitle());
+    }
+
+    /**
+     *
+     */
+    void sortBooks() {
+        List<Book> temp = (List<Book>) list.getAdapter();
+
+        bubble_srt(temp);
+
+        ListAdapter adapter = (ListAdapter) temp;
+        list.setAdapter(adapter);
     }
 
     /**

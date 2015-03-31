@@ -17,6 +17,7 @@
 
     // activity_menu.xml
     <string name="title_activity_add_book">Add New Book</string>
+    <string name="sort">Sort</string>
 
 
     // activity_add_book.xml
