@@ -1,8 +1,11 @@
 package edu.byui.cs246.bookwarm;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +24,9 @@ import android.widget.Toast;
  * the user to access the Notes relating to the book, set the read status, and rate the book
  */
 public class BookDetailsActivity extends ActionBarActivity {
-    private Book   thisBook;
+    private static final String TAG_BOOK_DETAILS_ACTIVITY = "BookDetailsActivity";
+
+    private Book thisBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,14 +227,31 @@ public class BookDetailsActivity extends ActionBarActivity {
 
     /**
      * Delete the book from the library
+     * Source referenced: http://stackoverflow.com/questions/2115758/how-to-display-alert-dialog-in-android
      */
     public void removeBook(View view) {
-        // Delete the book from the database
-        Library.getInstance().deleteBook(thisBook);
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Book")
+                .setMessage("Are you sure you want to remove this book from your library?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Delete the book from the database
+                        Library.getInstance().deleteBook(thisBook);
 
-        // Return to the main activity
-        Intent intent = new Intent(BookDetailsActivity.this, MainActivity.class);
-        startActivity(intent);
-        Toast.makeText(this, "\"" + thisBook.getTitle() + "\" has been removed from your library", Toast.LENGTH_LONG).show();
+                        // Return to the main activity
+                        Intent intent = new Intent(BookDetailsActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        String removed = "\"" + thisBook.getTitle() + "\" has been removed from your library";
+                        Toast.makeText(BookDetailsActivity.this, removed, Toast.LENGTH_LONG).show();
+                        Log.i(TAG_BOOK_DETAILS_ACTIVITY, "Book removed");
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.i(TAG_BOOK_DETAILS_ACTIVITY, "Book was not removed");
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

@@ -1,5 +1,7 @@
 package edu.byui.cs246.bookwarm;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -105,22 +107,41 @@ public class ListNoteActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * Defines behavior for when the user selects a context menu item
+     * Source referenced: http://stackoverflow.com/questions/2115758/how-to-display-alert-dialog-in-android
+     * @param item The context menu item that was selected
+     * @return Return false to allow normal context menu processing to proceed, true to consume it here
+     */
     public boolean onContextItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         AdapterView<?> adapter = (AdapterView)findViewById(R.id.listNote);
-        Note note = (Note)adapter.getItemAtPosition(menuInfo.position);
+        final Note note = (Note)adapter.getItemAtPosition(menuInfo.position);
 
         switch (itemId) {
             case 0:
-                Log.i("ListNoteActivity", "Edit note: " + note.getId());
+                Log.i(TAG_LIST_NOTE_ACTVITY, "Edit note: " + note.getId());
                 return true;
             case 1:
-                Log.i("ListNoteActivity", "Removing note: " + note.toString());
-                Library.getInstance().removeNote(note);
-                displayNoteObjects();
-                Toast.makeText(this, "Note Removed", Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete Note")
+                        .setMessage("Are you sure you want to remove this note?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.i(TAG_LIST_NOTE_ACTVITY, "Removing note: " + note.toString());
+                                Library.getInstance().removeNote(note);
+                                displayNoteObjects();
+                                Toast.makeText(ListNoteActivity.this, "Note Removed", Toast.LENGTH_SHORT).show();                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.i(TAG_LIST_NOTE_ACTVITY, "Note was not removed");
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
                 return true;
             default:
                 return true;
