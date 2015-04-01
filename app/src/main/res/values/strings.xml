@@ -25,6 +25,7 @@
     <string name="titleHint">Title</string>
     <string name="add_book">Add Book</string>
     <string name="authorHint">Author</string>
+    <string name="error">This book is already in your library</string>
 
     // activity_book_details.xml
     <string name="bookCoverDescription">Book Cover</string>
