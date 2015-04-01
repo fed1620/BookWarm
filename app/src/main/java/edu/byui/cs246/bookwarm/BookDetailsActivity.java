@@ -196,13 +196,13 @@ public class BookDetailsActivity extends ActionBarActivity {
             thisBook.setIsFavourite(true);
             Button button = (Button) findViewById(R.id.button3);
             button.setText("Remove From Favorites");
-            Toast.makeText(BookDetailsActivity.this, "Added \"" + thisBook.getTitle() + "\" to your favorites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BookDetailsActivity.this, "Added \"" + thisBook.getTitle() + "\" to favorites", Toast.LENGTH_SHORT).show();
         } else {
             // Remove the book from Favorites
             thisBook.setIsFavourite(false);
             Button button = (Button) findViewById(R.id.button3);
             button.setText("Add To Favorites");
-            Toast.makeText(BookDetailsActivity.this, "Removed \"" + thisBook.getTitle() + "\" from your favorites", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BookDetailsActivity.this, "Removed \"" + thisBook.getTitle() + "\" from favorites", Toast.LENGTH_SHORT).show();
         }
     }
 

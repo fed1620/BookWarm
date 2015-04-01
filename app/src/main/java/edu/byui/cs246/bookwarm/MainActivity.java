@@ -31,6 +31,12 @@ public class MainActivity extends ActionBarActivity {
             setContentView(R.layout.activity_main_empty);
         } else {
             setContentView(R.layout.activity_main);
+
+            android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle("My Library");
+            }
+
             // Set up the List View
             setupCustomListView();
         }
