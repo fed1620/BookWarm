@@ -85,6 +85,18 @@ public class Library {
     }
 
     /**
+     * Get a note from the database
+     * @return Returns a note
+     */
+    public Note getNote(int id) {
+        if (this.db == null) {
+            Log.e(TAG_LIBRARY, "ERROR: Database object is null");
+            return null;
+        }
+        return this.db.getNote(id);
+    }
+
+    /**
      * A getter that will return our list of books
      * @return Returns List<Book> books
      */
@@ -160,5 +172,11 @@ public class Library {
      * @param book The book to be updated
      */
     public void updateBook(Book book) {this.db.updateBook(book);}
+
+    /**
+     * Update the note in the database
+     * @param note The note to be updated
+     */
+    public void updateNote(Note note) {this.db.updateNote(note);}
 
 }

@@ -298,6 +298,52 @@ public class DBManager extends SQLiteOpenHelper {
     }
 
     /**
+     * Retrieve a Note from the database, and return it as a Note object
+     *
+     * @param id The id of the note
+     * @return Returns the note
+     */
+    public Note getNote(int id) {
+        // Get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Build the notes cursor
+        Cursor noteCursor = db.query(TABLE_NOTES,
+                COLUMNS_NOTE,
+                " id = ?",
+                new String[] {String.valueOf(id)},
+                null,
+                null,
+                null,
+                null);
+
+        // Build a note object
+        Note note = new Note();
+
+        if (noteCursor != null && noteCursor.moveToFirst()) {
+            note.setId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_NOTE_ID)));
+            note.setBookId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)));
+            note.setPageNumber(noteCursor.getInt(noteCursor.getColumnIndex(KEY_PAGE)));
+            note.setNoteContent(noteCursor.getString(noteCursor.getColumnIndex(KEY_CONTENT)));
+
+            // Close the note cursor
+            noteCursor.close();
+
+        } else if (noteCursor == null) {
+            Log.i(TAG_DB_MANAGER, "ERROR: Note cursor is null!");
+        } else if (!noteCursor.moveToFirst()) {
+            Log.i(TAG_DB_MANAGER, "ERROR: moveToFirst() returned FALSE");
+        }
+
+        // Log it
+        Log.i(TAG_DB_MANAGER, "Returned [Note " + note.getId() + "] corresponding to [Book " +
+                note.getBookId() + "]");
+
+        // Return the book object
+        return note;
+    }
+
+    /**
      * Update a Book
      * @param book The up-to-date Book object
      */
