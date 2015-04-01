@@ -41,6 +41,7 @@ public class BookDetailsActivity extends ActionBarActivity {
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(thisBook.getTitle() + " - Details");
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
         // jumping to a run function because onCreate is cluttered as fudge
@@ -64,6 +65,11 @@ public class BookDetailsActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        // If the user presses the back button in the menu bar
+        if (id==android.R.id.home) {
+            onBackPressed();
         }
 
         return super.onOptionsItemSelected(item);
