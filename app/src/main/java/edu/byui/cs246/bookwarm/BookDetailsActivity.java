@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * This activity will display all information about the book in detail, and will allow
@@ -26,6 +27,16 @@ public class BookDetailsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
+
+        // Get the book from the main activity
+        Book mainBook = (Book)getIntent().getSerializableExtra("thisBook");
+        thisBook = Library.getInstance().getBook(mainBook.getId());
+
+        // Get reference to the action bar
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(thisBook.getTitle() + " - Details");
+        }
 
         // jumping to a run function because onCreate is cluttered as fudge
         run();
@@ -68,12 +79,6 @@ public class BookDetailsActivity extends ActionBarActivity {
      * The 'main' of this activity.
      */
     private void run() {
-        // Do nothing with an invalid book
-        if (getIntent().getSerializableExtra("thisBook") == null) {return;}
-
-        // Get the book from the main activity
-        thisBook = (Book)getIntent().getSerializableExtra("thisBook");
-
         // Set up the various layout elements
         setupDisplay();
         setupSpinner();
@@ -191,11 +196,13 @@ public class BookDetailsActivity extends ActionBarActivity {
             thisBook.setIsFavourite(true);
             Button button = (Button) findViewById(R.id.button3);
             button.setText("Remove From Favorites");
+            Toast.makeText(BookDetailsActivity.this, "Added \"" + thisBook.getTitle() + "\" to your favorites", Toast.LENGTH_SHORT).show();
         } else {
             // Remove the book from Favorites
             thisBook.setIsFavourite(false);
             Button button = (Button) findViewById(R.id.button3);
             button.setText("Add To Favorites");
+            Toast.makeText(BookDetailsActivity.this, "Removed \"" + thisBook.getTitle() + "\" from your favorites", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -223,5 +230,6 @@ public class BookDetailsActivity extends ActionBarActivity {
         // Return to the main activity
         Intent intent = new Intent(BookDetailsActivity.this, MainActivity.class);
         startActivity(intent);
+        Toast.makeText(this, "\"" + thisBook.getTitle() + "\" has been removed from your library", Toast.LENGTH_LONG).show();
     }
 }

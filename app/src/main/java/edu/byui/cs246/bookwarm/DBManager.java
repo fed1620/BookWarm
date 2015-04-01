@@ -371,7 +371,7 @@ public class DBManager extends SQLiteOpenHelper {
         db.delete(TABLE_NOTES, KEY_NOTE_ID + " = ?", new String[] {String.valueOf(note.getId())});
 
         // Log
-        Log.i(TAG_DB_MANAGER, "Removed note: " + note.toString());
+        Log.i(TAG_DB_MANAGER, "Removed note: " + note.getId());
     }
 
     /**

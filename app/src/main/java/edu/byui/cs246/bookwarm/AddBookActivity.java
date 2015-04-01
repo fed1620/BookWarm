@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Adds book
@@ -79,6 +80,7 @@ public class AddBookActivity extends ActionBarActivity {
                         if (!Library.getInstance().contains(newBook)) {
                             Library.getInstance().addBook(newBook);
                             Log.i("DBManager", "Added Book: " + newBook.toString() + " with an ID of: " + newBook.getId());
+                            Toast.makeText(AddBookActivity.this, "\"" + title + "\" has been added to your library", Toast.LENGTH_LONG).show();
                         } else {
                             Log.e("DBManager", "Database already contains book: " + newBook.getTitle());
                         }

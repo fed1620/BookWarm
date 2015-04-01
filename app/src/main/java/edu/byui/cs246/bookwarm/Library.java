@@ -148,6 +148,14 @@ public class Library {
     }
 
     /**
+     * Deletes a note from the database
+     * @param note The note to be deleted
+     */
+    public void removeNote(Note note) {
+        db.deleteNote(note);
+    }
+
+    /**
      * Update the book in the database
      * @param book The book to be updated
      */
