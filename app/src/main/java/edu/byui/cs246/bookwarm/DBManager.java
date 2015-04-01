@@ -360,6 +360,27 @@ public class DBManager extends SQLiteOpenHelper {
     }
 
     /**
+     * Update a Note
+     * @param note The up-to-date Note object
+     */
+    public void updateNote(Note note) {
+        // Get reference to the writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // The page number and content will be updated, but
+        // the ID of the note and the Book ID should be the same
+        ContentValues values = new ContentValues();
+        values.put(KEY_PAGE,    note.getPageNumber());          // Page Number
+        values.put(KEY_CONTENT, note.getNoteContent());         // Content
+
+        // Update the row
+        db.update(TABLE_NOTES, values, KEY_ID+" = ?", new String[] {String.valueOf(note.getId())});
+
+        // Log message
+        Log.i(TAG_DB_MANAGER, "Updated Note: " + note.toString());
+    }
+
+    /**
      * Remove a note from the database
      * @param note The note to be deleted
      */
