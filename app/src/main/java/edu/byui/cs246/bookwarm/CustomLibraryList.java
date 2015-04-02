@@ -42,13 +42,26 @@ public class CustomLibraryList extends ArrayAdapter<String> {
         View rowView = inflater.inflate(R.layout.library_list_single, null, true);
 
         //retrieve the XML resources and set them up to be changed
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
+        TextView txtTitle   = (TextView)  rowView.findViewById(R.id.txt);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
+        ImageView heartView = (ImageView) rowView.findViewById(R.id.heartImg);
 
         //change em
         txtTitle.setText(library.getBookTitles()[position]);
         imageView.setImageResource(library.getImageIds()[position]);
+        checkAndRunForFavorites(heartView, position);
 
         return rowView;
+    }
+
+    /**
+     * Checks to see if the book is favorited, and displays the icon accordingly
+     * @param heartView
+     * @param position
+     */
+    private void checkAndRunForFavorites(ImageView heartView, int position) {
+        if (library.getFavorites()[position]){
+            heartView.setImageResource(R.drawable.ic_heart_icon);
+        }
     }
 }
