@@ -3,6 +3,7 @@ package edu.byui.cs246.bookwarm;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -76,15 +77,18 @@ public class Library {
      * This method will return an array of every book's favorite status
      * @return returns an array of booleans (favorite status)
      */
-    public boolean[] getFavorites() {
-        // Allocate a new array according to how many books we have
-        boolean[] favorites = new boolean[numBooks()];
+    public Boolean[] getFavorites() {
+        // Get the list of books
+        List<Book> books = getBooks();
+        List<Boolean> favorites = new ArrayList<>();
 
-        // Go through our list of books and get each favorite status
-        for (int i = 0; i < numBooks(); ++i) {
-            favorites[i] = getBooks().get(i).getIsFavourite();
+        // Go through our list of books and get each image
+        for (int i = 0; i < books.size(); ++i) {
+            favorites.add(books.get(i).getIsFavourite());
         }
-        return favorites;
+
+        // Convert the list to an array
+        return favorites.toArray(new Boolean[favorites.size()]);
     }
 
     /**
@@ -128,14 +132,17 @@ public class Library {
      * @return returns an array of Strings (book titles)
      */
     public String[] getBookTitles() {
-        // Allocate a new array according to how many books we have
-        String[] bookTitles = new String[numBooks()];
+        // Get the list of books
+        List<Book> books = getBooks();
+        List<String> titles = new ArrayList<>();
 
-        // Go through our list of books and get each title
-        for (int i = 0; i < numBooks(); ++i) {
-            bookTitles[i] = getBooks().get(i).getTitle();
+        // Create a list of the titles
+        for (int i = 0; i < books.size(); ++i) {
+            titles.add(books.get(i).getTitle());
         }
-        return bookTitles;
+
+        // Convert the list to an array
+        return titles.toArray(new String[titles.size()]);
     }
 
     /**
@@ -143,14 +150,17 @@ public class Library {
      * @return returns an array of ints (image IDs)
      */
     public Integer[] getImageIds() {
-        // Allocate a new array according to how many books we have
-        Integer[] imageIds = new Integer[numBooks()];
+        // Get the list of books
+        List<Book> books = getBooks();
+        List<Integer> images = new ArrayList<>();
 
-        // Go through our list of books and get each title
-        for (int i = 0; i < numBooks(); ++i) {
-            imageIds[i] = getBooks().get(i).getImageId();
+        // Go through our list of books and get each image
+        for (int i = 0; i < books.size(); ++i) {
+            images.add(books.get(i).getImageId());
         }
-        return imageIds;
+
+        // Convert the list to an array
+        return images.toArray(new Integer[images.size()]);
     }
 
     /**
@@ -166,13 +176,7 @@ public class Library {
      * How many books are in our library
      * @return Returns an integer representing the number of books in the library
      */
-    public int numBooks() {
-        if (getBooks().size() < 0) {
-            Log.e(TAG_LIBRARY, "ERROR: Library contains invalid number of books");
-            return 0;
-        }
-        return this.db.size();
-    }
+    public int numBooks() {return this.db.size();}
 
     /**
      * Deletes a note from the database

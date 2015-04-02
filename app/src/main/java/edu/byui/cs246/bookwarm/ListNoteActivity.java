@@ -132,7 +132,7 @@ public class ListNoteActivity extends ActionBarActivity {
 
         switch (itemId) {
             case 0:
-                Intent intent = new Intent(ListNoteActivity.this, EditNote.class);
+                Intent intent = new Intent(ListNoteActivity.this, EditNoteActivity.class);
                 intent.putExtra("thisNote", note);
                 startActivity(intent);
                 return true;

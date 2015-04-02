@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         if (id == R.id.add_new_book) {
-            Intent intent = new Intent(MainActivity.this, AddBookMethod.class);
+            Intent intent = new Intent(MainActivity.this, AddBookActivity.class);
             startActivity(intent);
             return true;
         }
@@ -131,6 +131,7 @@ public class MainActivity extends ActionBarActivity {
 
                 //ready, go.
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -141,7 +142,8 @@ public class MainActivity extends ActionBarActivity {
      */
     public void addBookActivity(View view) {
         // Go to the add book activity
-        Intent intent = new Intent(MainActivity.this, AddBookMethod.class);
+        Intent intent = new Intent(MainActivity.this, AddBookActivity.class);
         startActivity(intent);
+        finish();
     }
 }

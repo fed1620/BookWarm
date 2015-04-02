@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 
-public class EditNote extends ActionBarActivity {
+public class EditNoteActivity extends ActionBarActivity {
     private Note     thisNote;
     private EditText content;
     private EditText pageNumber;
@@ -103,7 +103,7 @@ public class EditNote extends ActionBarActivity {
         Library.getInstance().updateNote(thisNote);
 
         // Return to the list note activity
-        Intent intent = new Intent(EditNote.this, ListNoteActivity.class);
+        Intent intent = new Intent(EditNoteActivity.this, ListNoteActivity.class);
         intent.putExtra("thisBook", Library.getInstance().getBook(thisNote.getBookId()));
         startActivity(intent);
         finish();
