@@ -6,21 +6,16 @@ Igor(newLayoutLauncher) - Library sorting
                         - Sort by: Title
                         - Sort by: Author
                         - Sort by: Favorite status
-                        - BookWarm icon!
                         - Test on Nexus device!
 
-Federico(Iostream Broadswordsman) - Create activity_main_empty.xml layout for empty library
-                                  - Create delete button for detailed book view
-                                  - Create "Add to Favorite" button for detailed book view
-                                  - Remove redundancies from detailed book view
-                                  - Create a way to pop up a menu to delete/edit notes
-                                  - Floating action button to add a new book
-                                  - BookWarm icon!
+Federico(Iostream Broadswordsman) - Create Library method to return array of bools (Favorite status)
+                                  - Create Edit Note Activity
+                                  - Favorite filter tab
 
 Jake(RogueFactory) - Get a more detailed / hi-res book icon
-                   - Stare at A-SYNC task until eyes water
-                   - Do not allow blank notes to be created
                    - BookWarm icon!
+                   - isFavorite icon
+                   - isRead visual indication
 ~~~~~~~~~~~
 
 NOTES FOR TEAM MEMBERS GO HERE:

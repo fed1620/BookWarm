@@ -28,6 +28,10 @@ public class AddNoteActivity extends ActionBarActivity {
 
         thisBook = (Book) getIntent().getSerializableExtra("thisBook");
 
+        // Give focus to the text box
+        noteContent = (TextView) findViewById(R.id.editText);
+        noteContent.requestFocus();
+
         setupCreateNoteButton();
     }
 
@@ -63,16 +67,18 @@ public class AddNoteActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 pageNumber  = (TextView) findViewById(R.id.pageNumber);
-                noteContent = (TextView) findViewById(R.id.noteContent);
+                noteContent = (TextView) findViewById(R.id.editText);
 
-                if (noteContent.getText() != null) {
-                    newNote = new Note();
-                    newNote.setPageNumber(buildPageNumber());
-                    newNote.setNoteContent(noteContent.getText().toString());
-
-                    thisBook.addNote(newNote);
-                    Library.getInstance().updateBook(thisBook);
+                if (noteContent.getText().toString().isEmpty()) {
+                    return;
                 }
+
+                newNote = new Note();
+                newNote.setPageNumber(buildPageNumber());
+                newNote.setNoteContent(noteContent.getText().toString());
+
+                thisBook.addNote(newNote);
+                Library.getInstance().updateBook(thisBook);
 
                 Intent intent = new Intent(AddNoteActivity.this, ListNoteActivity.class);
                 intent.putExtra("thisBook", thisBook);
@@ -85,12 +91,12 @@ public class AddNoteActivity extends ActionBarActivity {
      * Build the page number for the Note.
      * @return returns the page number for the note entered. If none was entered, it is 0.
      */
-    private Integer buildPageNumber() {
+    private int buildPageNumber() {
         if (!pageNumber.getText().toString().isEmpty()) {
             String pageNumberContent = pageNumber.getText().toString();
             Log.i(TAG_ADD_NOTE_ACTIVITY, pageNumberContent);
             if (isInteger(pageNumberContent)) {
-                return new Integer(pageNumberContent);
+                return Integer.parseInt(pageNumberContent);
             } else {
                 Log.e(TAG_ADD_NOTE_ACTIVITY, "The user entered an invalid page number.");
                 //TODO: Implement a 'try again' feature. For now, return 0.
@@ -103,13 +109,10 @@ public class AddNoteActivity extends ActionBarActivity {
 
     /**
      * Checks to see if a string is an integer as efficiently as possible.
+     * References: http://stackoverflow.com/questions/237159/whats-the-best-way-to-check-to-see-if-a-string-represents-an-integer-in-java
      * @param str The string to be check.
      * @return A bool whether or not the string is an integer.
      */
-    //lovingly ripped off from:
-    // http://stackoverflow.com/questions/237159/whats-the-best-way-to-check-to-see-if-a-string-represents-an-integer-in-java
-    // @param str String
-    // @return decides if str is integer
     public static boolean isInteger(String str) {
         if (str == null) {
             return false;

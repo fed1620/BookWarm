@@ -37,4 +37,17 @@ public class Note implements Serializable {
     public int    getBookId()         {return this.bookId;}
     public String getNoteContent()    {return noteContent;}
     public int    getPageNumber()     {return pageNumber;}
+
+    /**
+     * The resulting string will be used in our ArrayAdapter<Note>
+     * @return Returns a string that represents a Note
+     */
+    @Override
+    public String toString() {
+        if (getPageNumber() != 0) {
+            return "[Page " + getPageNumber() + "]: \n" + getNoteContent();
+        } else {
+            return getNoteContent();
+        }
+    }
 }

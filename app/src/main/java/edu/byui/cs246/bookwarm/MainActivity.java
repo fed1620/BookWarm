@@ -3,30 +3,67 @@ package edu.byui.cs246.bookwarm;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
     /*--------------------------------------------------------------------------------------------*/
     public Library  library = Library.getInstance(); // Singleton
     public ListView list;
+    public static List<Book> array;
     /*--------------------------------------------------------------------------------------------*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         // Instantiate the database
         library.instantiateDatabase(this);
 
-        // Set up the List View
-        setupCustomListView();
+        // If the library is empty, go to the special activity
+        if (library.numBooks() == 0) {
+            setContentView(R.layout.activity_main_empty);
+        } else {
+            setContentView(R.layout.activity_main);
+
+            android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle("My Library");
+            }
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Set up the List View
+                            setupCustomListView();
+                        }
+                    });
+                }
+            });
+
+            thread.start();
+
+            if (!thread.isAlive()) {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 
@@ -50,39 +87,60 @@ public class MainActivity extends ActionBarActivity {
         }
 
         if (id == R.id.add_new_book) {
-            Intent intent = new Intent(MainActivity.this, AddBookMethod.class);
+            Intent intent = new Intent(MainActivity.this, AddBookActivity.class);
             startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.sort) {
+            sortBooks();
+
+            library.clear();
+            for(int i = 0; i < array.size(); ++i) {
+                library.addBook(array.get(i));
+            }
+            CustomLibraryList adapter = new CustomLibraryList(MainActivity.this, library);
+            list = (ListView) findViewById(R.id.listView);
+            list.setAdapter(adapter);
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void test(View view) {
-        // Create a book with two notes
-        Book book = new Book("Test Book", "Author");
-        book.setImageId(R.mipmap.ic_generic_cover);
-        book.addNote(new Note("This is a test note"));
-        book.addNote(new Note(250, "This is a note with a page number"));
+    /**
+     * Implements insertion sort algorithm
+     */
+    public static void doInsertionSort(){
 
-        // Add the book and display a message
-        if (!Library.getInstance().contains(book)) {
-            Library.getInstance().addBook(book);
-            Log.i("DBManager", "Added Book: " + book.toString() + " with an ID of: " + book.getId());
-            for (Note note : book.getNotes()) {
-                Log.i("DBManager", "Added Note with an ID of: " + note.getId() +
-                " corresponding to Book " + note.getBookId());
+        Book temp;
+        for (int i = 1; i < array.size(); i++) {
+            for(int j = i ; j > 0 ; j--){
+                if(array.get(j).getTitle().charAt(0) < array.get(j-1).getTitle().charAt(0)){
+                    temp = array.get(j);
+                    array.set(j, array.get(j-1));
+                    array.set(j-1, temp);
+                }
             }
-        } else {
-            Log.e("DBManager", "Database already contains book: " + book.getTitle());
         }
-        setupCustomListView();
+    }
+
+    /**
+     * Sorts Books
+     */
+    void sortBooks() {
+        if((list) != null) {
+            array = library.getBooks();
+            doInsertionSort();
+        }
     }
 
     /**
      * Self-explanatory
      */
     private void setupCustomListView() {
+
         CustomLibraryList adapter = new CustomLibraryList(MainActivity.this, library);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
@@ -100,15 +158,20 @@ public class MainActivity extends ActionBarActivity {
 
                 //ready, go.
                 startActivity(intent);
+                finish();
             }
         });
+
     }
 
     /**
-     * Clear the books from the library, and re-display the listview
+     * When this method is called, go to the add book activity
+     * @param view The view that was pressed
      */
-    public void clearLibrary(View view) {
-        library.clear();
-        setupCustomListView();
+    public void addBookActivity(View view) {
+        // Go to the add book activity
+        Intent intent = new Intent(MainActivity.this, AddBookActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -7,33 +7,54 @@
     <string name="add_new_book">Add New Book</string>
 
     // activity_main.xml
+    <string name="title_activity_main">My Library</string>
     <string name="title_activity_menu">Menu</string>
     <string name="clear">Clear Library</string>
     <string name="test"> Add Test Book</string>
 
+    // activity_main_empty.xml
+    <string name="no_books">It looks like you don\'t have \nany books in your library</string>
+    <string name="add_first_book">Add a book to \nget started!</string>
+
     // activity_menu.xml
     <string name="title_activity_add_book">Add New Book</string>
+    <string name="sort">Sort</string>
 
 
     // activity_add_book.xml
     <string name="titleHint">Title</string>
     <string name="add_book">Add Book</string>
     <string name="authorHint">Author</string>
+    <string name="error">This book is already in your library</string>
 
     // activity_book_details.xml
-    <string name="notesButton">Notes</string>
     <string name="bookCoverDescription">Book Cover</string>
     <string name="title">Title</string>
     <string name="author">Author</string>
-
+    <string name="notesButton">Notes</string>
+    <string name="deleteButton">Remove Book</string>
+    <string name="favoriteButton">Add To Favorites</string>
     <string-array name="readStatus">
         <item>I haven\'t read this book yet</item>
         <item>I\'m reading this book right now</item>
         <item>I\'ve already read this book before</item>
     </string-array>
+
+    // activity_list_note.xml
     <string name="title_activity_list_note">Notes</string>
     <string name="title_activity_add_note">Add Note</string>
     <string name="title_activity_add_book_method">AddBookMethod</string>
+    <string name="no_notes">You have no notes for this book</string>
+    <string name="book_title">Title</string>
+
+    // activity_add_note.xml
+    <string name="content">Add content…</string>
+    <string name="pg">Page number (Optional)</string>
+    <string name="create">Create Note</string>
+
+    // activity_edit_note.xml
+    <string name="title_activity_edit_note">Edit Note</string>
+    <string name="save">Save Changes</string>
 
 
 </resources>

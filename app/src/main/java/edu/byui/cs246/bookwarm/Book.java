@@ -2,7 +2,6 @@ package edu.byui.cs246.bookwarm;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A Book consists of a title, author, image id, read status, favorite status, rating, and

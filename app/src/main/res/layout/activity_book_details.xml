@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:weightSum="1">
 
     <RelativeLayout
@@ -59,20 +59,32 @@
         android:id="@+id/ratingBar"
         android:numStars="5"
         android:rating="0.0"
-        android:stepSize="1.0"/>
-
-    <TextView
-        android:layout_width="355dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/bookInfo"
-        android:layout_weight="0.84" />
+        android:stepSize="1.0" />
 
     <Button
-        android:layout_width="245dp"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="0dp"
         android:text="@string/notesButton"
         android:id="@+id/notesButton"
+        android:layout_weight="0.06"
+        android:focusable="false"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="35dp" />
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/favoriteButton"
+        android:id="@+id/button3"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.06" />
+        android:onClick="changeFavoriteStatus"/>
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/deleteButton"
+        android:id="@+id/button4"
+        android:layout_gravity="center_horizontal"
+        android:onClick ="removeBook"/>
 
 </LinearLayout>

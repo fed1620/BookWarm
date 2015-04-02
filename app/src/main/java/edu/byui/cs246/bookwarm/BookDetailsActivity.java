@@ -1,8 +1,11 @@
 package edu.byui.cs246.bookwarm;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,19 +17,32 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * This activity will display all information about the book in detail, and will allow
  * the user to access the Notes relating to the book, set the read status, and rate the book
  */
 public class BookDetailsActivity extends ActionBarActivity {
-    private Book   thisBook;
-    private String bookDescription;
+    private static final String TAG_BOOK_DETAILS_ACTIVITY = "BookDetailsActivity";
+
+    private Book thisBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
+
+        // Get the book from the main activity
+        Book mainBook = (Book)getIntent().getSerializableExtra("thisBook");
+        thisBook = Library.getInstance().getBook(mainBook.getId());
+
+        // Get reference to the action bar
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(thisBook.getTitle() + " - Details");
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         // jumping to a run function because onCreate is cluttered as fudge
         run();
@@ -51,6 +67,11 @@ public class BookDetailsActivity extends ActionBarActivity {
             return true;
         }
 
+        // If the user presses the back button in the menu bar
+        if (id==android.R.id.home) {
+            onBackPressed();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -69,17 +90,12 @@ public class BookDetailsActivity extends ActionBarActivity {
      * The 'main' of this activity.
      */
     private void run() {
-        // Do nothing with an invalid book
-        if (getIntent().getSerializableExtra("thisBook") == null) {return;}
-
-        // Get the book from the main activity
-        thisBook = (Book)getIntent().getSerializableExtra("thisBook");
-
         // Set up the various layout elements
         setupDisplay();
         setupSpinner();
         setupRatingBarListener();
         setupListNoteButton();
+        setupFavoriteButton();
     }
 
     /**
@@ -88,7 +104,6 @@ public class BookDetailsActivity extends ActionBarActivity {
     private void setupDisplay() {
         // Set the element variables
         ImageView coverIcon = (ImageView) findViewById(R.id.coverIcon);
-        TextView  bookInfo  = (TextView)  findViewById(R.id.bookInfo);
         TextView  title     = (TextView)  findViewById(R.id.title);
         TextView  author    = (TextView)  findViewById(R.id.author);
 
@@ -98,31 +113,6 @@ public class BookDetailsActivity extends ActionBarActivity {
         // Display the title and author Text Views
         title.setText(thisBook.getTitle());
         author.setText(thisBook.getAuthor());
-
-        // Set up the book information (separate function because it's extensive...)
-        buildInfoString();
-
-        // Assign the final string
-        bookInfo.setText(bookDescription);
-    }
-
-    /**
-     * Builds the String that shows the Title, Author, and whether or not the book is read.
-     */
-    private void buildInfoString() {
-        // Assign the Title and Author
-        bookDescription =  "Title: "        + thisBook.getTitle()     + "\n";
-        bookDescription += "Author: "       + thisBook.getAuthor()    + "\n";
-
-        //'isRead' segment
-        switch (thisBook.getReadStatus()) {
-            case 0: bookDescription += "Not yet read.\n";
-                break;
-            case 1: bookDescription += "Reading right now.\n";
-                break;
-            case 2: bookDescription += "Already read.\n";
-                break;
-        }
     }
 
     /**
@@ -152,23 +142,15 @@ public class BookDetailsActivity extends ActionBarActivity {
 
                 // Depending on which item is selected in the drop-down menu, a different
                 // read status will be assigned
-                TextView  bookInfo  = (TextView)  findViewById(R.id.bookInfo);
-
                 switch(spinner.getSelectedItemPosition()) {
                     case 0:
                         thisBook.setReadStatus(0);
-                        buildInfoString();
-                        bookInfo.setText(bookDescription);
                         break;
                     case 1:
                         thisBook.setReadStatus(1);
-                        buildInfoString();
-                        bookInfo.setText(bookDescription);
                         break;
                     case 2:
                         thisBook.setReadStatus(2);
-                        buildInfoString();
-                        bookInfo.setText(bookDescription);
                         break;
                 }
             }
@@ -199,7 +181,7 @@ public class BookDetailsActivity extends ActionBarActivity {
     /**
      * Self-explanatory
      */
-    void setupListNoteButton() {
+    public void setupListNoteButton() {
         Button btn = (Button) findViewById(R.id.notesButton);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,5 +195,69 @@ public class BookDetailsActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * When the user clicks the button, set the favorite status accordingly
+     * @param view The view that is clicked
+     */
+    public void changeFavoriteStatus(View view) {
+        if (!thisBook.getIsFavourite()) {
+            // Add the book as a Favorite
+            thisBook.setIsFavourite(true);
+            Button button = (Button) findViewById(R.id.button3);
+            button.setText("Remove From Favorites");
+            Toast.makeText(BookDetailsActivity.this, "Added \"" + thisBook.getTitle() + "\" to favorites", Toast.LENGTH_SHORT).show();
+        } else {
+            // Remove the book from Favorites
+            thisBook.setIsFavourite(false);
+            Button button = (Button) findViewById(R.id.button3);
+            button.setText("Add To Favorites");
+            Toast.makeText(BookDetailsActivity.this, "Removed \"" + thisBook.getTitle() + "\" from favorites", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Set the initial text of the button, depending on the status
+     */
+    public void setupFavoriteButton() {
+        if (!thisBook.getIsFavourite()) {
+            Button button = (Button)findViewById(R.id.button3);
+            button.setText("Add To Favorites");
+        } else {
+            Button button = (Button)findViewById(R.id.button3);
+            button.setText("Remove From Favorites");
+        }
+
+    }
+
+    /**
+     * Delete the book from the library
+     * Source referenced: http://stackoverflow.com/questions/2115758/how-to-display-alert-dialog-in-android
+     */
+    public void removeBook(View view) {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Book")
+                .setMessage("Are you sure you want to remove this book from your library?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Delete the book from the database
+                        Library.getInstance().deleteBook(thisBook);
+
+                        // Return to the main activity
+                        Intent intent = new Intent(BookDetailsActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        String removed = "\"" + thisBook.getTitle() + "\" has been removed from your library";
+                        Toast.makeText(BookDetailsActivity.this, removed, Toast.LENGTH_LONG).show();
+                        Log.i(TAG_BOOK_DETAILS_ACTIVITY, "Book removed");
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.i(TAG_BOOK_DETAILS_ACTIVITY, "Book was not removed");
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

@@ -3,18 +3,21 @@ package edu.byui.cs246.bookwarm;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Adds book
  */
 public class AddBookActivity extends ActionBarActivity {
-
     public String  title;
     public String  author;
     public Integer imageID = R.mipmap.ic_generic_cover;        // For now, this is always the same
@@ -26,6 +29,9 @@ public class AddBookActivity extends ActionBarActivity {
 
         // Set up the button that will allow the user to add a new book
         setupAddNewBookButton();
+
+        // Set up a text change listener to watch the title EditText
+        setupTextChangeListener();
     }
 
     @Override
@@ -48,6 +54,35 @@ public class AddBookActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Watch for when the user changes the text in the "Title" EditText field. If the user types
+     * in a title that is already in their library, let them know about it.
+     */
+    public void setupTextChangeListener() {
+        // The title field
+        final EditText title = (EditText)findViewById(R.id.title);
+        title.addTextChangedListener(new TextWatcher() {
+
+            // We don't need to do anything in these methods
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            // When the user types in a title, check to see if it is already in the library
+            // If it is in the library, display the explanatory TextView
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (Library.getInstance().contains(new Book(title.getText().toString(), null))) {
+                    TextView textView = (TextView)findViewById(R.id.textView3);
+                    textView.setText("\"" + title.getText().toString() + "\" is already in your library");
+                    textView.setVisibility(View.VISIBLE);
+                } else {
+                    // Otherwise, keep it hidden
+                    TextView textView = (TextView)findViewById(R.id.textView3);
+                    textView.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
     }
 
     /**
@@ -79,8 +114,10 @@ public class AddBookActivity extends ActionBarActivity {
                         if (!Library.getInstance().contains(newBook)) {
                             Library.getInstance().addBook(newBook);
                             Log.i("DBManager", "Added Book: " + newBook.toString() + " with an ID of: " + newBook.getId());
+                            Toast.makeText(AddBookActivity.this, "\"" + title + "\" has been added to your library", Toast.LENGTH_LONG).show();
                         } else {
                             Log.e("DBManager", "Database already contains book: " + newBook.getTitle());
+                            return;
                         }
 
                         // Return to the main activity
