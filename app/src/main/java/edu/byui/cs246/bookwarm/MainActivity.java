@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,6 +20,7 @@ public class MainActivity extends ActionBarActivity {
     /*--------------------------------------------------------------------------------------------*/
     public Library  library = Library.getInstance(); // Singleton
     public ListView list;
+    public static List<Book> array;
     /*--------------------------------------------------------------------------------------------*/
 
     @Override
@@ -71,43 +75,45 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.sort) {
             sortBooks();
 
+            library.clear();
+            for(int i = 0; i < array.size(); ++i) {
+                library.addBook(array.get(i));
+            }
+            CustomLibraryList adapter = new CustomLibraryList(MainActivity.this, library);
+            list = (ListView) findViewById(R.id.listView);
+            list.setAdapter(adapter);
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public static void bubble_srt(List<Book> array) {
-        int n = array.size();
-        int k;
-        for (int m = n; m >= 0; m--) {
-            for (int i = 0; i < n - 1; i++) {
-                k = i + 1;
-                if (array.get(i).getTitle().charAt(0) > array.get(k).getTitle().charAt(0)) {
-                    swapNumbers(i, k, array);
+    /**
+     * Implements insertion sort algorithm
+     */
+    public static void doInsertionSort(){
+
+        Book temp;
+        for (int i = 1; i < array.size(); i++) {
+            for(int j = i ; j > 0 ; j--){
+                if(array.get(j).getTitle().charAt(0) < array.get(j-1).getTitle().charAt(0)){
+                    temp = array.get(j);
+                    array.set(j, array.get(j-1));
+                    array.set(j-1, temp);
                 }
             }
         }
     }
 
-    private static void swapNumbers(int i, int j, List<Book> array) {
-
-        Book temp;
-        temp = array.get(i);
-        array.get(i).setTitle(array.get(j).getTitle());
-        array.get(j).setTitle(temp.getTitle());
-    }
-
     /**
-     *
+     * Sorts Books
      */
     void sortBooks() {
-        List<Book> temp = (List<Book>) list.getAdapter(); // TODO: This line causes a crash when the user presses "Sort"
-
-        bubble_srt(temp);
-
-        ListAdapter adapter = (ListAdapter) temp;
-        list.setAdapter(adapter);
+        if((list) != null) {
+            array = library.getBooks();
+            doInsertionSort();
+        }
     }
 
     /**
