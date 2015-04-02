@@ -36,6 +36,10 @@
             android:name=".AddBookMethod"
             android:label="@string/title_activity_add_book_method" >
         </activity>
+        <activity
+            android:name=".EditNoteActivity"
+            android:label="@string/title_activity_edit_note" >
+        </activity>
     </application>
 
 </manifest>

@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -45,6 +46,9 @@ public class ListNoteActivity extends ActionBarActivity {
             actionBar.setTitle(thisBook.getTitle() + " - Notes");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        // Set the visibility of the TextView elements
+        setVisibility();
 
         // display the list
         displayNoteObjects();
@@ -128,7 +132,9 @@ public class ListNoteActivity extends ActionBarActivity {
 
         switch (itemId) {
             case 0:
-                Log.i(TAG_LIST_NOTE_ACTVITY, "Edit note: " + note.getId());
+                Intent intent = new Intent(ListNoteActivity.this, EditNoteActivity.class);
+                intent.putExtra("thisNote", note);
+                startActivity(intent);
                 return true;
             case 1:
                 new AlertDialog.Builder(this)
@@ -137,6 +143,7 @@ public class ListNoteActivity extends ActionBarActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Library.getInstance().removeNote(note);
+                                setVisibility();
                                 displayNoteObjects();
                                 Toast.makeText(ListNoteActivity.this, "Note Removed", Toast.LENGTH_SHORT).show();                            }
                         })
@@ -202,5 +209,24 @@ public class ListNoteActivity extends ActionBarActivity {
 
         // log number of notes
         Log.i(TAG_LIST_NOTE_ACTVITY, "Loaded " + listNotes.size() + " notes.");
+    }
+
+    /**
+     * Set the visibility of the TextView items
+     */
+    private void setVisibility() {
+        // Get references to the TextView items
+        TextView title = (TextView)findViewById(R.id.book_title);
+        title.setText(thisBook.getTitle());
+        TextView noNotes = (TextView)findViewById(R.id.no_notes);
+
+        // Display them if there are no notes
+        if (Library.getInstance().getBook(thisBook.getId()).getNotes().isEmpty()) {
+            title.setVisibility(View.VISIBLE);
+            noNotes.setVisibility(View.VISIBLE);
+        } else {
+            title.setVisibility(View.INVISIBLE);
+            noNotes.setVisibility(View.INVISIBLE);
+        }
     }
 }

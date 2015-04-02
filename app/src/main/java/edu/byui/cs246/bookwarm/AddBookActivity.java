@@ -79,7 +79,8 @@ public class AddBookActivity extends ActionBarActivity {
                 } else {
                     // Otherwise, keep it hidden
                     TextView textView = (TextView)findViewById(R.id.textView3);
-                    textView.setVisibility(View.INVISIBLE);                 }
+                    textView.setVisibility(View.INVISIBLE);
+                }
             }
         });
     }

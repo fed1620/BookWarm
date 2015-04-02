@@ -13,6 +13,31 @@
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/addNote"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_notes"
+        android:id="@+id/no_notes"
+        android:textSize="20sp"
+        android:textColor="@color/bright_foreground_disabled_material_dark"
+        android:visibility="invisible"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/book_title"
+        android:id="@+id/book_title"
+        android:textSize="35sp"
+        android:textColor="@color/abc_secondary_text_material_dark"
+        android:visibility="invisible"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="115dp" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

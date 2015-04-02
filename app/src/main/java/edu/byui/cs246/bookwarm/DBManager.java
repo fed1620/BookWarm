@@ -3,6 +3,7 @@ package edu.byui.cs246.bookwarm;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -230,71 +231,95 @@ public class DBManager extends SQLiteOpenHelper {
      * @return Returns a List of Book objects
      */
     public List<Book> getBooks() {
-        // The list of books in the database
+        // The list of books we will return
         List<Book> books = new ArrayList<>();
 
         // Get the reference to the writable database
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Build the query
-        final String QUERY = "SELECT * FROM " + TABLE_BOOKS + ';';
+        // Initialize cursors
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BOOKS + ';', null);
 
         // Build the cursor
-        Cursor cursor = db.rawQuery(QUERY, null);
+        try {
+            // For every row in the table, build a book object and add it to the list
+            Book book;
 
-        // For every row in the table, build a book object and add it to the list
-        Book book;
-        if (cursor.moveToFirst()) {
-            do {
-                book = new Book();
-                book.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
-                book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
-                book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
-                book.setImageId(cursor.getInt(cursor.getColumnIndex(KEY_IMAGE)));
-                book.setReadStatus(cursor.getInt(cursor.getColumnIndex(KEY_STATUS)));
-                book.setRating(cursor.getInt(cursor.getColumnIndex(KEY_RATING)));
-                book.setDatePublished(cursor.getInt(cursor.getColumnIndex(KEY_DATE)));
+            if (cursor.moveToFirst()) {
+                do {
+                    book = new Book();
+                    book.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
+                    book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
+                    book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
+                    book.setImageId(cursor.getInt(cursor.getColumnIndex(KEY_IMAGE)));
+                    book.setReadStatus(cursor.getInt(cursor.getColumnIndex(KEY_STATUS)));
+                    book.setRating(cursor.getInt(cursor.getColumnIndex(KEY_RATING)));
+                    book.setDatePublished(cursor.getInt(cursor.getColumnIndex(KEY_DATE)));
 
-                // Convert the integer back to a boolean value
-                if (cursor.getInt(cursor.getColumnIndex(KEY_FAVORITE)) == 0) {
-                    book.setIsFavourite(false);
-                } else {
-                    book.setIsFavourite(true);
-                }
-
-                // Build the notes cursor
-                Cursor noteCursor = db.query(TABLE_NOTES,
-                                             COLUMNS_NOTE,
-                                             " book_id = ?",
-                                             new String[] {String.valueOf(cursor.getInt(cursor.getColumnIndex(KEY_ID)))},
-                                             null,
-                                             null,
-                                             null,
-                                             null);
-
-                // Get all of the notes that correspond to this book
-                if (noteCursor != null && noteCursor.moveToFirst()) {
-                    if (noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)) == cursor.getInt(cursor.getColumnIndex(KEY_ID))) {
-                        do {
-                            Note note = new Note();
-                            note.setId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_NOTE_ID)));
-                            note.setBookId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)));
-                            note.setPageNumber(noteCursor.getInt(noteCursor.getColumnIndex(KEY_PAGE)));
-                            note.setNoteContent(noteCursor.getString(noteCursor.getColumnIndex(KEY_CONTENT)));
-                            book.addNote(note);
-                        } while (noteCursor.moveToNext());
+                    // Convert the integer back to a boolean value
+                    if (cursor.getInt(cursor.getColumnIndex(KEY_FAVORITE)) == 0) {
+                        book.setIsFavourite(false);
+                    } else {
+                        book.setIsFavourite(true);
                     }
-                    // Free the note cursor
-                    noteCursor.close();
-                }
 
-                books.add(book);
-            } while (cursor.moveToNext());
+                    books.add(book);
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
         }
-        // Free the book cursor
-        cursor.close();
-
+        db.close();
         return books;
+    }
+
+    /**
+     * Retrieve a Note from the database, and return it as a Note object
+     *
+     * @param id The id of the note
+     * @return Returns the note
+     */
+    public Note getNote(int id) {
+        // Get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Build the notes cursor
+        Cursor noteCursor = db.query(TABLE_NOTES,
+                COLUMNS_NOTE,
+                " id = ?",
+                new String[] {String.valueOf(id)},
+                null,
+                null,
+                null,
+                null);
+
+        // Build a note object
+        Note note = new Note();
+
+        if (noteCursor != null && noteCursor.moveToFirst()) {
+            note.setId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_NOTE_ID)));
+            note.setBookId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)));
+            note.setPageNumber(noteCursor.getInt(noteCursor.getColumnIndex(KEY_PAGE)));
+            note.setNoteContent(noteCursor.getString(noteCursor.getColumnIndex(KEY_CONTENT)));
+
+            // Close the note cursor
+            noteCursor.close();
+
+        } else if (noteCursor == null) {
+            Log.i(TAG_DB_MANAGER, "ERROR: Note cursor is null!");
+        } else if (!noteCursor.moveToFirst()) {
+            Log.i(TAG_DB_MANAGER, "ERROR: moveToFirst() returned FALSE");
+        }
+
+        // Log it
+        Log.i(TAG_DB_MANAGER, "Returned [Note " + note.getId() + "] corresponding to [Book " +
+                note.getBookId() + "]");
+
+        // Return the book object
+        return note;
     }
 
     /**
@@ -360,6 +385,27 @@ public class DBManager extends SQLiteOpenHelper {
     }
 
     /**
+     * Update a Note
+     * @param note The up-to-date Note object
+     */
+    public void updateNote(Note note) {
+        // Get reference to the writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // The page number and content will be updated, but
+        // the ID of the note and the Book ID should be the same
+        ContentValues values = new ContentValues();
+        values.put(KEY_PAGE,    note.getPageNumber());          // Page Number
+        values.put(KEY_CONTENT, note.getNoteContent());         // Content
+
+        // Update the row
+        db.update(TABLE_NOTES, values, KEY_ID+" = ?", new String[] {String.valueOf(note.getId())});
+
+        // Log message
+        Log.i(TAG_DB_MANAGER, "Updated Note: " + note.toString());
+    }
+
+    /**
      * Remove a note from the database
      * @param note The note to be deleted
      */
@@ -379,28 +425,10 @@ public class DBManager extends SQLiteOpenHelper {
      * @return Returns the number of books
      */
     public int size() {
-        // The integer we will be returning
-        int i = 0;
-
-        // Get reference to readable DB
+        // Get the reference to the readable database
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // Build the query
-        final String QUERY = "SELECT * FROM " + TABLE_BOOKS + ';';
-
-        // Build the cursor
-        Cursor cursor = db.rawQuery(QUERY, null);
-
-        // Count every row in the table
-        if (cursor.moveToFirst()) {
-            do {
-                ++i;
-            } while (cursor.moveToNext());
-        }
-        // Close the cursor
-        cursor.close();
-
-        return i;
+        return (int)DatabaseUtils.queryNumEntries(db, TABLE_BOOKS);
     }
 
     /**

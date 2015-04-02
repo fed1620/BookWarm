@@ -41,8 +41,28 @@ public class MainActivity extends ActionBarActivity {
                 actionBar.setTitle("My Library");
             }
 
-            // Set up the List View
-            setupCustomListView();
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Set up the List View
+                            setupCustomListView();
+                        }
+                    });
+                }
+            });
+
+            thread.start();
+
+            if (!thread.isAlive()) {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -67,7 +87,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         if (id == R.id.add_new_book) {
-            Intent intent = new Intent(MainActivity.this, AddBookMethod.class);
+            Intent intent = new Intent(MainActivity.this, AddBookActivity.class);
             startActivity(intent);
             return true;
         }
@@ -120,6 +140,7 @@ public class MainActivity extends ActionBarActivity {
      * Self-explanatory
      */
     private void setupCustomListView() {
+
         CustomLibraryList adapter = new CustomLibraryList(MainActivity.this, library);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
@@ -137,8 +158,10 @@ public class MainActivity extends ActionBarActivity {
 
                 //ready, go.
                 startActivity(intent);
+                finish();
             }
         });
+
     }
 
     /**
@@ -147,7 +170,8 @@ public class MainActivity extends ActionBarActivity {
      */
     public void addBookActivity(View view) {
         // Go to the add book activity
-        Intent intent = new Intent(MainActivity.this, AddBookMethod.class);
+        Intent intent = new Intent(MainActivity.this, AddBookActivity.class);
         startActivity(intent);
+        finish();
     }
 }
