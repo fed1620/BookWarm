@@ -37,8 +37,28 @@ public class MainActivity extends ActionBarActivity {
                 actionBar.setTitle("My Library");
             }
 
-            // Set up the List View
-            setupCustomListView();
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Set up the List View
+                            setupCustomListView();
+                        }
+                    });
+                }
+            });
+
+            thread.start();
+
+            if (!thread.isAlive()) {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -114,6 +134,7 @@ public class MainActivity extends ActionBarActivity {
      * Self-explanatory
      */
     private void setupCustomListView() {
+
         CustomLibraryList adapter = new CustomLibraryList(MainActivity.this, library);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
@@ -134,6 +155,7 @@ public class MainActivity extends ActionBarActivity {
                 finish();
             }
         });
+
     }
 
     /**
