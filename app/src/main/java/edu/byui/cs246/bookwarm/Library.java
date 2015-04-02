@@ -73,6 +73,21 @@ public class Library {
     }
 
     /**
+     * This method will return an array of every book's favorite status
+     * @return returns an array of booleans (favorite status)
+     */
+    public boolean[] getFavorites() {
+        // Allocate a new array according to how many books we have
+        boolean[] favorites = new boolean[numBooks()];
+
+        // Go through our list of books and get each favorite status
+        for (int i = 0; i < numBooks(); ++i) {
+            favorites[i] = getBooks().get(i).getIsFavourite();
+        }
+        return favorites;
+    }
+
+    /**
      * Get a book from the database
      * @return Returns a book
      */
