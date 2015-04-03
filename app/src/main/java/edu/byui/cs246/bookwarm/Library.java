@@ -164,6 +164,42 @@ public class Library {
     }
 
     /**
+     * This method will return an array of authors
+     * @return returns an array of Strings (authors)
+     */
+    public String[] getAuthors() {
+        // Get the list of books
+        List<Book> books = getBooks();
+        List<String> authors = new ArrayList<>();
+
+        // Go through our list of books and get each author
+        for (int i = 0; i < books.size(); ++i) {
+            authors.add(books.get(i).getAuthor());
+        }
+
+        // Convert the list to an array
+        return authors.toArray(new String[authors.size()]);
+    }
+
+    /**
+     * This method will return an array of read statuses
+     * @return returns an array of ints (read status)
+     */
+    public Integer[] getReadStatuses() {
+        // Get the list of books
+        List<Book> books = getBooks();
+        List<Integer> readStatusArray = new ArrayList<>();
+
+        // Go through our list of books and get each read status
+        for (int i = 0; i < books.size(); ++i) {
+            readStatusArray.add(books.get(i).getImageId());
+        }
+
+        // Convert the list to an array
+        return readStatusArray.toArray(new Integer[readStatusArray.size()]);
+    }
+
+    /**
      * Instantiate the database from the main activity
      */
     public void instantiateDatabase(Context context) {
