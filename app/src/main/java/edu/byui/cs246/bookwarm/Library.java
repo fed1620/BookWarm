@@ -14,13 +14,20 @@ public class Library {
     /** Log tag */
     private static final String TAG_LIBRARY = "Library";
 
-    // Eager Singleton
+    // Eager Singleton -> (There can only be one!)
     private static final Library instance = new Library();
     private Library() {}
     public static Library getInstance() {return instance;}
 
     // The database that our library will use
     private DBManager  db;
+
+    // What is the library sorted by?
+    private int sortId = 0;
+
+    // Getter and setter for sortId
+    public void setSortId(int sortId) {this.sortId = sortId;}
+    public int  getSortId()           {return this.sortId;}
 
     /**
      * Add a book object to the list of books

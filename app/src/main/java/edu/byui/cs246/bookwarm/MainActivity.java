@@ -1,18 +1,17 @@
 package edu.byui.cs246.bookwarm;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,6 +20,7 @@ public class MainActivity extends ActionBarActivity {
     public Library  library = Library.getInstance(); // Singleton
     public ListView list;
     public static List<Book> array;
+    private static final String TAG_MAIN_ACTIVITY = "MainActivity";    // Log tag
     /*--------------------------------------------------------------------------------------------*/
 
     @Override
@@ -41,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
                 actionBar.setTitle("My Library");
             }
 
+            // Setting up the ListView on a separate thread
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -48,7 +49,12 @@ public class MainActivity extends ActionBarActivity {
                         @Override
                         public void run() {
                             // Set up the List View
-                            setupCustomListView();
+                            if (getSortIdFromPreferences() == 0) {
+                                setupCustomListView();
+                            } else {
+                                setupCustomListView();
+                                checkAndSortBook(getSortIdFromPreferences());
+                            }
                         }
                     });
                 }
@@ -80,7 +86,30 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        library.setSortId(id);
+        setSortIdToPreferences();
+        checkAndSortBook(id);
+        return super.onOptionsItemSelected(item);
+    }
 
+    /**
+     * Get the last sort method from Shared Preferences
+     */
+    private void setSortIdToPreferences() {
+        SharedPreferences preferences = getSharedPreferences("sortId", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("Sort ID", library.getSortId());
+        Log.i(TAG_MAIN_ACTIVITY, "Setting Sort ID to SharedPreferences...");
+        editor.apply();
+    }
+
+    private int getSortIdFromPreferences() {
+        SharedPreferences preferences = getSharedPreferences("sortId", Context.MODE_PRIVATE);
+        Log.i(TAG_MAIN_ACTIVITY, "Getting Sort ID from SharedPreferences...");
+        return preferences.getInt("Sort ID", 0);
+    }
+
+    private boolean checkAndSortBook(int id) {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -92,27 +121,24 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
 
-        if (id == R.id.sort) {
-            sortBooks();
-
-            library.clear();
-            for(int i = 0; i < array.size(); ++i) {
-                library.addBook(array.get(i));
-            }
-            CustomLibraryList adapter = new CustomLibraryList(MainActivity.this, library);
-            list = (ListView) findViewById(R.id.listView);
-            list.setAdapter(adapter);
-
+        if (id == R.id.sort_title) {
+            Log.i(TAG_MAIN_ACTIVITY, "Sorting by title...");
+            sortByTitle();
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        if (id == R.id.sort_author) {
+            Log.i(TAG_MAIN_ACTIVITY, "Sorting by author...");
+            sortByAuthor();
+            return true;
+        }
+        return false;
     }
 
     /**
      * Implements insertion sort algorithm
      */
-    public static void doInsertionSort(){
+    public static void insertionSortByTitle(){
 
         Book temp;
         for (int i = 1; i < array.size(); i++) {
@@ -127,12 +153,56 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Sorts Books
+     * Implements insertion sort algorithm
      */
-    void sortBooks() {
+    public static void insertionSortByAuthor(){
+
+        Book temp;
+        for (int i = 1; i < array.size(); i++) {
+            for(int j = i ; j > 0 ; j--){
+                if(array.get(j).getAuthor().charAt(0) < array.get(j-1).getAuthor().charAt(0)){
+                    temp = array.get(j);
+                    array.set(j, array.get(j-1));
+                    array.set(j-1, temp);
+                }
+            }
+        }
+    }
+
+    /**
+     * Sorts Books By Title
+     */
+    public void sortByTitle() {
         if((list) != null) {
             array = library.getBooks();
-            doInsertionSort();
+            insertionSortByTitle();
+
+            // Sort by title and reset the adapter
+            library.clear();
+            for(int i = 0; i < array.size(); ++i) {
+                library.addBook(array.get(i));
+            }
+            CustomLibraryList adapter = new CustomLibraryList(MainActivity.this, library);
+            list = (ListView) findViewById(R.id.listView);
+            list.setAdapter(adapter);
+        }
+    }
+
+    /**
+     * Sorts Books By Author
+     */
+    public void sortByAuthor() {
+        if((list) != null) {
+            array = library.getBooks();
+            insertionSortByAuthor();
+
+            library.clear();
+            for(int i = 0; i < array.size(); ++i) {
+                library.addBook(array.get(i));
+            }
+            CustomLibraryList adapter = new CustomLibraryList(MainActivity.this, library);
+            list = (ListView) findViewById(R.id.listView);
+            list.setAdapter(adapter);
         }
     }
 
