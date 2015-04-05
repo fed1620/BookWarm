@@ -47,7 +47,7 @@ public class CustomLibraryList extends ArrayAdapter<String> {
         ImageView heartView = (ImageView) rowView.findViewById(R.id.heartImg);
 
         //change em
-        txtTitle.setText(library.getBookTitles()[position]);
+        txtTitle.setText(setupTitleAndAuthor(position));
         imageView.setImageResource(library.getImageIds()[position]);
         checkAndRunForFavorites(heartView, position);
 
@@ -63,5 +63,14 @@ public class CustomLibraryList extends ArrayAdapter<String> {
         if (library.getFavorites()[position]){
             heartView.setImageResource(R.drawable.ic_heart_icon);
         }
+    }
+
+    /**
+     * Sets up the segment for the Title and Author
+     * @param position
+     * @return
+     */
+    private String setupTitleAndAuthor(int position) {
+        return library.getBookTitles()[position] + "\n" + library.getAuthors()[position];
     }
 }
