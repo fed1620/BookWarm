@@ -262,6 +262,7 @@ public class BookDetailsActivity extends ActionBarActivity {
                         // Return to the main activity
                         Intent intent = new Intent(BookDetailsActivity.this, MainActivity.class);
                         startActivity(intent);
+                        finish();
                         String removed = "\"" + thisBook.getTitle() + "\" has been removed from your library";
                         Toast.makeText(BookDetailsActivity.this, removed, Toast.LENGTH_LONG).show();
                         Log.i(TAG_BOOK_DETAILS_ACTIVITY, "Book removed");
