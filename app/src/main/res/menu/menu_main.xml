@@ -3,10 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/add_new_book" android:title="@string/add_new_book"
         android:orderInCategory="100" app:showAsAction="never" />
+    <group android:checkableBehavior="single">
     <item android:id="@+id/sort_title" android:title="@string/sort"
-        android:orderInCategory="200" app:showAsAction="never" />
+        android:orderInCategory="200" app:showAsAction="never" android:checkable="true"/>
     <item android:id="@+id/sort_author" android:title="@string/sort_author"
-        android:orderInCategory="300" app:showAsAction="never" />
+        android:orderInCategory="300" app:showAsAction="never" android:checkable="true"/>
+    </group>
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
     android:orderInCategory="400" app:showAsAction="never" />
 </menu>

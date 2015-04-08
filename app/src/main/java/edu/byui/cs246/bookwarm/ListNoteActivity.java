@@ -106,6 +106,7 @@ public class ListNoteActivity extends ActionBarActivity {
         Intent intent = new Intent(ListNoteActivity.this, BookDetailsActivity.class);
         intent.putExtra("thisBook", Library.getInstance().getBook(thisBook.getId()));
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -135,6 +136,7 @@ public class ListNoteActivity extends ActionBarActivity {
                 Intent intent = new Intent(ListNoteActivity.this, EditNoteActivity.class);
                 intent.putExtra("thisNote", note);
                 startActivity(intent);
+                finish();
                 return true;
             case 1:
                 new AlertDialog.Builder(this)
@@ -172,9 +174,8 @@ public class ListNoteActivity extends ActionBarActivity {
                 // create intent
                 Intent intent = new Intent(ListNoteActivity.this, AddNoteActivity.class);
                 intent.putExtra("thisBook", Library.getInstance().getBook(thisBook.getId()));
-
-                // run intent
                 startActivity(intent);
+                finish();
             }
         });
     }

@@ -193,6 +193,7 @@ public class BookDetailsActivity extends ActionBarActivity {
                 Intent intent = new Intent(BookDetailsActivity.this, ListNoteActivity.class);
                 intent.putExtra("thisBook", Library.getInstance().getBook(thisBook.getId()));
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -205,14 +206,23 @@ public class BookDetailsActivity extends ActionBarActivity {
         if (!thisBook.getIsFavourite()) {
             // Add the book as a Favorite
             thisBook.setIsFavourite(true);
+
+            // Change the button's text
             Button button = (Button) findViewById(R.id.button3);
             button.setText("Remove From Favorites");
+
+            // Add a heart
+            ImageView heart = (ImageView) findViewById(R.id.fave);
+            heart.setImageResource(R.drawable.ic_heart_icon);
+            heart.setVisibility(View.VISIBLE);
             Toast.makeText(BookDetailsActivity.this, "Added \"" + thisBook.getTitle() + "\" to favorites", Toast.LENGTH_SHORT).show();
         } else {
             // Remove the book from Favorites
             thisBook.setIsFavourite(false);
             Button button = (Button) findViewById(R.id.button3);
             button.setText("Add To Favorites");
+            ImageView heart = (ImageView) findViewById(R.id.fave);
+            heart.setVisibility(View.INVISIBLE);
             Toast.makeText(BookDetailsActivity.this, "Removed \"" + thisBook.getTitle() + "\" from favorites", Toast.LENGTH_SHORT).show();
         }
     }
@@ -224,7 +234,12 @@ public class BookDetailsActivity extends ActionBarActivity {
         if (!thisBook.getIsFavourite()) {
             Button button = (Button)findViewById(R.id.button3);
             button.setText("Add To Favorites");
+            ImageView heart = (ImageView) findViewById(R.id.fave);
+            heart.setVisibility(View.INVISIBLE);
         } else {
+            ImageView heart = (ImageView) findViewById(R.id.fave);
+            heart.setImageResource(R.drawable.ic_heart_icon);
+            heart.setVisibility(View.VISIBLE);
             Button button = (Button)findViewById(R.id.button3);
             button.setText("Remove From Favorites");
         }

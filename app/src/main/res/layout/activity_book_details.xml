@@ -30,7 +30,18 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_toRightOf="@+id/coverIcon"
-            android:layout_toEndOf="@+id/coverIcon" />
+            android:layout_toEndOf="@+id/coverIcon"
+            android:textColor="#c85de3ff"/>
+
+        <ImageView
+            android:contentDescription="@string/fave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fave"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/title" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,9 +52,10 @@
             android:layout_gravity="right"
             android:layout_below="@+id/title"
             android:layout_toRightOf="@+id/coverIcon"
-            android:layout_toEndOf="@+id/coverIcon" />
+            android:layout_toEndOf="@+id/coverIcon"
+            android:textColor="#afa3e5ff"/>
 
-        </RelativeLayout>
+    </RelativeLayout>
 
 
 

@@ -11,6 +11,7 @@
     <string name="title_activity_menu">Menu</string>
     <string name="clear">Clear Library</string>
     <string name="test"> Add Test Book</string>
+    <string name="load">Loading library…</string>
 
     // activity_main_empty.xml
     <string name="no_books">It looks like you don\'t have \nany books in your library</string>
@@ -18,8 +19,8 @@
 
     // activity_menu.xml
     <string name="title_activity_add_book">Add New Book</string>
-    <string name="sort">Sort By Title</string>
-    <string name="sort_author">Sort By Author</string>
+    <string name="sort">Sorting Mode: By Title</string>
+    <string name="sort_author">Sorting Mode: By Author</string>
 
 
     // activity_add_book.xml
@@ -30,6 +31,7 @@
 
     // activity_book_details.xml
     <string name="bookCoverDescription">Book Cover</string>
+    <string name="fave">Favorite Heart</string>
     <string name="title">Title</string>
     <string name="author">Author</string>
     <string name="notesButton">Notes</string>

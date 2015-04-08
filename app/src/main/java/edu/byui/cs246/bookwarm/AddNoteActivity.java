@@ -83,6 +83,7 @@ public class AddNoteActivity extends ActionBarActivity {
                 Intent intent = new Intent(AddNoteActivity.this, ListNoteActivity.class);
                 intent.putExtra("thisBook", thisBook);
                 startActivity(intent);
+                finish();
             }
         });
     }

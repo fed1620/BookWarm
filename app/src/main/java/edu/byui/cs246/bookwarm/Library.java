@@ -1,6 +1,7 @@
 package edu.byui.cs246.bookwarm;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -22,12 +23,20 @@ public class Library {
     // The database that our library will use
     private DBManager  db;
 
-    // What is the library sorted by?
-    private int sortId = 0;
-
     // Getter and setter for sortId
-    public void setSortId(int sortId) {this.sortId = sortId;}
-    public int  getSortId()           {return this.sortId;}
+    public void setSortMode(int sortId, Context context) {
+        // Get the reference to our shared preferences
+        SharedPreferences preferences = context.getSharedPreferences("sortId", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+//        Log.i(TAG_LIBRARY, "Setting Sort ID of " + sortId + " to SharedPreferences...");
+        editor.putInt("Sort ID", sortId);
+        editor.apply();
+    }
+    public int getSortMode(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("sortId", Context.MODE_PRIVATE);
+//        Log.i(TAG_LIBRARY, "Getting Sort ID of " + preferences.getInt("Sort ID", 0) + " from SharedPreferences...");
+        return preferences.getInt("Sort ID", 0);
+    }
 
     /**
      * Add a book object to the list of books
@@ -108,6 +117,18 @@ public class Library {
             return null;
         }
         return this.db.getBook(id);
+    }
+
+    /**
+     * Get a book from the database
+     * @return Returns a book
+     */
+    public Book getBook(Book b) {
+        if (this.db == null) {
+            Log.e(TAG_LIBRARY, "ERROR: Database object is null");
+            return null;
+        }
+        return this.db.getBook(b);
     }
 
     /**
@@ -240,5 +261,7 @@ public class Library {
      * @param note The note to be updated
      */
     public void updateNote(Note note) {this.db.updateNote(note);}
+
+    public void clearBooks() {this.db.clearBooks();}
 
 }

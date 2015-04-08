@@ -117,6 +117,9 @@ public class DBManager extends SQLiteOpenHelper {
 
         // Create ContentValues and add the different column values
         ContentValues values = new ContentValues();
+        if (book.getId() != 0) {
+            values.put(KEY_ID, book.getId());               // ID
+        }
         values.put(KEY_TITLE,    book.getTitle());          // Title
         values.put(KEY_AUTHOR,   book.getAuthor());         // Author
         values.put(KEY_IMAGE,    book.getImageId());        // ImageId
@@ -129,7 +132,9 @@ public class DBManager extends SQLiteOpenHelper {
         long idInsert = db.insert(TABLE_BOOKS, null, values);
 
         // Set the ID of the book
-        book.setId((int)idInsert);
+        if (book.getId() == 0) {
+            book.setId((int)idInsert);
+        }
 
         // If the Book contains Notes, insert them into the Notes table
         if (book.getNotes().size() != 0) {
@@ -155,7 +160,7 @@ public class DBManager extends SQLiteOpenHelper {
      * @param id The id of the book
      * @return Returns the book
      */
-    public Book getBook(int id){
+    public Book getBook(int id) {
         // Get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -225,6 +230,84 @@ public class DBManager extends SQLiteOpenHelper {
         // Return the book object
         return book;
     }
+
+    /**
+     * Retrieve a Book from the database, and return it as a Book object
+     *
+     * @param b The book
+     * @return Returns the book
+     */
+    public Book getBook(Book b){
+        // Get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Build the book cursor
+        Cursor cursor = db.query(TABLE_BOOKS,
+                COLUMNS,
+                " id = ?",
+                new String[] {String.valueOf(b.getId())},
+                null,
+                null,
+                null,
+                null);
+
+        // Build the notes cursor
+        Cursor noteCursor = db.query(TABLE_NOTES,
+                COLUMNS_NOTE,
+                " book_id = ?",
+                new String[] {String.valueOf(b.getId())},
+                null,
+                null,
+                null,
+                null);
+        // Build a book object
+        Book book = new Book();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            book.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
+            book.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
+            book.setAuthor(cursor.getString(cursor.getColumnIndex(KEY_AUTHOR)));
+            book.setImageId(cursor.getInt(cursor.getColumnIndex(KEY_IMAGE)));
+            book.setReadStatus(cursor.getInt(cursor.getColumnIndex(KEY_STATUS)));
+            book.setRating(cursor.getInt(cursor.getColumnIndex(KEY_RATING)));
+            book.setDatePublished(cursor.getInt(cursor.getColumnIndex(KEY_DATE)));
+
+            // Convert the integer back to a boolean value
+            if (cursor.getInt(cursor.getColumnIndex(KEY_FAVORITE)) == 0) {
+                book.setIsFavourite(false);
+            } else {
+                book.setIsFavourite(true);
+            }
+        } else if (cursor == null) {
+            Log.i(TAG_DB_MANAGER, "ERROR: Cursor is null!");
+        } else if (!cursor.moveToFirst()) {
+            Log.i(TAG_DB_MANAGER, "ERROR: moveToFirst() returned FALSE");
+        }
+
+        // Check if the book has notes
+        if (noteCursor != null && noteCursor.moveToFirst() && cursor != null && cursor.moveToFirst()) {
+            if (noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)) == cursor.getInt(cursor.getColumnIndex(KEY_ID))) {
+                do {
+                    Note note = new Note();
+                    note.setId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_NOTE_ID)));
+                    note.setBookId(noteCursor.getInt(noteCursor.getColumnIndex(KEY_BOOK_ID)));
+                    note.setPageNumber(noteCursor.getInt(noteCursor.getColumnIndex(KEY_PAGE)));
+                    note.setNoteContent(noteCursor.getString(noteCursor.getColumnIndex(KEY_CONTENT)));
+                    book.addNote(note);
+                } while (noteCursor.moveToNext());
+            }
+            // Free the note cursor
+            noteCursor.close();
+        }
+        // Free the book cursor
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        // Return the book object
+        return book;
+    }
+
 
     /**
      * Return all books in the database
@@ -360,7 +443,7 @@ public class DBManager extends SQLiteOpenHelper {
             }
 
         // Update the row
-        db.update(TABLE_BOOKS, values, KEY_ID+" = ?", new String[] {String.valueOf(book.getId())});
+        db.update(TABLE_BOOKS, values, KEY_ID + " = ?", new String[] {String.valueOf(book.getId())});
 
         // Log message
         Log.i(TAG_DB_MANAGER, "Updated book: " + book.toString());
@@ -399,7 +482,7 @@ public class DBManager extends SQLiteOpenHelper {
         values.put(KEY_CONTENT, note.getNoteContent());         // Content
 
         // Update the row
-        db.update(TABLE_NOTES, values, KEY_ID+" = ?", new String[] {String.valueOf(note.getId())});
+        db.update(TABLE_NOTES, values, KEY_ID + " = ?", new String[] {String.valueOf(note.getId())});
 
         // Log message
         Log.i(TAG_DB_MANAGER, "Updated Note: " + note.toString());
@@ -519,5 +602,40 @@ public class DBManager extends SQLiteOpenHelper {
 
         // Recreate it
         this.onCreate(db);
+    }
+
+    /**
+     * Clear books from the database
+     */
+    public void clearBooks() {
+        // If the database is empty, do nothing
+        if (size() == 0) {
+            return;
+        }
+
+        // Get the reference to this database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Drop the books table
+        final String DROP_TABLE_BOOKS = "DROP TABLE IF EXISTS " + TABLE_BOOKS + ';';
+        Log.i(TAG_DB_MANAGER, "Dropping table: " + TABLE_BOOKS + "...");
+        db.execSQL(DROP_TABLE_BOOKS);
+
+        // Build an SQL statement that will be used to create the book table
+        String CREATE_BOOK_TABLE =
+                "CREATE TABLE books (" +
+                        "  id          INTEGER PRIMARY KEY" +
+                        ", title       TEXT" +
+                        ", author      TEXT" +
+                        ", image_id    INTEGER" +
+                        ", read_status INTEGER" +
+                        ", favorite    INTEGER" +
+                        ", rating      INTEGER" +
+                        ", date        INTEGER);";
+
+        // Create the Books table
+        Log.i(TAG_DB_MANAGER, "Creating table: " + TABLE_BOOKS + "...");
+        db.execSQL(CREATE_BOOK_TABLE);
+
     }
 }
