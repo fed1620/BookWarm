@@ -59,6 +59,9 @@ public class EditNoteActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
+        Intent intent = new Intent(EditNoteActivity.this, ListNoteActivity.class);
+        intent.putExtra("thisBook", Library.getInstance().getBook(thisNote.getBookId()));
+        startActivity(intent);
         finish();
     }
 

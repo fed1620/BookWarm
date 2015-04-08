@@ -154,20 +154,23 @@ public class MainActivity extends ActionBarActivity {
         class Sorter extends AsyncTask<String, Void, String> {
 
             @Override
-            protected void onPreExecute() {
-                progressBar.setVisibility(View.VISIBLE);
-            }
+            protected void onPreExecute() {}
 
             @Override
             protected String doInBackground(String... params) {
                 taskRunning = true;
+                boolean sortPerformed;
                 try {
-                    checkAndSortBook(item.getItemId());
+                    sortPerformed = checkAndSortBook(item.getItemId());
                 } catch (Exception e) {
                     Log.e("LongOperation", "Interrupted", e);
                     return "Interrupted";
                 }
-                return "Finished executing AsyncTask: Sort";
+
+                if (sortPerformed) {
+                    return "Finished executing AsyncTask: Sort";
+                }
+                return "Finished executing AsyncTask";
             }
 
             @Override
@@ -188,6 +191,11 @@ public class MainActivity extends ActionBarActivity {
         } else if (item.getItemId() == R.id.sort_author && library.getSortMode(MainActivity.this) == R.id.sort_author) {
             Log.e(TAG_MAIN_ACTIVITY, "Library is already sorted by author");
             return false;
+        } else if (item.getItemId() != R.id.sort_author && item.getItemId() != R.id.sort_title) {
+            Log.i(TAG_MAIN_ACTIVITY, "Non-sorting menu item called");
+            progressBar.setVisibility(View.INVISIBLE);
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         // Execute the sort task
@@ -228,15 +236,14 @@ public class MainActivity extends ActionBarActivity {
     private boolean checkAndSortBook(int id) {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            return false;
         }
 
         if (id == R.id.add_new_book) {
-            progressBar.setVisibility(View.INVISIBLE);
             Intent intent = new Intent(MainActivity.this, AddBookActivity.class);
             startActivity(intent);
             finish();
-            return true;
+            return false;
         }
 
         if (id == R.id.sort_title) {

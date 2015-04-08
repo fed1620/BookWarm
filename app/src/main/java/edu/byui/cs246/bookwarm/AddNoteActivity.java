@@ -28,6 +28,12 @@ public class AddNoteActivity extends ActionBarActivity {
 
         thisBook = (Book) getIntent().getSerializableExtra("thisBook");
 
+        // Get reference to the action bar
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         // Give focus to the text box
         noteContent = (TextView) findViewById(R.id.editText);
         noteContent.requestFocus();
@@ -55,7 +61,19 @@ public class AddNoteActivity extends ActionBarActivity {
             return true;
         }
 
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(AddNoteActivity.this, ListNoteActivity.class);
+        intent.putExtra("thisBook", Library.getInstance().getBook(thisBook.getId()));
+        startActivity(intent);
+        finish();
     }
 
     /**

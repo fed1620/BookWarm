@@ -27,6 +27,12 @@ public class AddBookActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
 
+        // Get reference to the action bar
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         // Set up the button that will allow the user to add a new book
         setupAddNewBookButton();
 
@@ -53,7 +59,18 @@ public class AddBookActivity extends ActionBarActivity {
             return true;
         }
 
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(AddBookActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**
